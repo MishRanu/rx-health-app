@@ -1,6 +1,8 @@
-app.controller('dtabsController', function($scope, $ionicSideMenuDelegate) {
+app.controller('dtabsController', function($scope, $ionicSideMenuDelegate, ionicMaterialInk) {
 
-  $scope.showMenu = function() {
+    ionicMaterialInk.displayEffect();
+
+    $scope.showMenu = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
 

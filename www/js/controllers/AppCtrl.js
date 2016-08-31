@@ -1,4 +1,6 @@
-app.controller('tabsController', function($scope, $ionicSideMenuDelegate) {
+app.controller('tabsController', function($scope, $ionicSideMenuDelegate, ionicMaterialInk) {
+    ionicMaterialInk.displayEffect();
+
 
   $scope.showMenu = function() {
     $ionicSideMenuDelegate.toggleLeft();
