@@ -133,6 +133,14 @@ $ionicConfigProvider.tabs.position('top');
         }
     })
     
+    .state('comments', {
+        url: '/comments',
+        templateUrl: 'templates/comments.html',
+        controller: 'CommentsCtrl'
+    })
+
+
+
     .state('dapp', {
         url: '/dapp',
         abstract: true,
