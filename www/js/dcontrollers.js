@@ -69,7 +69,14 @@
 
 })
 
-.controller('dGroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading, ionicMaterialInk){
+.controller('dGroupsCtrl', function($scope, $stateParams,$timeout, $state,Http,$ionicLoading, ionicMaterialInk, ionicMaterialMotion){
+
+    $timeout(function() {
+        ionicMaterialMotion.fadeSlideInRight({
+            startVelocity: 3000
+        });
+    }, 700);
+
 
 	$scope.$on('ngLastRepeat.mylist',function(e) {
   ionicMaterialInk.displayEffect();
@@ -115,7 +122,11 @@
     // }, 300);
 
     // Set Motion
-    ionicMaterialMotion.fadeSlideInRight();
+    $timeout(function() {
+        ionicMaterialMotion.fadeSlideInRight({
+            startVelocity: 3000
+        });
+    }, 700);
 
     // Set Ink
     ionicMaterialInk.displayEffect();

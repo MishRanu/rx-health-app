@@ -1,16 +1,22 @@
 
 <ion-view view-title="Search for doctors, articles and diseases"> 
 	<ion-content>
-    <div class  = "list card" style= " margin-top: 20px; margin-bottom:20px">
-            <div class="bar bar-header bar-positive" style="position: static;">
-                <div class="h1 title title-center light">My Groups</div>
-            </div>
 
-<!--             <div class="item card ink item-icon-left" ng-repeat="item in myCommunities"  ng-last-repeat="mylist">
+
+<ion-list class  = "animate-fade-slide-in-right"> 
+
+
+
+<!--                  <div class="item card ink item-icon-left" ng-repeat="item in myCommunities"  ng-last-repeat="mylist">
                 <i class="icon ion-person-stalker"></i> {{item.Name}}
                 <span class="badge badge-assertive">0</span>
-            </div>
- -->
+            </div> -->
+    <ion-item>
+          <ion-item class="item-divider" style= "text-align:center">
+    Home Group
+  </ion-item>
+
+
                  <a class="item item-icon-left">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>Dr. Harsh Kumar Gupta's Community </h2>
                     <span class="badge badge-assertive">0</span>
@@ -18,20 +24,14 @@
 
 
 
-		</div>
+		</ion-item>
+
+<ion-item>
+          <ion-item class="item-divider" style= "text-align:center">
+    Admin Groups
+  </ion-item>
 
 
-
-    <div class  = "list card" style= " margin-top: 20px; margin-bottom:20px" >
-            <div class="bar bar-header bar-positive" style="position: static;">
-                <div class="h1 title title-center light">Admin Groups</div>
-            </div>
-
-<!--             <div class="item card ink item-icon-left" ng-repeat="item in myCommunities"  ng-last-repeat="mylist">
-                <i class="icon ion-person-stalker"></i> {{item.Name}}
-                <span class="badge badge-assertive">0</span>
-            </div>
- -->
                  <a class="item item-icon-left">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>Dr. Harsh Kumar Gupta's Community </h2>
                     <span class="badge badge-assertive">0</span>
@@ -39,20 +39,15 @@
 
 
 
-        </div>
+        </ion-item>
 
 
+<ion-item>
+          <ion-item class="item-divider" style= "text-align:center">
+    Connection Groups
+  </ion-item>
 
-    <div class  = "list card" style= " margin-top: 20px; margin-bottom:20px">
-            <div class="bar bar-header bar-positive" style="position: static;">
-                <div class="h1 title title-center light">Connected Groups</div>
-            </div>
 
-<!--             <div class="item card ink item-icon-left" ng-repeat="item in myCommunities"  ng-last-repeat="mylist">
-                <i class="icon ion-person-stalker"></i> {{item.Name}}
-                <span class="badge badge-assertive">0</span>
-            </div>
- -->
                  <a class="item item-icon-left">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>Dr. Harsh Kumar Gupta's Community </h2>
                     <span class="badge badge-assertive">0</span>
@@ -60,18 +55,14 @@
 
 
 
-        </div>
+        </ion-item>
 
-            <div class  = "list card" style= " margin-top: 20px; margin-bottom:20px">
-            <div class="bar bar-header bar-positive" style="position: static;">
-                <div class="h1 title title-center light">Following Groups</div>
-            </div>
+<ion-item>
+          <ion-item class="item-divider" style= "text-align:center">
+    Following Groups
+  </ion-item>
 
-<!--             <div class="item card ink item-icon-left" ng-repeat="item in myCommunities"  ng-last-repeat="mylist">
-                <i class="icon ion-person-stalker"></i> {{item.Name}}
-                <span class="badge badge-assertive">0</span>
-            </div>
- -->
+
                  <a class="item item-icon-left">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>Dr. Harsh Kumar Gupta's Community </h2>
                     <span class="badge badge-assertive">0</span>
@@ -79,8 +70,8 @@
 
 
 
-        </div>
-
+        </ion-item>
+</ion-list> 
 
 <!-- 		<div ng-if= "otherCommunities.length > 0" class="card">
 			<div style="border-bottom:1px solid #387ef5; margin-top:10px;padding:2px 10px;">
@@ -104,5 +95,6 @@
 		
 			</ion-list>	
 		</div> -->
+
 	</ion-content> 
 </ion-view>
