@@ -191,7 +191,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
   .state('dapp.dtabs', {
-    url: "/tabs",
+    url: "/dtabs",
     views: {
       'dmenuContent': {
         templateUrl: "dtemplates/tabs.html",
