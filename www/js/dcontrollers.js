@@ -69,7 +69,11 @@
 
 })
 
-.controller('dGroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading){
+.controller('dGroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading, ionicMaterialInk){
+
+	$scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
+})
     ionicMaterialInk.displayEffect();
 	$scope.me="Jaishriram";
 	Http.post('getcommunities', {
@@ -93,15 +97,29 @@
         $ionicLoading.hide();
       });
 
+    $scope.isExpanded = false;
+
 
 })
 
-.controller('dNotificationsCtrl', function($scope, $stateParams, $state, ionicMaterialInk){
+.controller('dNotificationsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+    // Set Header
+    // $scope.$parent.showHeader();
+    // $scope.$parent.clearFabs();
+    // $scope.$parent.setHeaderFab('left');
 
-	$scope.me="Jaishriram";
+    // Delay expansion
+    // $timeout(function() {
+    //     $scope.isExpanded = true;
+    //     $scope.$parent.setExpanded(true);
+    // }, 300);
+
+    // Set Motion
+    ionicMaterialMotion.fadeSlideInRight();
+
+    // Set Ink
     ionicMaterialInk.displayEffect();
 })
-
 
 .controller('dCommentsCtrl', function($scope, $stateParams, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
 
