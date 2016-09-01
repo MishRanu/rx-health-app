@@ -12,6 +12,8 @@ app.controller('dtabsController', function($scope, $ionicSideMenuDelegate, ionic
 
 
     // Form data for the login modal
+    //console.log("menu");
+    
     $scope.loginData = {};
     ionicMaterialInk.displayEffect();
     // var navIcons = document.getElementsByClassName('ion-navicon');

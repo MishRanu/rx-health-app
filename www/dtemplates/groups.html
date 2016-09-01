@@ -1,11 +1,22 @@
 <ion-view view-title="Search for doctors, articles and diseases"> 
 	<ion-content>
+	<div  class="card">
+			<div style="border-bottom:1px solid #387ef5; margin-top:10px;padding:2px 10px;">
+				My Communities
+			</div> 
+			<ion-list ng-repeat="item in myCommunities">
+				<ion-item ng-click="goToProfile()">
+					hello
+				</ion-item>
+		
+			</ion-list>	
+		</div>
 		<div ng-if= "myCommunities.length > 0" class="card">
 			<div style="border-bottom:1px solid #387ef5; margin-top:10px;padding:2px 10px;">
 				My Communities
 			</div> 
 			<ion-list ng-repeat="item in myCommunities">
-				<ion-item>
+				<ion-item ng-click="goToProfile()">
 					{{item.ComID}}  {{item.Name}} 
 				</ion-item>
 		
