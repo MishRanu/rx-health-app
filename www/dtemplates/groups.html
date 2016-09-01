@@ -1,5 +1,37 @@
 <ion-view view-title="Search for doctors, articles and diseases"> 
-	<ion-content> 
-	All hail the king!!!
+	<ion-content>
+		<div ng-if= "myCommunities.length > 0" class="card">
+			<div style="border-bottom:1px solid #387ef5; margin-top:10px;padding:2px 10px;">
+				My Communities
+			</div> 
+			<ion-list ng-repeat="item in myCommunities">
+				<ion-item>
+					{{item.ComID}}  {{item.Name}} 
+				</ion-item>
+		
+			</ion-list>	
+		</div>
+		<div ng-if= "otherCommunities.length > 0" class="card">
+			<div style="border-bottom:1px solid #387ef5; margin-top:10px;padding:2px 10px;">
+				Other Communities
+			</div> 
+			<ion-list ng-repeat="item in otherCommunities">
+				<ion-item>
+					{{item.ComID}}   {{item.Name}}
+				</ion-item>
+		
+			</ion-list>	
+		</div>
+		<div ng-if= "following.length > 0" class="card">
+			<div style="border-bottom:1px solid #387ef5; margin-top:10px;padding:2px 10px;">
+				Following
+			</div> 
+			<ion-list ng-repeat="item in following">
+				<ion-item>
+					{{item.ComID}}  {{item.Name}}
+				</ion-item>
+		
+			</ion-list>	
+		</div>
 	</ion-content> 
 </ion-view>
