@@ -291,7 +291,7 @@
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
 })
-.controller('ConnectionsCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+.controller('ConnectionsCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialInk,$ionicPopover, ionicMaterialMotion) {
    // $rootScope.hideTabsBar = true;
     // Set Header
     // $scope.$parent.showHeader();
