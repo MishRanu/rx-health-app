@@ -241,6 +241,15 @@
     // $scope.$parent.setHeaderFab(false);
 
     // Set Motion
+      $scope.users = [
+    { id: 1, name: 'Bob' },
+    { id: 2, name: 'Alice' },
+    { id: 3, name: 'Steve' }
+  ];
+  $scope.selectedUser = { id: 1, name: 'Bob' };
+
+
+  
     $scope.goToActivity = function(){
       $state.go('dapp.dtabs.activity');
     }
