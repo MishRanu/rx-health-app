@@ -93,9 +93,26 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('NotificationsCtrl', function($scope, $stateParams, $state, ionicMaterialInk){
+.controller('NotificationsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+    // Set Header
+    // $scope.$parent.showHeader();
+    // $scope.$parent.clearFabs();
+    // $scope.$parent.setHeaderFab('left');
 
-	$scope.me="Jaishriram";
+    // Delay expansion
+    // $timeout(function() {
+    //     $scope.isExpanded = true;
+    //     $scope.$parent.setExpanded(true);
+    // }, 300);
+
+    // Set Motion
+    $timeout(function() {
+        ionicMaterialMotion.fadeSlideInRight({
+            startVelocity: 3000
+        });
+    }, 700);
+
+    // Set Ink
     ionicMaterialInk.displayEffect();
 })
 
