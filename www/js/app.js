@@ -199,11 +199,10 @@ $ionicConfigProvider.tabs.position('top');
     })
 
   .state('dapp.dtabs', {
-    url: "/tabs",
+    url: "/dtabs",
     views: {
       'dmenuContent': {
         templateUrl: "dtemplates/tabs.html",
-        controller: 'dtabsController'
       }
     }
   })
@@ -244,6 +243,77 @@ $ionicConfigProvider.tabs.position('top');
             'dnotifications':{
                 templateUrl: 'dtemplates/notifications.html',
                 controller: 'dNotificationsCtrl'
+            }
+        }
+    })
+
+    .state('dapp.dtabs.profile', {
+        url: '/profile',
+        views: {
+            'dgroups': {
+                templateUrl: 'dtemplates/community.html',
+                controller: 'ProfileCtrl'
+            },
+            'fabContent': {
+                template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
+                controller: function ($timeout) {
+                    /*$timeout(function () {
+                        document.getElementById('fab-profile').classList.toggle('on');
+                    }, 800);*/
+                }
+            }
+        }
+    })
+    .state('dapp.dtabs.activity', {
+        url: '/activity',
+        views: {
+            'dgroups': {
+                templateUrl: 'dtemplates/activity.html',
+                controller: 'ActivityCtrl'
+            },
+            'fabContent': {
+                template: '<button id="fab-activity" class="button button-fab button-fab-top-right expanded button-energized-900 flap"><i class="icon ion-paper-airplane"></i></button>',
+                controller: function ($timeout) {
+                    $timeout(function () {
+                        document.getElementById('fab-activity').classList.toggle('on');
+                    }, 200);
+                }
+            }
+        }
+    })
+
+    .state('dapp.dtabs.connections', {
+        url: '/connections',
+        views: {
+            'dgroups': {
+                templateUrl: 'dtemplates/connections.html',
+                controller: 'ConnectionsCtrl'
+            },
+            'fabContent': {
+                template: '<button id="fab-friends" class="button button-fab button-fab-top-left expanded button-energized-900 spin"><i class="icon ion-chatbubbles"></i></button>',
+                controller: function ($timeout) {
+                    $timeout(function () {
+                        document.getElementById('fab-friends').classList.toggle('on');
+                    }, 900);
+                }
+            }
+        }
+    })
+
+    .state('dapp.dtabs.followers', {
+        url: '/followers',
+        views: {
+            'dgroups': {
+                templateUrl: 'dtemplates/followers.html',
+                controller: 'FollowersCtrl'
+            },
+            'fabContent': {
+                template: '<button id="fab-gallery" class="button button-fab button-fab-top-right expanded button-energized-900 drop"><i class="icon ion-heart"></i></button>',
+                controller: function ($timeout) {
+                    $timeout(function () {
+                        document.getElementById('fab-gallery').classList.toggle('on');
+                    }, 600);
+                }
             }
         }
     })
