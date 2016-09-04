@@ -45,24 +45,25 @@
                 <div class="item item-body">
                 <div class= "item no-padding"> <h3> Your Post Here </h3> </div>
                 <md-input-container>  
-            <textarea name="post" ng-model="post" rows="7" style= "width:100%"></textarea>
+            <textarea name="post" ng-model="post" rows="10" style= "width:100%"></textarea>
             </md-input-container>
 
-                    <p>
                         <a class="subdued">500 characters left</a>
-                    </p>
+                    
                 </div>
 
 
-            <div class = "item"> 
+            <div class = "item" style= "width:100%"> 
                 <div class = "button button-small button-positive"> Upload Photo </div> 
             </div>
-            <div class ="item item-divider" style= "background-color:white"> 
-<select> <option>Blue</option> <option selected>Green</option> <option>Red</option> </select> <select> <option>Only Connections</option> <option selected>Followers</option> </select>
-<div class = "button button-small button-positive"> Post </div> 
-
-            </div> 
-
         </div>
+            <div class ="item item-divider" style= "background-color:white"> 
+ <select> <option>Only Connections</option> <option>Public</option>  <option selected>Followers</option> </select>
+
+<div class = "button button-small button-positive" style= "float:right"> Post </div> 
+            </div> 
+&nbsp
+
+
     </ion-content>
 </ion-view>

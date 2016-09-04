@@ -43,6 +43,8 @@ app.controller('tabsController', function($scope, $ionicSideMenuDelegate, ionicM
                     '   </ion-content>' +
                     '</ion-popover-view>';
 
+
+
     $scope.popover = $ionicPopover.fromTemplate(template, {
         scope: $scope
     });

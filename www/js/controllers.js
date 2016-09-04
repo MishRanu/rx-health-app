@@ -6,37 +6,29 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('FeedCtrl', function($scope, $stateParams, $ionicPopup, $timeout, $state, ionicMaterialInk){
+.controller('FeedCtrl', function($scope, $stateParams, $ionicPopup, $timeout, $state, ionicMaterialInk, $ionicPopover){
 
 	$scope.me="Jaishriram";
     ionicMaterialInk.displayEffect();
 
-// var myPopup = $ionicPopup.show({
-//      template: '<input type="password" ng-model="data.wifi">',
-//      title: 'Enter Wi-Fi Password',
-//      subTitle: 'Please use normal things',
-//      scope: $scope,
-//      buttons: [
-//        { text: 'Cancel' },
-//        {
-//          text: '<b>Save</b>',
-//          type: 'button-positive',
-//          onTap: function(e) {
-//            if (!$scope.data.wifi) {
-//              //don't allow the user to close unless he enters wifi password
-//              e.preventDefault();
-//            } else {
-//              return $scope.data.wifi;
-//            }
-//          }
-//        },
-//      ]
-//    });
+    var ptemplate = '<ion-popover-view>'  +
+                    '<div class= "list no-padding"> <div class= "item" style= "padding-bottom:0px"> Save </div> <div class= "item" style= "padding-top:0px; padding-bottom:0px "> Report </div></div>' +
+                   '</ion-popover-view>';
 
-//    myPopup.then(function(res) {
-//      console.log('Tapped!', res);
-//    });
+    $scope.optionpopover = $ionicPopover.fromTemplate(ptemplate, {
+        scope: $scope
+    });
+    $scope.openPopover = function($event) {
+    $scope.optionpopover.show($event);
+  };
 
+    $scope.closePopover = function () {
+        $scope.optionpopover.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function () {
+        $scope.optionpopover.remove();
+    });
 
     $scope.showPopup = function() {
         var alertPopup = $ionicPopup.show({
