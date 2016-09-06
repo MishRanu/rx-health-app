@@ -61,11 +61,50 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 })
 
-.controller('GroupsCtrl', function($scope, $stateParams, $state, ionicMaterialInk){
-	$scope.me="Jaishriram";
+
+.controller('GroupsCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+    // Set Header
+    console.log("dsds");
+    // $scope.showHeader();
+    // $scope.$parent.clearFabs();
+    // $scope.isExpanded = false;
+    // $scope.$parent.setExpanded(false);
+    // $scope.$parent.setHeaderFab(false);
+
+    // Set Motion
+      $scope.users = [
+    { id: 1, name: 'Bob' },
+    { id: 2, name: 'Alice' },
+    { id: 3, name: 'Steve' }
+  ];
+  $scope.selectedUser = { id: 1, name: 'Bob' };
+
+
+  
+    $scope.goToActivity = function(){
+      $state.go('dapp.dtabs.activity');
+    }
+    $scope.goToMembers = function(){
+      $state.go('dapp.dtabs.connections');
+    }
+    $scope.goToFollowers = function(){
+      $state.go('dapp.dtabs.followers');
+    }
+    $timeout(function() {
+        ionicMaterialMotion.slideUp({
+            selector: '.slide-up'
+        });
+    }, 300);
+
+    $timeout(function() {
+        ionicMaterialMotion.fadeSlideInRight({
+            startVelocity: 3000
+        });
+    }, 700);
+
+    // Set Ink
     ionicMaterialInk.displayEffect();
 })
-
 .controller('FriendsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
     // Set Header
     $scope.$parent.showHeader();
