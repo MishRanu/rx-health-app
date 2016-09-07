@@ -6,8 +6,34 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('FeedCtrl', function($ionicLoading, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
+
+.controller('FeedCtrl', function($ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
     $rootScope.UserID = 1;
+		$scope.comments = null;
+		$ionicModal.fromTemplateUrl('templates/comments.html', {
+		  scope: $scope,
+		  animation: 'slide-in-up'
+		}).then(function(modal) {
+		  $scope.commentmodal = modal;
+		});
+
+  var options = {
+      location: 'yes',
+      clearcache: 'yes',
+      toolbar: 'no'
+   };
+
+   $scope.openBrowser = function(link) {
+      $cordovaInAppBrowser.open(link, '_blank', options)
+
+      .then(function(event) {
+         // success
+      })
+
+      .catch(function(event) {
+         // error
+      });
+   }
 
     $scope.$on("$ionicView.beforeEnter", function(){
         $ionicLoading.show({
@@ -21,6 +47,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
         $ionicLoading.hide();
         if ($scope.ResponseCode == 200) {
             $scope.feeds = data.Status.Articles;
+            console.dir($scope.feeds);
         }
           else {
             $ionicPopup.alert({
@@ -34,7 +61,33 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
           $ionicLoading.hide();
         });
     });
-        
+
+		$scope.openCommentModal = function(item){
+			$ionicLoading.show({
+			template: 'Loading...',
+			noBackdrop: true
+			});
+			Http.post('getcomments',{ShrID : item})
+			 .success(function(data) {
+			$scope.ResponseCode = data.Status.ResponseCode;
+			$scope.ResponseMessage = data.Status.ResponseMessage;
+			$ionicLoading.hide();
+			if ($scope.ResponseCode == 200) {
+					$scope.comments = data.Status.Comments;
+			}else{
+				$ionicPopup.alert({
+					title: 'Message',
+					template: $scope.ResponseMessage
+				});
+			}
+			}).error(function(data) {
+				//$scope.data.error={message: error, status: status};
+				console.log("error" + data);
+				$ionicLoading.hide();
+			});
+			$scope.commentmodal.show();
+		}
+
 	$scope.me="Jaishriram";
     ionicMaterialInk.displayEffect();
 
@@ -61,12 +114,12 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
         var alertPopup = $ionicPopup.show({
         	template: '<select> <option>Blue</option> <option selected>Green</option> <option>Red</option> </select> <select> <option>Only Connections</option> <option selected>Followers</option> </select>',
             title: 'Share',
-            subTitle: 'Select one of your groups to share', 
-            scope: $scope, 
+            subTitle: 'Select one of your groups to share',
+            scope: $scope,
             buttons: [
             	{ text: 'Cancel' },
             	{
-            		text: '<b>Share</b>', 
+            		text: '<b>Share</b>',
             		type: 'button-positive',
          			onTap: function(e) {
            			if (!$scope.data.wifi) {
@@ -115,6 +168,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     $scope.goToCommunity = function(CommuID, UserType){
         console.log(CommuID);
       $state.go('dapp.dtabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
+
     };
     Http.post('getcommunities', {
       'UserID': 1
@@ -163,7 +217,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
   $scope.selectedUser = { id: 1, name: 'Bob' };
 
 
-  
+
     $scope.goToActivity = function(){
       $state.go('dapp.dtabs.activity');
     }
