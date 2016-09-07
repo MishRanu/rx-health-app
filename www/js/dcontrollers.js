@@ -1,7 +1,7 @@
  angular.module('starter.dcontrollers', ['ionic', 'ionic-material'])
 
 
-.controller('dtabsCtrl', function($scope,$state, $ionicModal, $ionicPopover, $timeout,$rootScope) {
+ .controller('dtabsCtrl', function($scope,$state, $ionicModal, $ionicPopover, $timeout,$rootScope) {
     // Form data for the login modal
     $scope.loginData = {};
     $scope.isExpanded = false;
@@ -9,28 +9,28 @@
     $scope.hasHeaderFabRight = false;
     //$rootScope.hideTabsBar = false;
     $rootScope.$on('$ionicView.beforeEnter', function() {
-    var stateName = $state.current.name;
-    if (stateName === 'dapp.dtabs.symptify' || stateName === 'dapp.dtabs.feed' || stateName === 'dapp.dtabs.groups' || stateName === 'dapp.dtabs.notifications' ) {
-      $rootScope.hideTabsBar = false;
-    } else {
-      $rootScope.hideTabsBar = true;
-    }
+      var stateName = $state.current.name;
+      if (stateName === 'dapp.dtabs.symptify' || stateName === 'dapp.dtabs.feed' || stateName === 'dapp.dtabs.groups' || stateName === 'dapp.dtabs.notifications' ) {
+        $rootScope.hideTabsBar = false;
+      } else {
+        $rootScope.hideTabsBar = true;
+      }
       // if(stateName === 'tab.pmenu' && !$rootScope.IsLoggedIn){
       //   $state.go('login');
       // }
     });
     $scope.gosymptify = function() {
-    $state.go('dapp.dtabs.symptify');
-  }
-  $scope.gofeed = function() {
-    $state.go('dapp.dtabs.feed');
-  }
-  $scope.gogroups = function() {
-    $state.go('dapp.dtabs.groups');
-  }
-  $scope.gonotification = function() {
-    $state.go('dapp.dtabs.notifications');
-  }
+      $state.go('dapp.dtabs.symptify');
+    }
+    $scope.gofeed = function() {
+      $state.go('dapp.dtabs.feed');
+    }
+    $scope.gogroups = function() {
+      $state.go('dapp.dtabs.groups');
+    }
+    $scope.gonotification = function() {
+      $state.go('dapp.dtabs.notifications');
+    }
   // $scope.gopmenu = function() {
   //   $state.go('tab.pmenu');
   // }
@@ -47,83 +47,83 @@
     ////////////////////////////////////////
 
     $scope.hideNavBar = function() {
-        document.getElementsByTagName('ion-nav-bar')[0].style.display = 'none';
+      document.getElementsByTagName('ion-nav-bar')[0].style.display = 'none';
     };
 
     $scope.showNavBar = function() {
-        document.getElementsByTagName('ion-nav-bar')[0].style.display = 'block';
+      document.getElementsByTagName('ion-nav-bar')[0].style.display = 'block';
     };
 
     $scope.noHeader = function() {
-        var content = document.getElementsByTagName('ion-content');
-        for (var i = 0; i < content.length; i++) {
-            if (content[i].classList.contains('has-header')) {
-                content[i].classList.toggle('has-header');
-            }
+      var content = document.getElementsByTagName('ion-content');
+      for (var i = 0; i < content.length; i++) {
+        if (content[i].classList.contains('has-header')) {
+          content[i].classList.toggle('has-header');
         }
+      }
     };
 
     $scope.setExpanded = function(bool) {
-        $scope.isExpanded = bool;
+      $scope.isExpanded = bool;
     };
 
     $scope.setHeaderFab = function(location) {
-        var hasHeaderFabLeft = false;
-        var hasHeaderFabRight = false;
+      var hasHeaderFabLeft = false;
+      var hasHeaderFabRight = false;
 
-        switch (location) {
-            case 'left':
-                hasHeaderFabLeft = true;
-                break;
-            case 'right':
-                hasHeaderFabRight = true;
-                break;
-        }
+      switch (location) {
+        case 'left':
+        hasHeaderFabLeft = true;
+        break;
+        case 'right':
+        hasHeaderFabRight = true;
+        break;
+      }
 
-        $scope.hasHeaderFabLeft = hasHeaderFabLeft;
-        $scope.hasHeaderFabRight = hasHeaderFabRight;
+      $scope.hasHeaderFabLeft = hasHeaderFabLeft;
+      $scope.hasHeaderFabRight = hasHeaderFabRight;
     };
 
     $scope.hasHeader = function() {
-        var content = document.getElementsByTagName('ion-content');
-        for (var i = 0; i < content.length; i++) {
-            if (!content[i].classList.contains('has-header')) {
-                content[i].classList.toggle('has-header');
-            }
+      var content = document.getElementsByTagName('ion-content');
+      for (var i = 0; i < content.length; i++) {
+        if (!content[i].classList.contains('has-header')) {
+          content[i].classList.toggle('has-header');
         }
+      }
 
     };
 
     $scope.hideHeader = function() {
-        $scope.hideNavBar();
-        $scope.noHeader();
+      $scope.hideNavBar();
+      $scope.noHeader();
     };
 
     $scope.showHeader = function() {
-        $scope.showNavBar();
-        $scope.hasHeader();
+      $scope.showNavBar();
+      $scope.hasHeader();
     };
 
     $scope.clearFabs = function() {
-        var fabs = document.getElementsByClassName('button-fab');
-        if (fabs.length && fabs.length > 1) {
-            fabs[0].remove();
-        }
+      var fabs = document.getElementsByClassName('button-fab');
+      if (fabs.length && fabs.length > 1) {
+        fabs[0].remove();
+      }
     };
     
-})
+  })
 
 
-.controller('dSymptifyCtrl', function($scope, $stateParams, $state, ionicMaterialInk){
+ .controller('dSymptifyCtrl', function($scope, $stateParams, $state, ionicMaterialInk){
 
-	$scope.me="Jaishriram";
-    ionicMaterialInk.displayEffect();
-})
+   $scope.me="Jaishriram";
+   ionicMaterialInk.displayEffect();
+ })
 
-.controller('dFeedCtrl', function($scope, $stateParams, $ionicPopup, $timeout, $state, ionicMaterialInk){
+ .controller('dFeedCtrl', function($scope, $stateParams, $ionicPopup, $timeout, $state, ionicMaterialInk){
 
-	$scope.me="Jaishriram";
-    ionicMaterialInk.displayEffect();
+   $scope.me="Jaishriram";
+   ionicMaterialInk.displayEffect();
 
 // var myPopup = $ionicPopup.show({
 //      template: '<input type="password" ng-model="data.wifi">',
@@ -152,86 +152,103 @@
 //    });
 
 
-    $scope.showPopup = function() {
-        var alertPopup = $ionicPopup.show({
-        	template: '<select> <option>Blue</option> <option selected>Green</option> <option>Red</option> </select> <select> <option>Only Connections</option> <option selected>Followers</option> </select>',
-            title: 'Share',
-            subTitle: 'Select one of your groups to share', 
-            scope: $scope, 
-            buttons: [
-            	{ text: 'Cancel' },
-            	{
-            		text: '<b>Share</b>', 
-            		type: 'button-positive',
-         			onTap: function(e) {
-           			if (!$scope.data.wifi) {
+$scope.showPopup = function() {
+  var alertPopup = $ionicPopup.show({
+   template: '<select> <option>Blue</option> <option selected>Green</option> <option>Red</option> </select> <select> <option>Only Connections</option> <option selected>Followers</option> </select>',
+   title: 'Share',
+   subTitle: 'Select one of your groups to share', 
+   scope: $scope, 
+   buttons: [
+   { text: 'Cancel' },
+   {
+    text: '<b>Share</b>', 
+    type: 'button-positive',
+    onTap: function(e) {
+      if (!$scope.data.wifi) {
              //don't allow the user to close unless he enters wifi password
-             			e.preventDefault();
-           			} else {
-             		return $scope.data.wifi;
-           			}
-         		}
-       		},
-     		]
-        });
+             e.preventDefault();
+           } else {
+             return $scope.data.wifi;
+           }
+         }
+       },
+       ]
+     });
 
-        $timeout(function() {
+  $timeout(function() {
             //ionic.material.ink.displayEffect();
             ionicMaterialInk.displayEffect();
-        }, 0);
+          }, 0);
+};
+
+})
+
+ .controller('dGroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
+
+
+  $timeout(function() {
+    ionicMaterialMotion.fadeSlideInRight({
+      startVelocity: 3000
+    });
+  }, 700);
+
+  var template = '<ion-popover-view>' +
+                    '   <ion-header-bar>' +
+                    '       <h1 class="title">My Popover Title1</h1>' +
+                    '   </ion-header-bar>' +
+                    '   <ion-content class="padding">' +
+                    '       My Popover Contents' +
+                    '   </ion-content>' +
+                    '</ion-popover-view>';
+
+    $scope.popover1 = $ionicPopover.fromTemplate(template, {
+        scope: $scope
+    });
+    $scope.closePopover = function () {
+        $scope.popover1.hide();
     };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function () {
+        $scope.popover1.remove();
+    });
 
-})
-
-.controller('dGroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
-
-
-    $timeout(function() {
-        ionicMaterialMotion.fadeSlideInRight({
-            startVelocity: 3000
-        });
-    }, 700);
-
-
-
-	$scope.$on('ngLastRepeat.mylist',function(e) {
-  ionicMaterialInk.displayEffect();
-})
+  $scope.$on('ngLastRepeat.mylist',function(e) {
     ionicMaterialInk.displayEffect();
-	$scope.me="Jaishriram";
-  console.log("khujli");
- 
-    $scope.goToProfile = function(){
-      console.log("hello");
-      $state.go('dapp.dtabs.profile');
-    };
-	Http.post('getcommunities', {
-      'UserID': 4
-    })
-    .success(function(data) {
-      $scope.ResponseCode = data.Status.ResponseCode;
-      $scope.ResponseMessage = data.Status.ResponseMessage;
-      $ionicLoading.hide();
-      if ($scope.ResponseCode == 200) {
-        $scope.myCommunities = data.Status.myCommunities;
-        $scope.otherCommunities = data.Status.otherCommunities;
-        $scope.following = data.Status.following;
-        console.dir($scope.myCommunities,$scope.following);
-      } else {
-        alert($scope.ResponseMessage);
-      }
-    }).error(function(data, status, headers, config) {
+  })
+  ionicMaterialInk.displayEffect();
+  $scope.me="Jaishriram";
+
+  $scope.goToProfile = function(){
+    console.log("hello");
+    $state.go('dapp.dtabs.profile');
+  };
+  Http.post('getcommunities', {
+    'UserID': 4
+  })
+  .success(function(data) {
+    $scope.ResponseCode = data.Status.ResponseCode;
+    $scope.ResponseMessage = data.Status.ResponseMessage;
+    $ionicLoading.hide();
+    if ($scope.ResponseCode == 200) {
+      $scope.myCommunities = data.Status.myCommunities;
+      $scope.otherCommunities = data.Status.otherCommunities;
+      $scope.following = data.Status.following;
+      console.dir($scope.myCommunities,$scope.following);
+    } else {
+      alert($scope.ResponseMessage);
+    }
+  }).error(function(data, status, headers, config) {
         //$scope.data.error={message: error, status: status};
         alert("error" + data);
         $ionicLoading.hide();
       });
 
-    $scope.isExpanded = false;
+  $scope.isExpanded = false;
 
 
 })
 
-.controller('ProfileCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+ .controller('ProfileCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     // Set Header
     console.log("dsds");
     // $scope.showHeader();
@@ -241,15 +258,15 @@
     // $scope.$parent.setHeaderFab(false);
 
     // Set Motion
-      $scope.users = [
+    $scope.users = [
     { id: 1, name: 'Bob' },
     { id: 2, name: 'Alice' },
     { id: 3, name: 'Steve' }
-  ];
-  $scope.selectedUser = { id: 1, name: 'Bob' };
+    ];
+    $scope.selectedUser = { id: 1, name: 'Bob' };
 
 
-  
+
     $scope.goToActivity = function(){
       $state.go('dapp.dtabs.activity');
     }
@@ -260,21 +277,21 @@
       $state.go('dapp.dtabs.followers');
     }
     $timeout(function() {
-        ionicMaterialMotion.slideUp({
-            selector: '.slide-up'
-        });
+      ionicMaterialMotion.slideUp({
+        selector: '.slide-up'
+      });
     }, 300);
 
     $timeout(function() {
-        ionicMaterialMotion.fadeSlideInRight({
-            startVelocity: 3000
-        });
+      ionicMaterialMotion.fadeSlideInRight({
+        startVelocity: 3000
+      });
     }, 700);
 
     // Set Ink
     ionicMaterialInk.displayEffect();
-})
-.controller('ActivityCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+  })
+ .controller('ActivityCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
     // $scope.isExpanded = true;
@@ -282,16 +299,16 @@
     // $scope.$parent.setHeaderFab('right');
    // $rootScope.hideTabsBar = true;
 
-    $timeout(function() {
-        ionicMaterialMotion.fadeSlideIn({
-            selector: '.animate-fade-slide-in .item'
-        });
-    }, 200);
+   $timeout(function() {
+    ionicMaterialMotion.fadeSlideIn({
+      selector: '.animate-fade-slide-in .item'
+    });
+  }, 200);
 
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
-})
-.controller('ConnectionsCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialInk,$ionicPopover, ionicMaterialMotion) {
+  })
+ .controller('ConnectionsCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialInk,$ionicPopover, ionicMaterialMotion) {
    // $rootScope.hideTabsBar = true;
     // Set Header
     // $scope.$parent.showHeader();
@@ -306,15 +323,15 @@
 
     // Set Motion
     $timeout(function() {
-        ionicMaterialMotion.fadeSlideInRight({
-            startVelocity: 3000
-        });
+      ionicMaterialMotion.fadeSlideInRight({
+        startVelocity: 3000
+      });
     }, 700);
 
     // Set Ink
     ionicMaterialInk.displayEffect();
-})
-.controller('FollowersCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+  })
+ .controller('FollowersCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
     //$rootScope.hideTabsBar = true;
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -326,17 +343,17 @@
     ionicMaterialInk.displayEffect();
 
     ionicMaterialMotion.pushDown({
-        selector: '.push-down'
+      selector: '.push-down'
     });
     ionicMaterialMotion.fadeSlideInRight({
-        selector: '.animate-fade-slide-in .item'
+      selector: '.animate-fade-slide-in .item'
     });
 
-})
+  })
 
 
 
-.controller('dNotificationsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+ .controller('dNotificationsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
 
     // Delay expansion
     // $timeout(function() {
@@ -349,12 +366,12 @@
 
     // Set Ink
     ionicMaterialInk.displayEffect();
-})
+  })
 
-.controller('dCommentsCtrl', function($scope, $stateParams, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+ .controller('dCommentsCtrl', function($scope, $stateParams, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
 
-    ionicMaterialInk.displayEffect();
-	$scope.me="Jaishriram";
+  ionicMaterialInk.displayEffect();
+  $scope.me="Jaishriram";
 	    // Set Header
 
     // Set Motion
@@ -363,5 +380,5 @@
 
 
 
-})
+  })
 

@@ -2,11 +2,13 @@
     <ion-content ng-class="{expanded:isExpanded}">
         <div class="content">
             <div class="list animate-fade-slide-in-right">
-                <a href="#/app/profile" class="item item-avatar item-icon-right">
+                <a  class="item item-avatar item-icon-right">
                     <img src="img/jon-snow.jpg">
                     <h2>Jon Snow</h2>
                     <p>@Da illest illegitimate</p>
-                    <i class="icon ion-android-more-vertical" ng-click="popover.show($event)"></i>
+                    <!-- <button class="button button-icon ion-more" ng-click="popover.show($event)">
+                    </button> -->
+                                <i class="icon ion-android-more-vertical" ng-click="popover.show()"></i>
                 </a>
                 <a href="#/app/profile" class="item item-avatar item-icon-right">
                     <img src="img/daenerys.jpg">
