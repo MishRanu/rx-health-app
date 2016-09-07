@@ -1,6 +1,6 @@
 <ion-view view-title="Followers">
     <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
-        <div class="list animate-fade-slide-in-right" ng-repeat ="item in followers">
+        <div class="list animate-fade-slide-in-right" ng-repeat ="item in followers" ng-last-repeat="mylist">
             <a  class="item item-avatar item-icon-right" >
                     <img src="img/jon-snow.jpg">
                     <h2>{{item.FullName}}</h2>

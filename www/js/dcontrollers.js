@@ -357,8 +357,7 @@
     // $scope.$parent.setExpanded(true);
     // $scope.$parent.setHeaderFab('right');
    // $rootScope.hideTabsBar = true;
-    $scope.CommuID =  $stateParams.CommuID; 
-    $scope.UserType = $stateParams.UserType; 
+    $scope.CommuID =  $stateParams.CommuID;  
 
     $scope.$on('ngLastRepeat.mylist',function(e) {
   ionicMaterialInk.displayEffect();

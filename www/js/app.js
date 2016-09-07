@@ -302,7 +302,7 @@ $ionicConfigProvider.tabs.position('top');
         }
     })
     .state('dapp.dtabs.activity', {
-        url: '/community/activity/:CommuID/:UserType',
+        url: '/community/activity/:CommuID',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/activity.html',
@@ -320,7 +320,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.dtabs.connections', {
-        url: '/community/connections/:CommuID/:UserType',
+        url: '/community/connections/:CommuID',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/connections.html',
@@ -338,7 +338,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.dtabs.followers', {
-        url: '/community/followers/:CommuID/:UserType',
+        url: '/community/followers/:CommuID',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/followers.html',
