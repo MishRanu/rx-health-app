@@ -142,7 +142,6 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 })
 
 
-
 .controller('GroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
 
 
@@ -157,16 +156,22 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     $scope.$on('ngLastRepeat.mylist',function(e) {
   ionicMaterialInk.displayEffect();
 })
+
     ionicMaterialInk.displayEffect();
     $scope.me="Jaishriram";
   console.log("khujli");
+ 
+    $scope.goToCommunity1 = function(CommuID, UserType){
+        console.log(CommuID);
+      $state.go('dapp.dtabs.community1', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
+    };
+    $scope.goToCommunity = function(CommuID, UserType){
+        console.log(CommuID);
+      $state.go('dapp.dtabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
 
-    $scope.goToProfile = function(){
-      console.log("hello");
-      $state.go('app.tabs.community');
     };
     Http.post('getcommunities', {
-      'UserID': 4
+      'UserID': 1
     })
     .success(function(data) {
       $scope.ResponseCode = data.Status.ResponseCode;
@@ -174,9 +179,12 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       $ionicLoading.hide();
       if ($scope.ResponseCode == 200) {
         $scope.myCommunities = data.Status.myCommunities;
-        $scope.otherCommunities = data.Status.otherCommunities;
+        $scope.connectCommunities = data.Status.connectCommunities;
+
+        $scope.adminCommunities = data.Status.adminCommunities;
         $scope.following = data.Status.following;
-        console.dir($scope.myCommunities,$scope.following);
+        console.log(data.Status);
+        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
       } else {
         alert($scope.ResponseMessage);
       }
