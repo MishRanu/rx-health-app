@@ -123,6 +123,26 @@ $ionicConfigProvider.tabs.position('top');
         }
     })
     
+
+        .state('app.tabs.community', {
+        url: '/community',
+        views: {
+            'groups': {
+                templateUrl: 'templates/community.html',
+                controller: 'CommunityCtrl'
+            },
+            'fabContent': {
+                template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
+                controller: function ($timeout) {
+                    /*$timeout(function () {
+                        document.getElementById('fab-profile').classList.toggle('on');
+                    }, 800);*/
+                }
+            }
+        }
+    })
+
+
         .state('app.tabs.notifications', {
         url: '/notifications', 
         views:{
@@ -247,12 +267,12 @@ $ionicConfigProvider.tabs.position('top');
         }
     })
 
-    .state('dapp.dtabs.profile', {
-        url: '/profile',
+    .state('dapp.dtabs.community', {
+        url: '/groups/:CommuID',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/community.html',
-                controller: 'ProfileCtrl'
+                controller: 'CommunityCtrl'
             },
             'fabContent': {
                 template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
@@ -265,7 +285,7 @@ $ionicConfigProvider.tabs.position('top');
         }
     })
     .state('dapp.dtabs.activity', {
-        url: '/activity',
+        url: '/community/activity/:CommuID',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/activity.html',
@@ -283,7 +303,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.dtabs.connections', {
-        url: '/connections',
+        url: '/community/connections/:CommuID',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/connections.html',
@@ -301,7 +321,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.dtabs.followers', {
-        url: '/followers',
+        url: '/community/followers/:CommuID',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/followers.html',
