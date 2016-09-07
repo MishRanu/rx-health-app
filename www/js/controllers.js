@@ -6,8 +6,35 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('FeedCtrl', function($scope, $stateParams, $ionicPopup, $timeout, $state, ionicMaterialInk, $ionicPopover){
+.controller('FeedCtrl', function($ionicLoading, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
+    $rootScope.UserID = 1;
 
+    $scope.$on("$ionicView.beforeEnter", function(){
+        $ionicLoading.show({
+        template: 'Loading...',
+        noBackdrop: true
+        });
+        Http.post('getfeeds',{UserID : $rootScope.UserID})
+         .success(function(data) {
+        $scope.ResponseCode = data.Status.ResponseCode;
+        $scope.ResponseMessage = data.Status.ResponseMessage;
+        $ionicLoading.hide();
+        if ($scope.ResponseCode == 200) {
+            $scope.feeds = data.Status.Articles;
+        }
+          else {
+            $ionicPopup.alert({
+              title: 'Message',
+              template: $scope.ResponseMessage
+            });
+          }
+        }).error(function(data) {
+          //$scope.data.error={message: error, status: status};
+          console.log("error" + data);
+          $ionicLoading.hide();
+        });
+    });
+        
 	$scope.me="Jaishriram";
     ionicMaterialInk.displayEffect();
 
