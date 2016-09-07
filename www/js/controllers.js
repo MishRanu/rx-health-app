@@ -7,7 +7,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 })
 
 
-.controller('FeedCtrl', function($ionicLoading, $cordovaInAppBrowser, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
+.controller('FeedCtrl', function($ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
     $rootScope.UserID = 1;
 		$scope.comments = null;
 		$ionicModal.fromTemplateUrl('templates/comments.html', {
