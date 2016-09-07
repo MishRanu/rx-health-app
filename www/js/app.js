@@ -268,7 +268,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.dtabs.community', {
-        url: '/groups/:CommuID',
+        url: '/groups/:CommuID/:UserType',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/community.html',
@@ -284,8 +284,25 @@ $ionicConfigProvider.tabs.position('top');
             }
         }
     })
+        .state('dapp.dtabs.community1', {
+        url: '/groups/:CommuID/:UserType',
+        views: {
+            'dgroups': {
+                templateUrl: 'dtemplates/community1.html',
+                controller: 'Community1Ctrl'
+            },
+            'fabContent': {
+                template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
+                controller: function ($timeout) {
+                    /*$timeout(function () {
+                        document.getElementById('fab-profile').classList.toggle('on');
+                    }, 800);*/
+                }
+            }
+        }
+    })
     .state('dapp.dtabs.activity', {
-        url: '/community/activity/:CommuID',
+        url: '/community/activity/:CommuID/:UserType',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/activity.html',
@@ -303,7 +320,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.dtabs.connections', {
-        url: '/community/connections/:CommuID',
+        url: '/community/connections/:CommuID/:UserType',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/connections.html',
@@ -321,7 +338,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.dtabs.followers', {
-        url: '/community/followers/:CommuID',
+        url: '/community/followers/:CommuID/:UserType',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/followers.html',

@@ -195,9 +195,13 @@
 	$scope.me="Jaishriram";
   console.log("khujli");
  
-    $scope.goToProfile = function(CommuID){
+    $scope.goToCommunity1 = function(CommuID, UserType){
         console.log(CommuID);
-      $state.go('dapp.dtabs.community', {"CommuID": CommuID}, {reload:false});
+      $state.go('dapp.dtabs.community1', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
+    };
+    $scope.goToCommunity = function(CommuID, UserType){
+        console.log(CommuID);
+      $state.go('dapp.dtabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
     };
 	Http.post('getcommunities', {
       'UserID': 1
@@ -208,7 +212,9 @@
       $ionicLoading.hide();
       if ($scope.ResponseCode == 200) {
         $scope.myCommunities = data.Status.myCommunities;
-        $scope.otherCommunities = data.Status.otherCommunities;
+        $scope.connectCommunities = data.Status.connectCommunities;
+
+        $scope.adminCommunities = data.Status.adminCommunities;
         $scope.following = data.Status.following;
         console.log(data.Status);
         // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
@@ -229,9 +235,13 @@
 .controller('CommunityCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     // Set Header
 
+    $scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
+})
+
 
     $scope.CommuID =  $stateParams.CommuID; 
-
+    $scope.UserType = $stateParams.UserType; 
     console.log("dsds");
     // $scope.showHeader();
     // $scope.$parent.clearFabs();
@@ -273,6 +283,51 @@
     // Set Ink
     ionicMaterialInk.displayEffect();
 })
+
+ .controller('Community1Ctrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+    // Set Header
+    console.log("dsds");
+    // $scope.showHeader();
+    // $scope.$parent.clearFabs();
+    // $scope.isExpanded = false;
+    // $scope.$parent.setExpanded(false);
+    // $scope.$parent.setHeaderFab(false);
+
+    // Set Motion
+      $scope.users = [
+    { id: 1, name: 'Bob' },
+    { id: 2, name: 'Alice' },
+    { id: 3, name: 'Steve' }
+  ];
+  $scope.selectedUser = { id: 1, name: 'Bob' };
+
+
+  
+    $scope.goToActivity = function(){
+      $state.go('dapp.dtabs.activity');
+    }
+    $scope.goToMembers = function(){
+      $state.go('dapp.dtabs.connections');
+    }
+    $scope.goToFollowers = function(){
+      $state.go('dapp.dtabs.followers');
+    }
+    $timeout(function() {
+        ionicMaterialMotion.slideUp({
+            selector: '.slide-up'
+        });
+    }, 300);
+
+    $timeout(function() {
+        ionicMaterialMotion.fadeSlideInRight({
+            startVelocity: 3000
+        });
+    }, 700);
+
+    // Set Ink
+    ionicMaterialInk.displayEffect();
+})
+
 .controller('ActivityCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -281,7 +336,11 @@
     // $scope.$parent.setHeaderFab('right');
    // $rootScope.hideTabsBar = true;
     $scope.CommuID =  $stateParams.CommuID; 
+    $scope.UserType = $stateParams.UserType; 
 
+    $scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
+})
 
     $timeout(function() {
         ionicMaterialMotion.fadeSlideIn({
@@ -328,6 +387,11 @@
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
     $scope.CommuID =  $stateParams.CommuID; 
+    $scope.UserType = $stateParams.UserType; 
+
+    $scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
+})
 
     ionicMaterialMotion.pushDown({
         selector: '.push-down'
