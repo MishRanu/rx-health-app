@@ -17,6 +17,10 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 		  $scope.commentmodal = modal;
 		});
 
+  $scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
+})
+
   var options = {
       location: 'yes',
       clearcache: 'yes',
