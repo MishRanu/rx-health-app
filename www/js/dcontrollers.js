@@ -349,7 +349,6 @@
 })
 
 
-  })
  .controller('ActivityCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
 
     // $scope.$parent.showHeader();
