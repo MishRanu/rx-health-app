@@ -6,8 +6,16 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('FeedCtrl', function($ionicLoading, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
+.controller('FeedCtrl', function($ionicModal, $ionicLoading, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
     $rootScope.UserID = 1;
+
+		$ionicModal.fromTemplateUrl('templates/comments.html', {
+		  scope: $scope,
+		  animation: 'slide-in-up'
+		}).then(function(modal) {
+		  $scope.commentmodal = modal;
+		});
+
 
     $scope.$on("$ionicView.beforeEnter", function(){
         $ionicLoading.show({
@@ -34,7 +42,11 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
           $ionicLoading.hide();
         });
     });
-        
+
+		$scope.openCommentModal = function(){
+			$scope.commentmodal.show();
+		}
+
 	$scope.me="Jaishriram";
     ionicMaterialInk.displayEffect();
 
@@ -61,12 +73,12 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
         var alertPopup = $ionicPopup.show({
         	template: '<select> <option>Blue</option> <option selected>Green</option> <option>Red</option> </select> <select> <option>Only Connections</option> <option selected>Followers</option> </select>',
             title: 'Share',
-            subTitle: 'Select one of your groups to share', 
-            scope: $scope, 
+            subTitle: 'Select one of your groups to share',
+            scope: $scope,
             buttons: [
             	{ text: 'Cancel' },
             	{
-            		text: '<b>Share</b>', 
+            		text: '<b>Share</b>',
             		type: 'button-positive',
          			onTap: function(e) {
            			if (!$scope.data.wifi) {
@@ -107,7 +119,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
     $scope.me="Jaishriram";
   console.log("khujli");
- 
+
     $scope.goToProfile = function(){
       console.log("hello");
       $state.go('app.tabs.community');
@@ -156,7 +168,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
   $scope.selectedUser = { id: 1, name: 'Bob' };
 
 
-  
+
     $scope.goToActivity = function(){
       $state.go('dapp.dtabs.activity');
     }
