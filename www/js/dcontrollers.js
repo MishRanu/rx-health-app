@@ -312,7 +312,7 @@
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
   })
- .controller('ConnectionsCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialInk,$ionicPopover, ionicMaterialMotion) {
+ .controller('ConnectionsCtrl', function($scope,$rootScope,Http,$ionicLoading, $stateParams, $timeout, ionicMaterialInk,$ionicPopover, ionicMaterialMotion) {
    // $rootScope.hideTabsBar = true;
     // Set Header
     // $scope.$parent.showHeader();
@@ -328,6 +328,27 @@
     // Set Motion
     $scope.CommuID =  $stateParams.CommuID; 
 
+    Http.post('getconnections', {
+      'CommuID': $scope.CommuID
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      $ionicLoading.hide();
+      if ($scope.ResponseCode == 200) {
+        $scope.connections = data.Status.ConnectionData.Connection;
+        
+        console.log($scope.connections);
+        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
+
     $timeout(function() {
       ionicMaterialMotion.fadeSlideInRight({
         startVelocity: 3000
@@ -337,7 +358,7 @@
     // Set Ink
     ionicMaterialInk.displayEffect();
   })
- .controller('FollowersCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+ .controller('FollowersCtrl', function($scope,$rootScope, $stateParams,Http,$ionicLoading, $timeout, ionicMaterialInk, ionicMaterialMotion) {
     //$rootScope.hideTabsBar = true;
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -346,15 +367,41 @@
     // $scope.$parent.setHeaderFab(false);
 
     // Activate ink for controller
+    $scope.CommuID =  $stateParams.CommuID;
     ionicMaterialInk.displayEffect();
     $scope.CommuID =  $stateParams.CommuID; 
 
-    ionicMaterialMotion.pushDown({
-      selector: '.push-down'
-    });
-    ionicMaterialMotion.fadeSlideInRight({
-      selector: '.animate-fade-slide-in .item'
-    });
+    // ionicMaterialMotion.pushDown({
+    //   selector: '.push-down'
+    // });
+    // ionicMaterialMotion.fadeSlideInRight({
+    //   selector: '.animate-fade-slide-in .item'
+    // });
+     Http.post('getconnections', {
+      'CommuID': $scope.CommuID
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      $ionicLoading.hide();
+      if ($scope.ResponseCode == 200) {
+        $scope.followers = data.Status.ConnectionData.Followers;
+        
+        console.log($scope.followers);
+        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
+    $timeout(function() {
+      ionicMaterialMotion.fadeSlideInRight({
+        startVelocity: 3000
+      });
+    }, 700);
 
   })
 
