@@ -8,7 +8,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 .controller('FeedCtrl', function($ionicModal, $ionicLoading, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
     $rootScope.UserID = 1;
-
+		$scope.comments = null;
 		$ionicModal.fromTemplateUrl('templates/comments.html', {
 		  scope: $scope,
 		  animation: 'slide-in-up'
@@ -43,7 +43,29 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
         });
     });
 
-		$scope.openCommentModal = function(){
+		$scope.openCommentModal = function(item){
+			$ionicLoading.show({
+			template: 'Loading...',
+			noBackdrop: true
+			});
+			Http.post('getcomments',{ShrID : item})
+			 .success(function(data) {
+			$scope.ResponseCode = data.Status.ResponseCode;
+			$scope.ResponseMessage = data.Status.ResponseMessage;
+			$ionicLoading.hide();
+			if ($scope.ResponseCode == 200) {
+					$scope.comments = data.Status.Comments;
+			}else{
+				$ionicPopup.alert({
+					title: 'Message',
+					template: $scope.ResponseMessage
+				});
+			}
+			}).error(function(data) {
+				//$scope.data.error={message: error, status: status};
+				console.log("error" + data);
+				$ionicLoading.hide();
+			});
 			$scope.commentmodal.show();
 		}
 
