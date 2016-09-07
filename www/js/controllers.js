@@ -6,7 +6,8 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('FeedCtrl', function($ionicModal, $ionicLoading, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
+
+.controller('FeedCtrl', function($ionicLoading, $cordovaInAppBrowser, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
     $rootScope.UserID = 1;
 		$scope.comments = null;
 		$ionicModal.fromTemplateUrl('templates/comments.html', {
@@ -16,6 +17,23 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 		  $scope.commentmodal = modal;
 		});
 
+  var options = {
+      location: 'yes',
+      clearcache: 'yes',
+      toolbar: 'no'
+   };
+
+   $scope.openBrowser = function(link) {
+      $cordovaInAppBrowser.open(link, '_blank', options)
+
+      .then(function(event) {
+         // success
+      })
+
+      .catch(function(event) {
+         // error
+      });
+   }
 
     $scope.$on("$ionicView.beforeEnter", function(){
         $ionicLoading.show({
@@ -29,6 +47,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
         $ionicLoading.hide();
         if ($scope.ResponseCode == 200) {
             $scope.feeds = data.Status.Articles;
+            console.dir($scope.feeds);
         }
           else {
             $ionicPopup.alert({
