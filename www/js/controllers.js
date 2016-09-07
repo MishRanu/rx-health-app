@@ -62,7 +62,56 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 })
 
 
-.controller('GroupsCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+
+.controller('GroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
+
+
+    $timeout(function() {
+        ionicMaterialMotion.fadeSlideInRight({
+            startVelocity: 3000
+        });
+    }, 700);
+
+
+
+    $scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
+})
+    ionicMaterialInk.displayEffect();
+    $scope.me="Jaishriram";
+  console.log("khujli");
+ 
+    $scope.goToProfile = function(){
+      console.log("hello");
+      $state.go('app.tabs.community');
+    };
+    Http.post('getcommunities', {
+      'UserID': 4
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      $ionicLoading.hide();
+      if ($scope.ResponseCode == 200) {
+        $scope.myCommunities = data.Status.myCommunities;
+        $scope.otherCommunities = data.Status.otherCommunities;
+        $scope.following = data.Status.following;
+        console.dir($scope.myCommunities,$scope.following);
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
+
+    $scope.isExpanded = false;
+
+
+})
+
+.controller('CommunityCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     // Set Header
     console.log("dsds");
     // $scope.showHeader();
@@ -105,6 +154,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     // Set Ink
     ionicMaterialInk.displayEffect();
 })
+
 .controller('FriendsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
     // Set Header
     $scope.$parent.showHeader();

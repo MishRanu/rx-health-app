@@ -120,62 +120,56 @@
    ionicMaterialInk.displayEffect();
  })
 
- .controller('dFeedCtrl', function($scope, $stateParams, $ionicPopup, $timeout, $state, ionicMaterialInk){
 
-   $scope.me="Jaishriram";
-   ionicMaterialInk.displayEffect();
+.controller('dFeedCtrl', function($scope, $stateParams, $ionicPopup, $timeout, $state, ionicMaterialInk, $ionicPopover){
 
-// var myPopup = $ionicPopup.show({
-//      template: '<input type="password" ng-model="data.wifi">',
-//      title: 'Enter Wi-Fi Password',
-//      subTitle: 'Please use normal things',
-//      scope: $scope,
-//      buttons: [
-//        { text: 'Cancel' },
-//        {
-//          text: '<b>Save</b>',
-//          type: 'button-positive',
-//          onTap: function(e) {
-//            if (!$scope.data.wifi) {
-//              //don't allow the user to close unless he enters wifi password
-//              e.preventDefault();
-//            } else {
-//              return $scope.data.wifi;
-//            }
-//          }
-//        },
-//      ]
-//    });
+    $scope.me="Jaishriram";
+    ionicMaterialInk.displayEffect();
 
-//    myPopup.then(function(res) {
-//      console.log('Tapped!', res);
-//    });
+    var ptemplate = '<ion-popover-view>'  +
+                    '<div class= "list no-padding"> <div class= "item" style= "padding-bottom:0px"> Save </div> <div class= "item" style= "padding-top:0px; padding-bottom:0px "> Report </div></div>' +
+                   '</ion-popover-view>';
+
+    $scope.optionpopover = $ionicPopover.fromTemplate(ptemplate, {
+        scope: $scope
+    });
+    $scope.openPopover = function($event) {
+    $scope.optionpopover.show($event);
+  };
+
+    $scope.closePopover = function () {
+        $scope.optionpopover.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function () {
+        $scope.optionpopover.remove();
+    });
 
 
-$scope.showPopup = function() {
-  var alertPopup = $ionicPopup.show({
-   template: '<select> <option>Blue</option> <option selected>Green</option> <option>Red</option> </select> <select> <option>Only Connections</option> <option selected>Followers</option> </select>',
-   title: 'Share',
-   subTitle: 'Select one of your groups to share', 
-   scope: $scope, 
-   buttons: [
-   { text: 'Cancel' },
-   {
-    text: '<b>Share</b>', 
-    type: 'button-positive',
-    onTap: function(e) {
-      if (!$scope.data.wifi) {
+    $scope.showPopup = function() {
+        var alertPopup = $ionicPopup.show({
+            template: '<select> <option>Blue</option> <option selected>Green</option> <option>Red</option> </select> <select> <option>Only Connections</option> <option selected>Followers</option> </select>',
+            title: 'Share',
+            subTitle: 'Select one of your groups to share', 
+            scope: $scope, 
+            buttons: [
+                { text: 'Cancel' },
+                {
+                    text: '<b>Share</b>', 
+                    type: 'button-positive',
+                    onTap: function(e) {
+                    if (!$scope.data.wifi) {
              //don't allow the user to close unless he enters wifi password
-             e.preventDefault();
-           } else {
-             return $scope.data.wifi;
-           }
-         }
-       },
-       ]
-     });
+                        e.preventDefault();
+                    } else {
+                    return $scope.data.wifi;
+                    }
+                }
+            },
+            ]
+        });
 
-  $timeout(function() {
+        $timeout(function() {
             //ionic.material.ink.displayEffect();
             ionicMaterialInk.displayEffect();
           }, 0);
@@ -183,8 +177,7 @@ $scope.showPopup = function() {
 
 })
 
- .controller('dGroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
-
+.controller('dGroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
 
   $timeout(function() {
     ionicMaterialMotion.fadeSlideInRight({
@@ -212,32 +205,36 @@ $scope.showPopup = function() {
         $scope.popover1.remove();
     });
 
-  $scope.$on('ngLastRepeat.mylist',function(e) {
-    ionicMaterialInk.displayEffect();
-  })
-  ionicMaterialInk.displayEffect();
-  $scope.me="Jaishriram";
 
-  $scope.goToProfile = function(){
-    console.log("hello");
-    $state.go('dapp.dtabs.profile');
-  };
-  Http.post('getcommunities', {
-    'UserID': 4
-  })
-  .success(function(data) {
-    $scope.ResponseCode = data.Status.ResponseCode;
-    $scope.ResponseMessage = data.Status.ResponseMessage;
-    $ionicLoading.hide();
-    if ($scope.ResponseCode == 200) {
-      $scope.myCommunities = data.Status.myCommunities;
-      $scope.otherCommunities = data.Status.otherCommunities;
-      $scope.following = data.Status.following;
-      console.dir($scope.myCommunities,$scope.following);
-    } else {
-      alert($scope.ResponseMessage);
-    }
-  }).error(function(data, status, headers, config) {
+	$scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
+})
+
+    ionicMaterialInk.displayEffect();
+	$scope.me="Jaishriram";
+  console.log("khujli");
+ 
+    $scope.goToProfile = function(CommuID){
+        console.log(CommuID);
+      $state.go('dapp.dtabs.community', {"CommuID": CommuID}, {reload:false});
+    };
+	Http.post('getcommunities', {
+      'UserID': 1
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      $ionicLoading.hide();
+      if ($scope.ResponseCode == 200) {
+        $scope.myCommunities = data.Status.myCommunities;
+        $scope.otherCommunities = data.Status.otherCommunities;
+        $scope.following = data.Status.following;
+        console.log(data.Status);
+        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
         //$scope.data.error={message: error, status: status};
         alert("error" + data);
         $ionicLoading.hide();
@@ -248,8 +245,13 @@ $scope.showPopup = function() {
 
 })
 
- .controller('ProfileCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+
+.controller('CommunityCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     // Set Header
+
+
+    $scope.CommuID =  $stateParams.CommuID; 
+
     console.log("dsds");
     // $scope.showHeader();
     // $scope.$parent.clearFabs();
@@ -268,13 +270,13 @@ $scope.showPopup = function() {
 
 
     $scope.goToActivity = function(){
-      $state.go('dapp.dtabs.activity');
+      $state.go('dapp.dtabs.activity', {'CommuID': $scope.CommuID}, {reload: false});
     }
     $scope.goToMembers = function(){
-      $state.go('dapp.dtabs.connections');
+      $state.go('dapp.dtabs.connections', {'CommuID': $scope.CommuID}, {reload: false});
     }
     $scope.goToFollowers = function(){
-      $state.go('dapp.dtabs.followers');
+      $state.go('dapp.dtabs.followers', {'CommuID': $scope.CommuID}, {reload: false});
     }
     $timeout(function() {
       ionicMaterialMotion.slideUp({
@@ -298,6 +300,8 @@ $scope.showPopup = function() {
     // $scope.$parent.setExpanded(true);
     // $scope.$parent.setHeaderFab('right');
    // $rootScope.hideTabsBar = true;
+    $scope.CommuID =  $stateParams.CommuID; 
+
 
    $timeout(function() {
     ionicMaterialMotion.fadeSlideIn({
@@ -322,6 +326,8 @@ $scope.showPopup = function() {
     // }, 300);
 
     // Set Motion
+    $scope.CommuID =  $stateParams.CommuID; 
+
     $timeout(function() {
       ionicMaterialMotion.fadeSlideInRight({
         startVelocity: 3000
@@ -341,6 +347,7 @@ $scope.showPopup = function() {
 
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
+    $scope.CommuID =  $stateParams.CommuID; 
 
     ionicMaterialMotion.pushDown({
       selector: '.push-down'
