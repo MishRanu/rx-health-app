@@ -1,0 +1,46 @@
+<ion-view view-title="Search for doctors, articles and diseases"> 
+	<ion-content> 
+	
+			<!-- <div class = "cards">  -->
+			<div class = "item no-padding">
+				<!--             	<a class="button option button-clear" ng-click="openPopover($event)">
+  <i class="icon dark ion-chevron-down"></i>
+</a> -->
+            <div class="list card clear-bg ink" ng-repeat ="item in feeds">
+<!--             	<a class="button option button-clear" ng-click="openPopover($event)">
+  <i class="icon dark ion-chevron-down"></i>
+</a> -->
+            <a class = "option" on-tap="openPopover($event)"><i class="icon ion-chevron-down" style="font-size:15px"></i></a>
+<!-- 
+            <a class = "icon option ion-chevron-down" ng-click="openPopover($event)"> </a>  -->
+                <div class="item item-avatar">
+                    <img src="img/arya.jpg">
+                    <h2>{{item.Author}}</h2>
+                    <p>"Joffrey. Cersei. Ilyn Payne. Hound. Polliver. The Mountain."</p>
+                </div>
+                <div class="item item-body">
+                    <h2>{{item.Header}}</h2>
+                	<img src="img/newmaterial.jpg">
+                <p>  The quickest way to a man's heart is through Arya's needle. She has two speeds: Walk and Kill, and is the reason why Waldo is still hiding. </p>
+                    <p>
+                        <a class="subdued">1 Like</a>
+                        <a class="subdued">5 Comments</a>
+                    </p>
+                </div>
+                <div class="item tabs tabs-positive tabs-secondary tabs-icon-left">
+                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="likeArticle()">
+                        <i class="icon ion-thumbsup"></i> Like
+                    </a>
+                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ui-sref="comments" class = "animate up-down">
+                        <i class="icon ion-chatbox"></i> Comment
+                    </a>
+                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="showPopup()">
+                        <i class="icon ion-share"></i> Share
+                    </a>
+                </div>
+  
+            </div>
+            </div>
+        <!-- </div>  -->
+	</ion-content> 
+</ion-view>

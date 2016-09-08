@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('starter', ['ionic', 'ionic-material' ,'starter.services', 'starter.controllers', 'starter.dcontrollers']);
+var app = angular.module('starter', ['ionic', 'ionic-material' ,'starter.services', 'starter.controllers', 'starter.dcontrollers', 'ngCordova']);
 
 app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ionicLoading) {
     $ionicPlatform.ready(function () {
@@ -20,9 +20,9 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ioni
 })
 
 app.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
- 
+
 $ionicConfigProvider.views.transition('ios');
-$ionicConfigProvider.tabs.position('top'); 
+$ionicConfigProvider.tabs.position('top');
 
     $stateProvider
 
@@ -94,7 +94,7 @@ $ionicConfigProvider.tabs.position('top');
   })
 
     .state('app.tabs.symptify', {
-        url: '/symptify', 
+        url: '/symptify',
         views:{
             'symptify':{
                 templateUrl: 'templates/symptify.html',
@@ -104,7 +104,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('app.tabs.feed', {
-        url: '/feed', 
+        url: '/feed',
         views:{
             'feed':{
                 templateUrl: 'templates/feed.html',
@@ -112,9 +112,9 @@ $ionicConfigProvider.tabs.position('top');
             }
         }
     })
-    
+
         .state('app.tabs.groups', {
-        url: '/groups', 
+        url: '/groups',
         views:{
             'groups':{
                 templateUrl: 'templates/groups.html',
@@ -122,7 +122,7 @@ $ionicConfigProvider.tabs.position('top');
             }
         }
     })
-    
+
 
         .state('app.tabs.community', {
         url: '/community',
@@ -144,7 +144,7 @@ $ionicConfigProvider.tabs.position('top');
 
 
         .state('app.tabs.notifications', {
-        url: '/notifications', 
+        url: '/notifications',
         views:{
             'notifications':{
                 templateUrl: 'templates/notifications.html',
@@ -152,7 +152,7 @@ $ionicConfigProvider.tabs.position('top');
             }
         }
     })
-    
+
     .state('comments', {
         url: '/comments',
         templateUrl: 'templates/comments.html',
@@ -228,7 +228,7 @@ $ionicConfigProvider.tabs.position('top');
   })
 
     .state('dapp.dtabs.symptify', {
-        url: '/symptify', 
+        url: '/symptify',
         views:{
             'dsymptify':{
                 templateUrl: 'dtemplates/symptify.html',
@@ -238,7 +238,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.dtabs.feed', {
-        url: '/feed', 
+        url: '/feed',
         views:{
             'dfeed':{
                 templateUrl: 'dtemplates/feed.html',
@@ -248,7 +248,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.dtabs.groups', {
-        url: '/groups', 
+        url: '/groups',
         views:{
             'dgroups':{
                 templateUrl: 'dtemplates/groups.html',
@@ -258,7 +258,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.dtabs.notifications', {
-        url: '/notifications', 
+        url: '/notifications',
         views:{
             'dnotifications':{
                 templateUrl: 'dtemplates/notifications.html',
@@ -356,8 +356,8 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('welcome', {
-        url: '/welcome', 
-        templateUrl: 'templates/welcome.html', 
+        url: '/welcome',
+        templateUrl: 'templates/welcome.html',
         controller: 'WelcomeCtrl'
     })
     ;
