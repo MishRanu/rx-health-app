@@ -16,7 +16,7 @@
                     <div class="item item-avatar">
                         <img src="img/arya.jpg">
                         <h2>{{item.Author}}</h2>
-                        <p> 20 minutes ago &nbsp <i class = "icon ion-earth" ></i></p>  
+                        <p> {{timeSince(item.LastEdited)}} &nbsp <i ng-if= "item.Type=='public'" class = "icon ion-earth" > </i> <i ng-if= "item.Type=='other'" class = "icon ion-ios-people" > </i></p>  
                     </div>
                         <div class="item item-body" ng-click="openBrowser(item.Link)">
                         <img src="img/newmaterial.jpg">
