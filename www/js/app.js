@@ -33,6 +33,15 @@ $ionicConfigProvider.tabs.position('top');
         controller: 'AppCtrl'
     })
 
+    .state('app.QRScanner', { 
+        url: '/QRScanner', 
+        views: {
+            'menuContent': { 
+                templateUrl: 'templates/QRScanner.html', 
+                controller: 'QRScannerCtrl'
+            }
+        }
+    })
     .state('app.lists', {
         url: '/lists',
         views: {
