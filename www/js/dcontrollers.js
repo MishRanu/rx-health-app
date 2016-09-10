@@ -252,12 +252,51 @@
 })
 
 
-.controller('CommunityCtrl', function($scope, $stateParams,$state,  $cordovaImagePicker, $ionicPlatform, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+.controller('CommunityCtrl', function($scope, $stateParams,$state,  $cordovaImagePicker, $ionicPlatform, $timeout, ionicMaterialMotion, ionicMaterialInk, $ionicPopover, $cordovaFileTransfer) {
     // Set Header
+
+
+  // .fromTemplate() method
+//   var template = '<ion-popover-view><ion-header-bar> <h1 class="title">My Popover Title</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
+
+//  $scope.popover = $ionicPopover.fromTemplate(template, { 
+//   scope: $scope
+// })
+ 
+// $ionicPopover.fromTemplateUrl('pic-upload.html', { 
+//   scope: $scope
+// }).then(function(popover){ 
+//   $scope.popover= popover; 
+
+// }); 
+
+
+//   $scope.openPopover = function($event) {
+//     $scope.popover.show($event);
+//   };
+//   $scope.closePopover = function() {
+//     $scope.popover.hide();
+//   };
+//   //Cleanup the popover when we're done with it!
+//   $scope.$on('$destroy', function() {
+//     $scope.popover.remove();
+//   });
+//   // Execute action on hide popover
+//   $scope.$on('popover.hidden', function() {
+//     // Execute action
+//   });
+//   // Execute action on remove popover
+//   $scope.$on('popover.removed', function() {
+//     // Execute action
+//   });
+
 
     $scope.$on('ngLastRepeat.mylist',function(e) {
   ionicMaterialInk.displayEffect();
 })
+
+
+
 
 
     $scope.CommuID =  $stateParams.CommuID; 
@@ -276,11 +315,11 @@
     { id: 3, name: 'Steve' }
     ];
     $scope.selectedUser = { id: 1, name: 'Bob' };
+    $scope.uploadPhoto = function(){
+    // $ionicPlatform.ready(function() {
 
-    $ionicPlatform.ready(function() {
-
-
-      $scope.getImageSaveContact = function() {       
+    document.addEventListener('deviceready', function(){
+       
         // Image picker will load images according to these settings
     var options = {
         maximumImagesCount: 1, // Max number of selected images, I'm using only one for this example
@@ -289,17 +328,56 @@
         quality: 80            // Higher is better
     };
  
-    $cordovaImagePicker.getPictures(options).then(function (results) {
+    $cordovaImagePicker.getPictures(options).then(function(results) {
                 // Loop through acquired images
-        for (var i = 0; i < results.length; i++) {
-            console.log('Image URI: ' + results[i]);   // Print image URI
+        // for (var i = 0; i < results.length; i++) {
+            // console.log('Image URI: ' + results[i]);   // Print image URI
+            $scope.images = results; 
         }
-    }, function(error) {
+      ,function(error) {
         console.log('Error: ' + JSON.stringify(error));    // In case of error
     });
-};  
+  })
+// });
+}
+  $scope.posttext; 
 
-});
+  var Poptions = {
+  fileKey: "userid",
+  httpMethod: "POST",
+  mimeType: "image/jpeg",
+  params: {myDescription: $scope.posttext, rating: 5}, 
+  chunkedMode: true
+  };
+  Poptions.params.headers = {'Content-Type': 'application/json'}
+  
+  var url = "http://dxhealth.esy.es/RxHealth0.1/upload.php"; 
+  var filepath = $scope.images; 
+
+  $scope.post = function(){ 
+
+    document.addEventListener('deviceready', function(){
+
+      $cordovaFileTransfer.upload(url, filepath, Poptions)
+      .then(function(result){
+
+        $ionicPopup.alert({
+          title: 'Success', 
+          template: 'Your article has been posted successfully'
+        });
+
+      }, function(err){
+
+        $ionicPopup.alert({
+          title: 'Failure', 
+          template: 'Your article could not be posted'
+        }); 
+      }, function(progress){
+
+      })
+    })
+}
+
 
 
 
