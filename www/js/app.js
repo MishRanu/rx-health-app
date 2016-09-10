@@ -96,8 +96,7 @@ $ionicConfigProvider.tabs.position('top');
     url: "/tabs",
     views: {
       'menuContent': {
-        templateUrl: "templates/tabs.html",
-        controller: 'tabsController'
+        templateUrl: "templates/tabs.html"
       }
     }
   })
@@ -134,7 +133,7 @@ $ionicConfigProvider.tabs.position('top');
 
 
         .state('app.tabs.community', {
-        url: '/community',
+        url: '/pcommunity',
         views: {
             'groups': {
                 templateUrl: 'templates/community.html',

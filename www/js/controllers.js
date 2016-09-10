@@ -1,5 +1,117 @@
 angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
+.controller('tabsCtrl', function($scope,$state, $ionicModal, $ionicPopover, $timeout,$rootScope) {
+    // Form data for the login modal
+    $scope.loginData = {};
+    $scope.isExpanded = false;
+    $scope.hasHeaderFabLeft = false;
+    $scope.hasHeaderFabRight = false;
+    //$rootScope.hideTabsBar = false;
+    $rootScope.$on('$ionicView.beforeEnter', function() {
+      var stateName = $state.current.name;
+      if (stateName === 'app.tabs.symptify' || stateName === 'app.tabs.feed' || stateName === 'app.tabs.groups' || stateName === 'app.tabs.notifications' ) {
+        $rootScope.hideTabsBar = false;
+      } else {
+        $rootScope.hideTabsBar = true;
+      }
+      // if(stateName === 'tab.pmenu' && !$rootScope.IsLoggedIn){
+      //   $state.go('login');
+      // }
+    });
+    // $scope.gosymptify = function() {
+    //   $state.go('dapp.dtabs.symptify');
+    // }
+    // $scope.gofeed = function() {
+    //   $state.go('dapp.dtabs.feed');
+    // }
+    // $scope.gogroups = function() {
+    //   $state.go('dapp.dtabs.groups');
+    // }
+    // $scope.gonotification = function() {
+    //   $state.go('dapp.dtabs.notifications');
+    // }
+  // $scope.gopmenu = function() {
+  //   $state.go('tab.pmenu');
+  // }
+
+    // var navIcons = document.getElementsByClassName('ion-navicon');
+    // for (var i = 0; i < navIcons.length; i++) {
+    //     navIcons.addEventListener('click', function() {
+    //         this.classList.toggle('active');
+    //     });
+    // }
+
+    ////////////////////////////////////////
+    // Layout Methods
+    ////////////////////////////////////////
+
+    $scope.hideNavBar = function() {
+      document.getElementsByTagName('ion-nav-bar')[0].style.display = 'none';
+    };
+
+    $scope.showNavBar = function() {
+      document.getElementsByTagName('ion-nav-bar')[0].style.display = 'block';
+    };
+
+    $scope.noHeader = function() {
+      var content = document.getElementsByTagName('ion-content');
+      for (var i = 0; i < content.length; i++) {
+        if (content[i].classList.contains('has-header')) {
+          content[i].classList.toggle('has-header');
+        }
+      }
+    };
+
+    $scope.setExpanded = function(bool) {
+      $scope.isExpanded = bool;
+    };
+
+    $scope.setHeaderFab = function(location) {
+      var hasHeaderFabLeft = false;
+      var hasHeaderFabRight = false;
+
+      switch (location) {
+        case 'left':
+        hasHeaderFabLeft = true;
+        break;
+        case 'right':
+        hasHeaderFabRight = true;
+        break;
+      }
+
+      $scope.hasHeaderFabLeft = hasHeaderFabLeft;
+      $scope.hasHeaderFabRight = hasHeaderFabRight;
+    };
+
+    $scope.hasHeader = function() {
+      var content = document.getElementsByTagName('ion-content');
+      for (var i = 0; i < content.length; i++) {
+        if (!content[i].classList.contains('has-header')) {
+          content[i].classList.toggle('has-header');
+        }
+      }
+
+    };
+
+    $scope.hideHeader = function() {
+      $scope.hideNavBar();
+      $scope.noHeader();
+    };
+
+    $scope.showHeader = function() {
+      $scope.showNavBar();
+      $scope.hasHeader();
+    };
+
+    $scope.clearFabs = function() {
+      var fabs = document.getElementsByClassName('button-fab');
+      if (fabs.length && fabs.length > 1) {
+        fabs[0].remove();
+      }
+    };
+    
+  })
+
 .controller('SymptifyCtrl', function($scope, $stateParams, $state, ionicMaterialInk){
 
 	$scope.me="Jaishriram";
