@@ -225,6 +225,8 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     });
 
 		$scope.openCommentModal = function(item){
+
+
 			$ionicLoading.show({
 			template: 'Loading...',
 			noBackdrop: true
@@ -249,7 +251,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 			});
 			$scope.commentmodal.show();
 		}
-
+    $scope.closeModal = function() {
+      $scope.commentmodal.hide();
+      };
 	$scope.me="Jaishriram";
     ionicMaterialInk.displayEffect();
 
@@ -451,16 +455,17 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 	$scope.me="Fuck";
 })
 
-.controller('CommentsCtrl', function($scope, $stateParams, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+// .controller('CommentsCtrl', function($scope, $stateParams, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
 
-    ionicMaterialInk.displayEffect();
-	$scope.me="Jaishriram";
-	    // Set Header
+//     ionicMaterialInk.displayEffect();
+// 	$scope.me="Jaishriram";
+// 	    // Set Header
 
-    // Set Motion
-    ionicMaterialMotion.fadeSlideInRight();
-
-
+//     // Set Motion
+//     ionicMaterialMotion.fadeSlideInRight();
 
 
-})
+
+
+
+// })
