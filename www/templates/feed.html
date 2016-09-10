@@ -2,13 +2,12 @@
 	<ion-content>
 
 			<!-- <div class = "cards">  -->
-				<!--             	<a class="button option button-clear" ng-click="openPopover($event)">
-  <i class="icon dark ion-chevron-down"></i>
-</a> -->
+
             <div class="list card clear-bg ink" ng-repeat ="item in feeds" style="margin-bottom:20px" ng-last-repeat="mylist">
 <!--             	<a class="button option button-clear" ng-click="openPopover($event)">
   <i class="icon dark ion-chevron-down"></i>
 </a> -->
+
             <!-- <a class = "option" on-tap="openPopover($event)"><i class="icon ion-chevron-down" style="font-size:15px"></i></a> -->
 <!--
             <a class = "icon option ion-chevron-down" ng-click="openPopover($event)"> </a>  -->
@@ -30,6 +29,7 @@
                         <a class="subdued" style="font-size:18px"><i class="icon ion-chatbox calm" style="font-size:25px"></i> {{item.Comments}}</a> -->
                         </p>
                     </div>
+
                 <div class="item tabs tabs-secondary tabs-icon-left">
                     <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="likeArticle()">
                         <i class="icon ion-thumbsup"></i> Like
