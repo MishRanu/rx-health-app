@@ -23,7 +23,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 })
 
-.controller('FeedCtrl', function($ionicLoading, $cordovaImagePicker, $ionicPlatform, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
+.controller('FeedCtrl', function($ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
     $rootScope.UserID = 1;
 		$scope.comments = null;
 		$ionicModal.fromTemplateUrl('templates/comments.html', {
@@ -32,33 +32,6 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 		}).then(function(modal) {
 		  $scope.commentmodal = modal;
 		});
-
-
-
-    $ionicPlatform.ready(function() {
-
-
-      $scope.getImageSaveContact = function() {       
-        // Image picker will load images according to these settings
-    var options = {
-        maximumImagesCount: 1, // Max number of selected images, I'm using only one for this example
-        width: 800,
-        height: 800,
-        quality: 80            // Higher is better
-    };
- 
-    $cordovaImagePicker.getPictures(options).then(function (results) {
-                // Loop through acquired images
-        for (var i = 0; i < results.length; i++) {
-            console.log('Image URI: ' + results[i]);   // Print image URI
-        }
-    }, function(error) {
-        console.log('Error: ' + JSON.stringify(error));    // In case of error
-    });
-};  
-
-});
-
 
 
     $scope.timeSince = function(date) {
@@ -238,13 +211,10 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     $scope.me="Jaishriram";
   console.log("khujli");
  
-    $scope.goToCommunity1 = function(CommuID, UserType){
-        console.log(CommuID);
-      $state.go('dapp.dtabs.community1', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
-    };
+
     $scope.goToCommunity = function(CommuID, UserType){
         console.log(CommuID);
-      $state.go('dapp.dtabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
+      $state.go('app.tabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
 
     };
     Http.post('getcommunities', {
