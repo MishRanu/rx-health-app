@@ -5,11 +5,34 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('starter', ['ionic', 'ionic-material' ,'starter.services', 'starter.controllers', 'starter.dcontrollers', 'ngCordova']);
 
-app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ionicLoading) {
+app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ionicLoading, $cordovaSplashscreen, $rootScope) {
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
+        //$cordovaSplashscreen.show();
+        $rootScope.UserID = 1;
+        Http.post('getcommunities', {
+          'UserID': $rootScope.UserID
+        })
+        .success(function(data) {
+          $ionicLoading.hide();
+          if (data.Status.ResponseCode == 200) {
+            Http.data.communities = {};
+            Http.data.communities.myCommunities = data.Status.myCommunities;
+            Http.data.communities.connectCommunities = data.Status.connectCommunities;
 
+            Http.data.communities.adminCommunities = data.Status.adminCommunities;
+            Http.data.communities.following = data.Status.following;
+            // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+            //$cordovaSplashscreen.hide();
+          } else {
+            alert(data.Status.ResponseMessage);
+          }
+        }).error(function(data, status, headers, config) {
+            //$scope.data.error={message: error, status: status};
+            alert("error" + data);
+            $ionicLoading.hide();
+          });
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         }
@@ -33,11 +56,11 @@ $ionicConfigProvider.tabs.position('top');
         controller: 'AppCtrl'
     })
 
-    .state('app.QRScanner', { 
-        url: '/QRScanner', 
+    .state('app.QRScanner', {
+        url: '/QRScanner',
         views: {
-            'menuContent': { 
-                templateUrl: 'templates/QRScanner.html', 
+            'menuContent': {
+                templateUrl: 'templates/QRScanner.html',
                 controller: 'QRScannerCtrl'
             }
         }

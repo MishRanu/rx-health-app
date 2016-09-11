@@ -11,11 +11,11 @@
             <!-- <a class = "option" on-tap="openPopover($event)"><i class="icon ion-chevron-down" style="font-size:15px"></i></a> -->
 <!--
             <a class = "icon option ion-chevron-down" ng-click="openPopover($event)"> </a>  -->
-                
+
                     <div class="item item-avatar">
                         <img src="img/arya.jpg">
                         <h2>{{item.Author}}</h2>
-                        <p> {{timeSince(item.LastEdited)}} &nbsp <i ng-if= "item.Type=='public'" class = "icon ion-earth" > </i> <i ng-if= "item.Type=='other'" class = "icon ion-ios-people" > </i></p>  
+                        <p> {{timeSince(item.LastEdited)}} &nbsp <i ng-if= "item.Type=='public'" class = "icon ion-earth" > </i> <i ng-if= "item.Type=='other'" class = "icon ion-ios-people" > </i></p>
                     </div>
                         <div class="item item-body" ng-click="openBrowser(item.Link)">
                         <img src="img/newmaterial.jpg">
@@ -37,7 +37,7 @@
                     <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="openCommentModal(item.ShrID)" class = "animate up-down">
                         <i class="icon ion-chatbox"></i> Comment
                     </a>
-                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="showPopup()">
+                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="showPopup(item.ShrID)">
                         <i class="icon ion-share"></i> Share
                     </a>
                 </div>

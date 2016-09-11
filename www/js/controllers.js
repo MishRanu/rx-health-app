@@ -136,9 +136,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 })
 
 .controller('FeedCtrl', function($ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
-    $rootScope.UserID = 1;
 		$scope.comments = null;
 		$scope.currentshrid = null;
+    $scope.communities = Http.data.communities.myCommunities.concat(Http.data.communities.adminCommunities);
 		$ionicModal.fromTemplateUrl('templates/comments.html', {
 		  scope: $scope,
 		  animation: 'slide-in-up'
@@ -337,9 +337,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
         $scope.optionpopover.remove();
     });
 
-    $scope.showPopup = function() {
-        var alertPopup = $ionicPopup.show({
-        	template: '<select> <option>Blue</option> <option selected>Green</option> <option>Red</option> </select> <select> <option>Only Connections</option> <option selected>Followers</option> </select>',
+    $scope.showPopup = function(shrid) {
+        $scope.alertPopup = $ionicPopup.show({
+        	template: '<select ng-model="alertPopup.selectedCommunity" ng-options="x.Name for x in communities"></select> <textarea elastic placeholder="Place your thoughts..." ng-model="alertPopup.shareSummary"></textarea>',
             title: 'Share',
             subTitle: 'Select one of your groups to share',
             scope: $scope,
@@ -349,13 +349,48 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
             		text: '<b>Share</b>',
             		type: 'button-positive',
          			onTap: function(e) {
-           			if (!$scope.data.wifi) {
-             //don't allow the user to close unless he enters wifi password
-             			e.preventDefault();
-           			} else {
-             		return $scope.data.wifi;
-           			}
-         		}
+                console.dir($scope.alertPopup);
+                if($scope.alertPopup.selectedCommunity != null){
+                  console.log('Yeah');
+                  var options = {
+                    UserID : $rootScope.UserID,
+                    ShrID : shrid,
+                    CommuID : $scope.alertPopup.selectedCommunity.CommuID,
+                    Type : 2
+                  }
+                  if($scope.alertPopup.shareSummary){
+                    options.Summary = $scope.alertPopup.shareSummary;
+                  }
+                  $ionicLoading.show({
+            			template: 'Sharing...',
+            			noBackdrop: true
+            			});
+                  Http.post('sharearticle',options)
+                  .success(function(data){
+                    $scope.ResponseCode = data.Status.ResponseCode;
+              			$scope.ResponseMessage = data.Status.ResponseMessage;
+              			$ionicLoading.hide();
+              			if ($scope.ResponseCode == 200) {
+                      $ionicLoading.show({
+                			template: 'Article Shared',
+                			duration : 1000
+                			});
+                      return data;
+              			}else{
+              				$ionicPopup.alert({
+              					title: 'Message',
+              					template: $scope.ResponseMessage
+              				});
+              			}
+                  })
+                  .error(function(data){
+                    console.log("error" + data);
+            				$ionicLoading.hide();
+                  })
+                }else{
+                  e.preventDefault();
+                }
+              }
        		},
      		]
         });
@@ -370,8 +405,11 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 
 .controller('GroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
+    $scope.myCommunities = Http.data.communities.myCommunities;
+    $scope.connectCommunities = Http.data.connectCommunities;
 
-
+    $scope.adminCommunities = Http.data.adminCommunities;
+    $scope.following = Http.data.following;
     $timeout(function() {
         ionicMaterialMotion.fadeSlideInRight({
             startVelocity: 3000
@@ -394,29 +432,29 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       $state.go('app.tabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
 
     };
-    Http.post('getcommunities', {
-      'UserID': 1
-    })
-    .success(function(data) {
-      $scope.ResponseCode = data.Status.ResponseCode;
-      $scope.ResponseMessage = data.Status.ResponseMessage;
-      $ionicLoading.hide();
-      if ($scope.ResponseCode == 200) {
-        $scope.myCommunities = data.Status.myCommunities;
-        $scope.connectCommunities = data.Status.connectCommunities;
-
-        $scope.adminCommunities = data.Status.adminCommunities;
-        $scope.following = data.Status.following;
-        console.log(data.Status);
-        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
-      } else {
-        alert($scope.ResponseMessage);
-      }
-    }).error(function(data, status, headers, config) {
-        //$scope.data.error={message: error, status: status};
-        alert("error" + data);
-        $ionicLoading.hide();
-      });
+    // Http.post('getcommunities', {
+    //   'UserID': 1
+    // })
+    // .success(function(data) {
+    //   $scope.ResponseCode = data.Status.ResponseCode;
+    //   $scope.ResponseMessage = data.Status.ResponseMessage;
+    //   $ionicLoading.hide();
+    //   if ($scope.ResponseCode == 200) {
+    //     $scope.myCommunities = data.Status.myCommunities;
+    //     $scope.connectCommunities = data.Status.connectCommunities;
+    //
+    //     $scope.adminCommunities = data.Status.adminCommunities;
+    //     $scope.following = data.Status.following;
+    //     console.log(data.Status);
+    //     // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+    //   } else {
+    //     alert($scope.ResponseMessage);
+    //   }
+    // }).error(function(data, status, headers, config) {
+    //     //$scope.data.error={message: error, status: status};
+    //     alert("error" + data);
+    //     $ionicLoading.hide();
+    //   });
 
     $scope.isExpanded = false;
 
