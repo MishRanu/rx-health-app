@@ -407,7 +407,6 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 .controller('GroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
     $scope.myCommunities = Http.data.communities.myCommunities;
     $scope.connectCommunities = Http.data.connectCommunities;
-
     $scope.adminCommunities = Http.data.adminCommunities;
     $scope.following = Http.data.following;
     $timeout(function() {
