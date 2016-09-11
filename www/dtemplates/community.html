@@ -53,7 +53,7 @@
                 <div class="item item-body">
                 <div class= "item no-padding"> <h3> Your Post Here </h3> </div>
                 <md-input-container>  
-            <textarea name="post" ng-model="post" rows="10" style= "width:100%"></textarea>
+            <textarea name="post" ng-model="posttext" rows="10" style= "width:100%"></textarea>
             </md-input-container>
 
                         <a class="subdued">500 characters left</a>
@@ -62,13 +62,24 @@
 
 
             <div class = "item" style= "width:100%"> 
-                <div class = "button button-small button-positive"> Upload Photo </div> 
+                <div class = "button button-small button-positive" ng-click="uploadPhoto()"> Upload Photo </div> 
+   
             </div>
         </div>
+<!-- 
+        <script id = "pic-upload.html" type = "text/ng-template"> 
+        <ion-popover-view> 
+            <ion-content> 
+            <div class= "button button-small button-positive"> Camera </div> 
+            <div class= "button button-small button-positive"> Gallery </div>  
+            </ion-content> 
+        </ion-popover-view> 
+        </script> 
+ -->
             <div class ="item item-divider" style= "background-color:white"> 
  <select> <option>Only Connections</option> <option>Public</option>  <option selected>Followers</option> </select>
 
-<div class = "button button-small button-positive" style= "float:right"> Post </div> 
+<div class = "button button-small button-positive" ng-click = "post()" style= "float:right"> Post </div> 
             </div> 
 &nbsp
 

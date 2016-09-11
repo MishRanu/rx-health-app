@@ -252,12 +252,51 @@
 })
 
 
-.controller('CommunityCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+.controller('CommunityCtrl', function($scope, $stateParams,$state,  $cordovaImagePicker, $ionicPlatform, $timeout, ionicMaterialMotion, ionicMaterialInk, $ionicPopover, $cordovaFileTransfer) {
     // Set Header
+
+
+  // .fromTemplate() method
+//   var template = '<ion-popover-view><ion-header-bar> <h1 class="title">My Popover Title</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
+
+//  $scope.popover = $ionicPopover.fromTemplate(template, { 
+//   scope: $scope
+// })
+ 
+// $ionicPopover.fromTemplateUrl('pic-upload.html', { 
+//   scope: $scope
+// }).then(function(popover){ 
+//   $scope.popover= popover; 
+
+// }); 
+
+
+//   $scope.openPopover = function($event) {
+//     $scope.popover.show($event);
+//   };
+//   $scope.closePopover = function() {
+//     $scope.popover.hide();
+//   };
+//   //Cleanup the popover when we're done with it!
+//   $scope.$on('$destroy', function() {
+//     $scope.popover.remove();
+//   });
+//   // Execute action on hide popover
+//   $scope.$on('popover.hidden', function() {
+//     // Execute action
+//   });
+//   // Execute action on remove popover
+//   $scope.$on('popover.removed', function() {
+//     // Execute action
+//   });
+
 
     $scope.$on('ngLastRepeat.mylist',function(e) {
   ionicMaterialInk.displayEffect();
 })
+
+
+
 
 
     $scope.CommuID =  $stateParams.CommuID; 
@@ -276,6 +315,69 @@
     { id: 3, name: 'Steve' }
     ];
     $scope.selectedUser = { id: 1, name: 'Bob' };
+    $scope.uploadPhoto = function(){
+    // $ionicPlatform.ready(function() {
+
+    document.addEventListener('deviceready', function(){
+       
+        // Image picker will load images according to these settings
+    var options = {
+        maximumImagesCount: 1, // Max number of selected images, I'm using only one for this example
+        width: 800,
+        height: 800,
+        quality: 80            // Higher is better
+    };
+ 
+    $cordovaImagePicker.getPictures(options).then(function(results) {
+                // Loop through acquired images
+        // for (var i = 0; i < results.length; i++) {
+            // console.log('Image URI: ' + results[i]);   // Print image URI
+            $scope.images = results; 
+        }
+      ,function(error) {
+        console.log('Error: ' + JSON.stringify(error));    // In case of error
+    });
+  })
+// });
+}
+  $scope.posttext; 
+
+  var Poptions = {
+  fileKey: "userid",
+  httpMethod: "POST",
+  mimeType: "image/jpeg",
+  params: {myDescription: $scope.posttext, rating: 5}, 
+  chunkedMode: true
+  };
+  Poptions.params.headers = {'Content-Type': 'application/json'}
+  
+  var url = "http://dxhealth.esy.es/RxHealth0.1/upload.php"; 
+  var filepath = $scope.images; 
+
+  $scope.post = function(){ 
+
+    document.addEventListener('deviceready', function(){
+
+      $cordovaFileTransfer.upload(url, filepath, Poptions)
+      .then(function(result){
+
+        $ionicPopup.alert({
+          title: 'Success', 
+          template: 'Your article has been posted successfully'
+        });
+
+      }, function(err){
+
+        $ionicPopup.alert({
+          title: 'Failure', 
+          template: 'Your article could not be posted'
+        }); 
+      }, function(progress){
+
+      })
+    })
+}
+
 
 
 
@@ -386,7 +488,8 @@
     // }, 300);
 
     // Set Motion
-    $scope.CommuID =  $stateParams.CommuID; 
+    $scope.CommuID =  $stateParams.CommuID;
+
 
     Http.post('getconnections', {
       'CommuID': $scope.CommuID
@@ -495,6 +598,50 @@
 
     // Set Motion
     ionicMaterialMotion.fadeSlideInRight();
+
+
+
+
+  })
+ .controller('SearchCtrl', function($scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+  $scope.CurrentState =  $stateParams.CurrentState;
+  console.log($scope.CurrentState);
+  ionicMaterialInk.displayEffect();
+  $scope.me="Jaishriram";
+      
+  $rootScope.goBack = function() {
+    // implement custom behaviour here
+    $state.go($scope.CurrentState);
+  };
+  
+
+  $scope.$on('$ionicView.beforeEnter', function(event, viewData) {
+    viewData.enableBack = true;
+  }); 
+  $scope.keyfunc = function(keyevent, query) {
+  if (keyevent.which === 13) {
+    $scope.modal.hide();
+    //$scope.goToDocCards('query', query);
+  } else if (keyevent.which === 8 && query.length === 1) {
+    $scope.querylist = null;
+  } else {
+    var temp = String.fromCharCode(keyevent.which);
+    if ((query == null || query.length < 1) && keyevent.which !== 8) {
+      $scope.querylist = null;
+      $scope.showLoadingIcon = true;
+      Http.post('searchdoctor', {
+        'Data': temp
+      }).success(function(data) {
+        if (data.Status.ResponseCode == "200") {
+          $scope.querylist = data.Status.Result;
+        }
+        $scope.showLoadingIcon = false;
+      }).error(function(data) {
+        console.dir(data);
+      });
+    }
+  }
+}          
 
 
 

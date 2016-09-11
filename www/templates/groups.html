@@ -12,7 +12,7 @@
                 <span class="badge badge-assertive">0</span>
 
             </div> -->
-    <ion-item class = "card" ng-if="myCommunities.length!=0">
+<!--     <ion-item class = "card" ng-if="myCommunities.length!=0">
           <ion-item class="item-divider" style= "text-align:center" >
     Home Group
   </ion-item>
@@ -41,15 +41,18 @@
 
 
         </ion-item>
+ -->
 
-
+<a class = "item item-icon-left"> <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
+</a>
+ 
 <ion-item class = "card">
           <ion-item class="item-divider" style= "text-align:center" ng-if="connectCommuniities.length!=0">
     Connection Groups
   </ion-item>
 
 
-                 <a class="item item-icon-left" ng-repeat ="item in connectCommunities" ng-click="goToCommunity1(item.CommuID, item.UserType)">
+                 <a class="item item-icon-left" ng-repeat ="item in connectCommunities" ng-click="goToCommunity(item.CommuID, item.UserType)">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
                     <span class="badge badge-assertive">0</span>
                 </a>
@@ -62,7 +65,7 @@
     Following Groups
   </ion-item>
 
-                 <a class="item item-icon-left" ng-repeat ="item in following" ng-click="goToCommunity1(item.CommuID, item.UserType)">
+                 <a class="item item-icon-left" ng-repeat ="item in following" ng-click="goToCommunity(item.CommuID, item.UserType)">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
                     <span class="badge badge-assertive">0</span>
                 </a>

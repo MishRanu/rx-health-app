@@ -2,13 +2,14 @@
 <widget id="com.ionicframework.rxnew672240" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>rxnew</name>
   <description>
-        An Ionic Framework and Cordova project.
+        RxHealth App for connecting doctors to patients
     </description>
-  <author email="you@example.com" href="http://example.com.com/">
-      Your Name Here
+  <author email="abhichoudhary11@gmail.com" href="http://static.koimoi.com/wp-content/new-galleries/2012/07/Gangs-of-Wasseypur-II-Movie-Stills-Photo.jpg">
+      Abhishek Choudhary
     </author>
   <content src="index.html"/>
   <access origin="*"/>
+  <preference name="loadUrlTimeoutValue" value="700000" />
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
