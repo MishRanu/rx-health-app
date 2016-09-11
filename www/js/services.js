@@ -13,6 +13,30 @@ angular.module('starter.services', [])
     }
 })
 
+.directive('file', function() {
+  return {
+    restrict: 'AE',
+    scope: {
+      file: '@'
+    },
+    link: function(scope, el, attrs){
+      el.bind('change', function(event){
+        var files = event.target.files;
+        var file = files[0];
+        if(file.size>0){
+          scope.file = file;
+          scope.$parent.file = file;
+        } else {
+          scope.file = {};
+          scope.$parent.file = {}; 
+        }
+        scope.$apply();
+      });
+    }
+  };
+})
+
+
 .directive('hideTabs', function($rootScope) {
     return {
       restrict: 'A',
@@ -39,6 +63,26 @@ angular.module('starter.services', [])
       }
     };
   })
+
+  .directive('elastic',
+    function() {
+        return {
+            restrict: 'A',
+            link: function($scope, element) {
+                element.css({
+                  'resize' : 'none',
+                  'width' : '100%',
+                  'height' : '36px'
+                });
+                $scope.initialHeight = $scope.initialHeight || element[0].style.height;
+                var resize = function() {
+                    element[0].style.height = $scope.initialHeight;
+                    element[0].style.height = "" + element[0].scrollHeight + "px";
+                };
+                element.on("input change", resize);
+            }
+        };
+    })
 
 
 
