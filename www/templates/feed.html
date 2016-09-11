@@ -2,8 +2,10 @@
 	<ion-content>
 
 			<!-- <div class = "cards">  -->
-
-            <div class="list card clear-bg ink" ng-repeat ="item in feeds" style="margin-bottom:20px" ng-last-repeat="mylist">
+				<!--             	<a class="button option button-clear" ng-click="openPopover($event)">
+  <i class="icon dark ion-chevron-down"></i>
+</a> -->
+            <div class="list card clear-bg ink" ng-repeat ="item in feeds track by $index" style="margin-bottom:20px" ng-last-repeat="mylist">
 <!--             	<a class="button option button-clear" ng-click="openPopover($event)">
   <i class="icon dark ion-chevron-down"></i>
 </a> -->
@@ -30,18 +32,43 @@
                         </p>
                     </div>
 
-                <div class="item tabs tabs-secondary tabs-icon-left">
-                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="likeArticle()">
-                        <i class="icon ion-thumbsup"></i> Like
-                    </a>
-                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="openCommentModal(item.ShrID)" class = "animate up-down">
-                        <i class="icon ion-chatbox"></i> Comment
-                    </a>
-                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="showPopup(item.ShrID)">
-                        <i class="icon ion-share"></i> Share
-                    </a>
+                <div >
+                    <div class="item tabs tabs-secondary tabs-icon-left" ng-if = "item.action == 1"> <!-- for Public Unknown Articles -->
+                        <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="FollowArticle()">
+                            <i class="icon ion-android-happy"></i> Follow
+                        </a>
+                    </div>
+                    <div class="item tabs tabs-secondary tabs-icon-left" ng-if ="item.action == 2">  <!-- " For Followers  -->
+                        <a ng-class = "{likecolor: item.Liked }" class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="likeArticle($index)">
+                            <i class="icon ion-thumbsup"></i> Like
+                        </a>
+                        <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="BookmarkArticle()">
+                            <i class="icon ion-android-bookmark"></i> Bookmark
+                        </a>
+                    </div>
+                    <div class="item tabs tabs-secondary tabs-icon-left" ng-if ="item.action == 3"> <!-- For Connections and Followers(Public Articles) -->
+                        <a ng-class = "{likecolor: item.Liked }" class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="likeArticle($index)">
+                            <i class="icon ion-thumbsup"></i> Like
+                        </a>
+                        <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="openCommentModal()" class = "animate  up-down">
+                            <i class="icon ion-chatbox"></i> Comment
+                        </a>
+                        <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="BookmarkArticle()">
+                            <i class="icon ion-android-bookmark"></i> Bookmark
+                        </a>
+                    </div>
+                    <div class="item tabs tabs-secondary tabs-icon-left" ng-if = "item.action == 4">  <!-- for Doctors only  -->
+                        <a ng-class = "{likecolor: item.Liked }" class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="likeArticle($index)">
+                            <i class="icon ion-thumbsup"></i> Like
+                        </a>
+                        <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="openCommentModal()" class = "animate  up-down">
+                            <i class="icon ion-chatbox"></i> Comment
+                        </a>
+                        <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="showPopup(item.ShrID)">
+                            <i class="icon ion-share"></i> Share
+                        </a>
+                    </div>
                 </div>
-
             </div>
 
         <!-- </div>  -->
