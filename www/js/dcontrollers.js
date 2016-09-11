@@ -518,6 +518,8 @@
     });
     $scope.removeMember = function(item,CommuID){
       var index = $scope.connections.indexOf(item)
+      console.log(index);
+
       Http.post('removefromcommunity',{
         'CommuID':CommuID,
         'UserID':item.UserID
@@ -530,6 +532,7 @@
         //article.Isbookmark = false;
         }
       })
+      $scope.closePopover();
     }
 
     Http.post('getconnections', {
