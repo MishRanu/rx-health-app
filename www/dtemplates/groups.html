@@ -1,6 +1,9 @@
 
-<ion-view view-title="Search for doctors, articles and diseases"> 
+<ion-view view-title="Groups"> 
 	<ion-content class = "padding">
+
+
+
 
 
 <ion-list class  = "animate-fade-slide-in-right"> 
@@ -12,44 +15,38 @@
                 <span class="badge badge-assertive">0</span>
 
             </div> -->
-    <ion-item class = "card">
-          <ion-item class="item-divider" style= "text-align:center" >
-    Home Group
-  </ion-item>
+    <ion-item ng-if="myCommunities.length!=0">
+         <a class = "item" style= "text-align:center"> My Communities </a>
 
 
-                 <a class="item item-icon-left" ng-repeat ="item in myCommunities" ng-click="goToProfile(item.CommuID, $index)">
-                    <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
-                    <span class="badge badge-assertive">0</span>
-                </a>
+       <a class="item item-icon-left" ng-repeat ="item in myCommunities" ng-click="goToCommunity(item.CommuID, item.UserType)">
+          <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
+          <span class="badge badge-assertive">0</span>
+      </a>
 
 
 
 		</ion-item>
 
-<ion-item class = "card">
-          <ion-item class="item-divider" style= "text-align:center">
-    Admin Groups
-  </ion-item>
+<ion-item ng-if="adminCommunities.length!=0">
+         
+         <a class = "item" style= "text-align:center"> Admin Communities </a>
 
-
-                 <a class="item item-icon-left" ng-repeat ="item in otherCommunities" ng-if = "item.IsAdmin=='true'" ng-click="goToProfile(item.CommuID)">
-                    <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
-                    <span class="badge badge-assertive">0</span>
-                </a>
+     <a class="item item-icon-left" ng-repeat ="item in adminCommunities" ng-click="goToCommunity(item.CommuID, item.UserType)">
+        <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
+        <span class="badge badge-assertive">0</span>
+    </a>
 
 
 
         </ion-item>
 
 
-<ion-item class = "card">
-          <ion-item class="item-divider" style= "text-align:center">
-    Connection Groups
-  </ion-item>
+<ion-item ng-if = "connectCommunities.length!=0">
 
+         <a class = "item" style= "text-align:center"> Connection Communities </a>
 
-                 <a class="item item-icon-left" ng-repeat ="item in otherCommunities" ng-if = "item.IsAdmin=='false'" ng-click="goToProfile(item.CommuID)">
+                 <a class="item item-icon-left" ng-repeat ="item in connectCommunities" ng-click="goToCommunity1(item.CommuID, item.UserType)">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
                     <span class="badge badge-assertive">0</span>
                 </a>
@@ -57,12 +54,9 @@
 
         </ion-item>
 
-<ion-item class = "card">
-          <ion-item class="item-divider" style= "text-align:center">
-    Following Groups
-  </ion-item>
-
-                 <a class="item item-icon-left" ng-repeat ="item in following" ng-click="goToProfile(item.CommuID)">
+<ion-item ng-if="following.length!=0">
+         <a class = "item" style= "text-align:center"> Following Communities </a>
+                 <a class="item item-icon-left" ng-repeat ="item in following" ng-click="goToCommunity1(item.CommuID, item.UserType)">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
                     <span class="badge badge-assertive">0</span>
                 </a>
@@ -71,28 +65,6 @@
         </ion-item>
 </ion-list> 
 
-<!-- 		<div ng-if= "otherCommunities.length > 0" class="card">
-			<div style="border-bottom:1px solid #387ef5; margin-top:10px;padding:2px 10px;">
-				Other Communities
-			</div> 
-			<ion-list ng-repeat="item in otherCommunities">
-				<ion-item>
-					{{item.ComID}}   {{item.Name}}
-				</ion-item>
-		
-			</ion-list>	
-		</div>
-		<div ng-if= "following.length > 0" class="card">
-			<div style="border-bottom:1px solid #387ef5; margin-top:10px;padding:2px 10px;">
-				Following
-			</div> 
-			<ion-list ng-repeat="item in following">
-				<ion-item>
-					{{item.ComID}}  {{item.Name}}
-				</ion-item>
-		
-			</ion-list>	
-		</div> -->
 
 	</ion-content> 
 </ion-view>

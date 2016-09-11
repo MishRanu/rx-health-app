@@ -53,4 +53,52 @@ app.controller('dtabsController', function($scope, $ionicSideMenuDelegate, ionic
     $scope.$on('$destroy', function () {
         $scope.popover.remove();
     });
+
+    $scope.query = null;
+$scope.showLoadingIcon = false;
+$scope.currentCity = null;
+$ionicModal.fromTemplateUrl('dtemplates/searchtemplate.html', {
+  scope: $scope,
+  animation: 'slide-in-up',
+  focusFirstInput: true
+}).then(function(modal) {
+  $scope.modal = modal;
+});
+
+$scope.openSearch = function() {
+    $scope.modal.show();
+  // if($rootScope.lat){
+  //   $scope.modal.show();
+  // }else{
+  //   GeoLocation.updatelocation("GPS required for search");
+  // }
+};
+$scope.closeSearch = function() {
+  $scope.modal.hide();
+};
+
+$scope.keyfunc = function(keyevent, query) {
+  if (keyevent.which === 13) {
+    $scope.modal.hide();
+    //$scope.goToDocCards('query', query);
+  } else if (keyevent.which === 8 && query.length === 1) {
+    $scope.querylist = null;
+  } else {
+    var temp = String.fromCharCode(keyevent.which);
+    if ((query == null || query.length < 1) && keyevent.which !== 8) {
+      $scope.querylist = null;
+      $scope.showLoadingIcon = true;
+      Http.post('searchdoctor', {
+        'Data': temp
+      }).success(function(data) {
+        if (data.Status.ResponseCode == "200") {
+          $scope.querylist = data.Status.Result;
+        }
+        $scope.showLoadingIcon = false;
+      }).error(function(data) {
+        console.dir(data);
+      });
+    }
+  }
+}
 });

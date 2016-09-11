@@ -1,37 +1,35 @@
 <ion-view view-title="Connections">
-    <ion-content ng-class="{expanded:isExpanded}">
+    <ion-content >
         <div class="content">
-            <div class="list animate-fade-slide-in-right">
-                <a href="#/app/profile" class="item item-avatar item-icon-right">
+            <div class="list " ng-repeat ="item in connections">
+                <a  class="item item-avatar item-icon-right" >
                     <img src="img/jon-snow.jpg">
-                    <h2>Jon Snow</h2>
-                    <p>@Da illest illegitimate</p>
-                    <i class="icon ion-android-more-vertical" ng-click="popover.show($event)"></i>
+                    <h2>{{item.FullName}}</h2>
+                    <p>@nikname</p>
+                    <!-- <button class="button button-icon ion-more" ng-click="popover.show($event)">
+                    </button> -->
+                                <i class="icon ion-android-more-vertical" ng-click="popover.show()"></i>
                 </a>
-                <a href="#/app/profile" class="item item-avatar item-icon-right">
+                <!-- <a href="#/app/profile" class="item item-avatar item-icon-right">
                     <img src="img/daenerys.jpg">
                     <h2>Daenerys Targaryen</h2>
                     <p>@Dragon mommy</p>
-<!--                     <i class="icon ion-chatbubble muted"></i>
- -->                </a>
+                 </a>
                 <a href="#/app/profile" class="item item-avatar item-icon-right">
                     <img src="img/arya.jpg">
                     <h2>Arya Stark</h2>
                     <p>@Is Chuck Norris' fear</p>
-<!--                     <i class="icon ion-chatbubble muted"></i>
- -->                </a>
+                 </a>
                 <a href="#/app/profile" class="item item-avatar item-icon-right">
                     <img src="img/sansa.jpg">
                     <h2>Sansa Stark</h2>
                     <p>@Sansa</p>
-<!--                     <i class="icon ion-chatbubble muted"></i>
- -->                </a>
+                 </a>
                 <a href="#/app/profile" class="item item-avatar item-icon-right">
                     <img src="img/tyrion.jpg">
                     <h2>Tyrion Lannister</h2>
                     <p>@hjsda</p>
-<!--                     <i class="icon ion-chatbubble muted"></i>
- -->                </a>
+                </a> -->
             </div>
         </div>
         <button id="fab" class="button button-positive button-fab button-fab-bottom-right" id="menu-popover" ng-click="popover.show($event)">

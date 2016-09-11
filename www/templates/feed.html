@@ -2,33 +2,35 @@
 	<ion-content>
 
 			<!-- <div class = "cards">  -->
-			<div class = "item no-padding">
-				<!--             	<a class="button option button-clear" ng-click="openPopover($event)">
-  <i class="icon dark ion-chevron-down"></i>
-</a> -->
-            <div class="list card clear-bg ink" ng-repeat ="item in feeds">
+
+            <div class="list card clear-bg ink" ng-repeat ="item in feeds" style="margin-bottom:20px" ng-last-repeat="mylist">
 <!--             	<a class="button option button-clear" ng-click="openPopover($event)">
   <i class="icon dark ion-chevron-down"></i>
 </a> -->
-            <a class = "option" on-tap="openPopover($event)"><i class="icon ion-chevron-down" style="font-size:15px"></i></a>
+
+            <!-- <a class = "option" on-tap="openPopover($event)"><i class="icon ion-chevron-down" style="font-size:15px"></i></a> -->
 <!--
             <a class = "icon option ion-chevron-down" ng-click="openPopover($event)"> </a>  -->
-                <div ng-click="openBrowser(item.Link)">
+                
                     <div class="item item-avatar">
                         <img src="img/arya.jpg">
                         <h2>{{item.Author}}</h2>
+                        <p> {{timeSince(item.LastEdited)}} &nbsp <i ng-if= "item.Type=='public'" class = "icon ion-earth" > </i> <i ng-if= "item.Type=='other'" class = "icon ion-ios-people" > </i></p>  
                     </div>
-                    <div class="item item-body">
-                        <h2>{{item.Header}}</h2>
+                        <div class="item item-body" ng-click="openBrowser(item.Link)">
                         <img src="img/newmaterial.jpg">
                         <p> {{item.Summary}}</p>
                         <p>
-                        <a class="subdued" style="font-size:18px"><i class="icon ion-thumbsup calm" style="font-size:25px" ></i> {{item.Likes}}  </a>
-                        <a class="subdued" style="font-size:18px"><i class="icon ion-chatbox calm" style="font-size:25px"></i> {{item.Comments}}</a>
+                            <a class="subdued" ng-if="item.Likes=='1' || item.Likes=='0'">{{item.Likes}} Like</a>
+                            <a class="subdued" ng-if="!(item.Likes=='1' || item.Likes=='0')">{{item.Likes}} Likes</a>
+                            <a class="subdued" ng-if="item.Comments=='1' || item.Comments=='0'">{{item.Comments}} Comment</a>
+                            <a class="subdued" ng-if="!(item.Comments=='1' || item.Comments=='0')">{{item.Comments}} Comments</a>
+<!--                         <a class="subdued" style="font-size:18px"><i class="icon ion-thumbsup calm" style="font-size:25px" ></i> {{item.Likes}}  </a>
+                        <a class="subdued" style="font-size:18px"><i class="icon ion-chatbox calm" style="font-size:25px"></i> {{item.Comments}}</a> -->
                         </p>
                     </div>
-                </div>
-                <div class="item tabs tabs-positive tabs-secondary tabs-icon-left">
+
+                <div class="item tabs tabs-secondary tabs-icon-left">
                     <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="likeArticle()">
                         <i class="icon ion-thumbsup"></i> Like
                     </a>
@@ -41,7 +43,7 @@
                 </div>
 
             </div>
-            </div>
+
         <!-- </div>  -->
 	</ion-content>
 </ion-view>

@@ -1,7 +1,7 @@
  angular.module('starter.dcontrollers', ['ionic', 'ionic-material'])
 
 
-.controller('dtabsCtrl', function($scope,$state, $ionicModal, $ionicPopover, $timeout,$rootScope) {
+ .controller('dtabsCtrl', function($scope,$state, $ionicModal, $ionicPopover, $timeout,$rootScope) {
     // Form data for the login modal
     $scope.loginData = {};
     $scope.isExpanded = false;
@@ -9,28 +9,28 @@
     $scope.hasHeaderFabRight = false;
     //$rootScope.hideTabsBar = false;
     $rootScope.$on('$ionicView.beforeEnter', function() {
-    var stateName = $state.current.name;
-    if (stateName === 'dapp.dtabs.symptify' || stateName === 'dapp.dtabs.feed' || stateName === 'dapp.dtabs.groups' || stateName === 'dapp.dtabs.notifications' ) {
-      $rootScope.hideTabsBar = false;
-    } else {
-      $rootScope.hideTabsBar = true;
-    }
+      var stateName = $state.current.name;
+      if (stateName === 'dapp.dtabs.symptify' || stateName === 'dapp.dtabs.feed' || stateName === 'dapp.dtabs.groups' || stateName === 'dapp.dtabs.notifications' ) {
+        $rootScope.hideTabsBar = false;
+      } else {
+        $rootScope.hideTabsBar = true;
+      }
       // if(stateName === 'tab.pmenu' && !$rootScope.IsLoggedIn){
       //   $state.go('login');
       // }
     });
     $scope.gosymptify = function() {
-    $state.go('dapp.dtabs.symptify');
-  }
-  $scope.gofeed = function() {
-    $state.go('dapp.dtabs.feed');
-  }
-  $scope.gogroups = function() {
-    $state.go('dapp.dtabs.groups');
-  }
-  $scope.gonotification = function() {
-    $state.go('dapp.dtabs.notifications');
-  }
+      $state.go('dapp.dtabs.symptify');
+    }
+    $scope.gofeed = function() {
+      $state.go('dapp.dtabs.feed');
+    }
+    $scope.gogroups = function() {
+      $state.go('dapp.dtabs.groups');
+    }
+    $scope.gonotification = function() {
+      $state.go('dapp.dtabs.notifications');
+    }
   // $scope.gopmenu = function() {
   //   $state.go('tab.pmenu');
   // }
@@ -47,78 +47,79 @@
     ////////////////////////////////////////
 
     $scope.hideNavBar = function() {
-        document.getElementsByTagName('ion-nav-bar')[0].style.display = 'none';
+      document.getElementsByTagName('ion-nav-bar')[0].style.display = 'none';
     };
 
     $scope.showNavBar = function() {
-        document.getElementsByTagName('ion-nav-bar')[0].style.display = 'block';
+      document.getElementsByTagName('ion-nav-bar')[0].style.display = 'block';
     };
 
     $scope.noHeader = function() {
-        var content = document.getElementsByTagName('ion-content');
-        for (var i = 0; i < content.length; i++) {
-            if (content[i].classList.contains('has-header')) {
-                content[i].classList.toggle('has-header');
-            }
+      var content = document.getElementsByTagName('ion-content');
+      for (var i = 0; i < content.length; i++) {
+        if (content[i].classList.contains('has-header')) {
+          content[i].classList.toggle('has-header');
         }
+      }
     };
 
     $scope.setExpanded = function(bool) {
-        $scope.isExpanded = bool;
+      $scope.isExpanded = bool;
     };
 
     $scope.setHeaderFab = function(location) {
-        var hasHeaderFabLeft = false;
-        var hasHeaderFabRight = false;
+      var hasHeaderFabLeft = false;
+      var hasHeaderFabRight = false;
 
-        switch (location) {
-            case 'left':
-                hasHeaderFabLeft = true;
-                break;
-            case 'right':
-                hasHeaderFabRight = true;
-                break;
-        }
+      switch (location) {
+        case 'left':
+        hasHeaderFabLeft = true;
+        break;
+        case 'right':
+        hasHeaderFabRight = true;
+        break;
+      }
 
-        $scope.hasHeaderFabLeft = hasHeaderFabLeft;
-        $scope.hasHeaderFabRight = hasHeaderFabRight;
+      $scope.hasHeaderFabLeft = hasHeaderFabLeft;
+      $scope.hasHeaderFabRight = hasHeaderFabRight;
     };
 
     $scope.hasHeader = function() {
-        var content = document.getElementsByTagName('ion-content');
-        for (var i = 0; i < content.length; i++) {
-            if (!content[i].classList.contains('has-header')) {
-                content[i].classList.toggle('has-header');
-            }
+      var content = document.getElementsByTagName('ion-content');
+      for (var i = 0; i < content.length; i++) {
+        if (!content[i].classList.contains('has-header')) {
+          content[i].classList.toggle('has-header');
         }
+      }
 
     };
 
     $scope.hideHeader = function() {
-        $scope.hideNavBar();
-        $scope.noHeader();
+      $scope.hideNavBar();
+      $scope.noHeader();
     };
 
     $scope.showHeader = function() {
-        $scope.showNavBar();
-        $scope.hasHeader();
+      $scope.showNavBar();
+      $scope.hasHeader();
     };
 
     $scope.clearFabs = function() {
-        var fabs = document.getElementsByClassName('button-fab');
-        if (fabs.length && fabs.length > 1) {
-            fabs[0].remove();
-        }
+      var fabs = document.getElementsByClassName('button-fab');
+      if (fabs.length && fabs.length > 1) {
+        fabs[0].remove();
+      }
     };
     
-})
+  })
 
 
-.controller('dSymptifyCtrl', function($scope, $stateParams, $state, ionicMaterialInk){
+ .controller('dSymptifyCtrl', function($scope, $stateParams, $state, ionicMaterialInk){
 
-	$scope.me="Jaishriram";
-    ionicMaterialInk.displayEffect();
-})
+   $scope.me="Jaishriram";
+   ionicMaterialInk.displayEffect();
+ })
+
 
 .controller('dFeedCtrl', function($scope, $stateParams, $ionicPopup, $timeout, $state, ionicMaterialInk, $ionicPopover){
 
@@ -143,6 +144,7 @@
     $scope.$on('$destroy', function () {
         $scope.optionpopover.remove();
     });
+
 
     $scope.showPopup = function() {
         var alertPopup = $ionicPopup.show({
@@ -170,21 +172,38 @@
         $timeout(function() {
             //ionic.material.ink.displayEffect();
             ionicMaterialInk.displayEffect();
-        }, 0);
-    };
+          }, 0);
+};
 
 })
 
-
 .controller('dGroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
 
+  $timeout(function() {
+    ionicMaterialMotion.fadeSlideInRight({
+      startVelocity: 3000
+    });
+  }, 700);
 
-    $timeout(function() {
-        ionicMaterialMotion.fadeSlideInRight({
-            startVelocity: 3000
-        });
-    }, 700);
+  var template = '<ion-popover-view>' +
+                    '   <ion-header-bar>' +
+                    '       <h1 class="title">My Popover Title1</h1>' +
+                    '   </ion-header-bar>' +
+                    '   <ion-content class="padding">' +
+                    '       My Popover Contents' +
+                    '   </ion-content>' +
+                    '</ion-popover-view>';
 
+    $scope.popover1 = $ionicPopover.fromTemplate(template, {
+        scope: $scope
+    });
+    $scope.closePopover = function () {
+        $scope.popover1.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function () {
+        $scope.popover1.remove();
+    });
 
 
 	$scope.$on('ngLastRepeat.mylist',function(e) {
@@ -195,9 +214,13 @@
 	$scope.me="Jaishriram";
   console.log("khujli");
  
-    $scope.goToProfile = function(CommuID){
+    $scope.goToCommunity1 = function(CommuID, UserType){
         console.log(CommuID);
-      $state.go('dapp.dtabs.community', {"CommuID": CommuID}, {reload:false});
+      $state.go('dapp.dtabs.community1', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
+    };
+    $scope.goToCommunity = function(CommuID, UserType){
+        console.log(CommuID);
+      $state.go('dapp.dtabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
     };
 	Http.post('getcommunities', {
       'UserID': 1
@@ -208,7 +231,9 @@
       $ionicLoading.hide();
       if ($scope.ResponseCode == 200) {
         $scope.myCommunities = data.Status.myCommunities;
-        $scope.otherCommunities = data.Status.otherCommunities;
+        $scope.connectCommunities = data.Status.connectCommunities;
+
+        $scope.adminCommunities = data.Status.adminCommunities;
         $scope.following = data.Status.following;
         console.log(data.Status);
         // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
@@ -221,17 +246,168 @@
         $ionicLoading.hide();
       });
 
-    $scope.isExpanded = false;
+  $scope.isExpanded = false;
 
 
 })
 
-.controller('CommunityCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+
+.controller('CommunityCtrl', function($scope, $stateParams,$state,  $cordovaImagePicker, $ionicPlatform, $timeout, ionicMaterialMotion, ionicMaterialInk, $ionicPopover, $cordovaFileTransfer) {
     // Set Header
 
 
-    $scope.CommuID =  $stateParams.CommuID; 
+  // .fromTemplate() method
+//   var template = '<ion-popover-view><ion-header-bar> <h1 class="title">My Popover Title</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
 
+//  $scope.popover = $ionicPopover.fromTemplate(template, { 
+//   scope: $scope
+// })
+ 
+// $ionicPopover.fromTemplateUrl('pic-upload.html', { 
+//   scope: $scope
+// }).then(function(popover){ 
+//   $scope.popover= popover; 
+
+// }); 
+
+
+//   $scope.openPopover = function($event) {
+//     $scope.popover.show($event);
+//   };
+//   $scope.closePopover = function() {
+//     $scope.popover.hide();
+//   };
+//   //Cleanup the popover when we're done with it!
+//   $scope.$on('$destroy', function() {
+//     $scope.popover.remove();
+//   });
+//   // Execute action on hide popover
+//   $scope.$on('popover.hidden', function() {
+//     // Execute action
+//   });
+//   // Execute action on remove popover
+//   $scope.$on('popover.removed', function() {
+//     // Execute action
+//   });
+
+
+    $scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
+})
+
+
+
+
+
+    $scope.CommuID =  $stateParams.CommuID; 
+    $scope.UserType = $stateParams.UserType; 
+    console.log("dsds");
+    // $scope.showHeader();
+    // $scope.$parent.clearFabs();
+    // $scope.isExpanded = false;
+    // $scope.$parent.setExpanded(false);
+    // $scope.$parent.setHeaderFab(false);
+
+    // Set Motion
+    $scope.users = [
+    { id: 1, name: 'Bob' },
+    { id: 2, name: 'Alice' },
+    { id: 3, name: 'Steve' }
+    ];
+    $scope.selectedUser = { id: 1, name: 'Bob' };
+    $scope.uploadPhoto = function(){
+    // $ionicPlatform.ready(function() {
+
+    document.addEventListener('deviceready', function(){
+       
+        // Image picker will load images according to these settings
+    var options = {
+        maximumImagesCount: 1, // Max number of selected images, I'm using only one for this example
+        width: 800,
+        height: 800,
+        quality: 80            // Higher is better
+    };
+ 
+    $cordovaImagePicker.getPictures(options).then(function(results) {
+                // Loop through acquired images
+        // for (var i = 0; i < results.length; i++) {
+            // console.log('Image URI: ' + results[i]);   // Print image URI
+            $scope.images = results; 
+        }
+      ,function(error) {
+        console.log('Error: ' + JSON.stringify(error));    // In case of error
+    });
+  })
+// });
+}
+  $scope.posttext; 
+
+  var Poptions = {
+  fileKey: "userid",
+  httpMethod: "POST",
+  mimeType: "image/jpeg",
+  params: {myDescription: $scope.posttext, rating: 5}, 
+  chunkedMode: true
+  };
+  Poptions.params.headers = {'Content-Type': 'application/json'}
+  
+  var url = "http://dxhealth.esy.es/RxHealth0.1/upload.php"; 
+  var filepath = $scope.images; 
+
+  $scope.post = function(){ 
+
+    document.addEventListener('deviceready', function(){
+
+      $cordovaFileTransfer.upload(url, filepath, Poptions)
+      .then(function(result){
+
+        $ionicPopup.alert({
+          title: 'Success', 
+          template: 'Your article has been posted successfully'
+        });
+
+      }, function(err){
+
+        $ionicPopup.alert({
+          title: 'Failure', 
+          template: 'Your article could not be posted'
+        }); 
+      }, function(progress){
+
+      })
+    })
+}
+
+
+
+
+    $scope.goToActivity = function(){
+      $state.go('dapp.dtabs.activity', {'CommuID': $scope.CommuID}, {reload: false});
+    }
+    $scope.goToMembers = function(){
+      $state.go('dapp.dtabs.connections', {'CommuID': $scope.CommuID}, {reload: false});
+    }
+    $scope.goToFollowers = function(){
+      $state.go('dapp.dtabs.followers', {'CommuID': $scope.CommuID}, {reload: false});
+    }
+    $timeout(function() {
+      ionicMaterialMotion.slideUp({
+        selector: '.slide-up'
+      });
+    }, 300);
+
+    $timeout(function() {
+      ionicMaterialMotion.fadeSlideInRight({
+        startVelocity: 3000
+      });
+    }, 700);
+
+    // Set Ink
+    ionicMaterialInk.displayEffect();
+})
+
+ .controller('Community1Ctrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+    // Set Header
     console.log("dsds");
     // $scope.showHeader();
     // $scope.$parent.clearFabs();
@@ -250,13 +426,13 @@
 
   
     $scope.goToActivity = function(){
-      $state.go('dapp.dtabs.activity', {'CommuID': $scope.CommuID}, {reload: false});
+      $state.go('dapp.dtabs.activity');
     }
     $scope.goToMembers = function(){
-      $state.go('dapp.dtabs.connections', {'CommuID': $scope.CommuID}, {reload: false});
+      $state.go('dapp.dtabs.connections');
     }
     $scope.goToFollowers = function(){
-      $state.go('dapp.dtabs.followers', {'CommuID': $scope.CommuID}, {reload: false});
+      $state.go('dapp.dtabs.followers');
     }
     $timeout(function() {
         ionicMaterialMotion.slideUp({
@@ -273,26 +449,32 @@
     // Set Ink
     ionicMaterialInk.displayEffect();
 })
-.controller('ActivityCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+
+
+ .controller('ActivityCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
     // $scope.isExpanded = true;
     // $scope.$parent.setExpanded(true);
     // $scope.$parent.setHeaderFab('right');
    // $rootScope.hideTabsBar = true;
-    $scope.CommuID =  $stateParams.CommuID; 
+    $scope.CommuID =  $stateParams.CommuID;  
 
+    $scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
+})
 
-    $timeout(function() {
-        ionicMaterialMotion.fadeSlideIn({
-            selector: '.animate-fade-slide-in .item'
-        });
-    }, 200);
+   $timeout(function() {
+    ionicMaterialMotion.fadeSlideIn({
+      selector: '.animate-fade-slide-in .item'
+    });
+  }, 200);
 
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
-})
-.controller('ConnectionsCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialInk,$ionicPopover, ionicMaterialMotion) {
+  })
+ .controller('ConnectionsCtrl', function($scope,$rootScope,Http,$ionicLoading, $stateParams, $timeout, ionicMaterialInk,$ionicPopover, ionicMaterialMotion) {
    // $rootScope.hideTabsBar = true;
     // Set Header
     // $scope.$parent.showHeader();
@@ -308,16 +490,37 @@
     // Set Motion
     $scope.CommuID =  $stateParams.CommuID; 
 
+    Http.post('getconnections', {
+      'CommuID': $scope.CommuID
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      $ionicLoading.hide();
+      if ($scope.ResponseCode == 200) {
+        $scope.connections = data.Status.ConnectionData.Connection;
+        
+        console.log($scope.connections);
+        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
+
     $timeout(function() {
-        ionicMaterialMotion.fadeSlideInRight({
-            startVelocity: 3000
-        });
+      ionicMaterialMotion.fadeSlideInRight({
+        startVelocity: 3000
+      });
     }, 700);
 
     // Set Ink
     ionicMaterialInk.displayEffect();
-})
-.controller('FollowersCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+  })
+ .controller('FollowersCtrl', function($scope,$rootScope, $stateParams,Http,$ionicLoading, $timeout, ionicMaterialInk, ionicMaterialMotion) {
     //$rootScope.hideTabsBar = true;
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -326,21 +529,52 @@
     // $scope.$parent.setHeaderFab(false);
 
     // Activate ink for controller
+    $scope.CommuID =  $stateParams.CommuID;
     ionicMaterialInk.displayEffect();
     $scope.CommuID =  $stateParams.CommuID; 
+    $scope.UserType = $stateParams.UserType; 
 
-    ionicMaterialMotion.pushDown({
-        selector: '.push-down'
-    });
-    ionicMaterialMotion.fadeSlideInRight({
-        selector: '.animate-fade-slide-in .item'
-    });
-
+    $scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
 })
 
+    // ionicMaterialMotion.pushDown({
+    //   selector: '.push-down'
+    // });
+    // ionicMaterialMotion.fadeSlideInRight({
+    //   selector: '.animate-fade-slide-in .item'
+    // });
+     Http.post('getconnections', {
+      'CommuID': $scope.CommuID
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      $ionicLoading.hide();
+      if ($scope.ResponseCode == 200) {
+        $scope.followers = data.Status.ConnectionData.Followers;
+        
+        console.log($scope.followers);
+        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
+    $timeout(function() {
+      ionicMaterialMotion.fadeSlideInRight({
+        startVelocity: 3000
+      });
+    }, 700);
+
+  })
 
 
-.controller('dNotificationsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+
+ .controller('dNotificationsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
 
     // Delay expansion
     // $timeout(function() {
@@ -353,12 +587,12 @@
 
     // Set Ink
     ionicMaterialInk.displayEffect();
-})
+  })
 
-.controller('dCommentsCtrl', function($scope, $stateParams, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+ .controller('dCommentsCtrl', function($scope, $stateParams, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
 
-    ionicMaterialInk.displayEffect();
-	$scope.me="Jaishriram";
+  ionicMaterialInk.displayEffect();
+  $scope.me="Jaishriram";
 	    // Set Header
 
     // Set Motion
@@ -367,5 +601,5 @@
 
 
 
-})
+  })
 
