@@ -414,6 +414,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
             			template: 'Sharing...',
             			noBackdrop: true
             			});
+                  console.dir(options);
                   Http.post('sharearticle',options)
                   .success(function(data){
                     $scope.ResponseCode = data.Status.ResponseCode;
