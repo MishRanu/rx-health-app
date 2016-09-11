@@ -197,31 +197,54 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
    }
 
     $scope.$on("$ionicView.beforeEnter", function(){
+      $scope.refresh = function(counter){
         $ionicLoading.show({
         template: 'Loading...',
         noBackdrop: true
         });
-        Http.post('getfeeds',{UserID : $rootScope.UserID})
-         .success(function(data) {
-        $scope.ResponseCode = data.Status.ResponseCode;
-        $scope.ResponseMessage = data.Status.ResponseMessage;
-        $ionicLoading.hide();
-        if ($scope.ResponseCode == 200) {
-            $scope.feeds = data.Status.Articles;
-            console.dir($scope.feeds);
-        }
-          else {
-            $ionicPopup.alert({
-              title: 'Message',
-              template: $scope.ResponseMessage
-            });
+        Http.post('getfeeds',{UserID : $rootScope.UserID, count : counter})
+        .success(function(data) {
+          console.dir(data.Status.Articles);
+          $scope.ResponseCode = data.Status.ResponseCode;
+          $scope.ResponseMessage = data.Status.ResponseMessage;
+          $ionicLoading.hide();
+          if ($scope.ResponseCode == 200) {
+              $scope.feeds = data.Status.Articles;
+              console.dir($scope.feeds);
           }
-        }).error(function(data) {
+            else {
+              $ionicPopup.alert({
+                title: 'Message',
+                template: $scope.ResponseMessage
+              });
+            }
+        })
+        .error(function(data) {
           //$scope.data.error={message: error, status: status};
           console.log("error" + data);
           $ionicLoading.hide();
         });
+      }
+      $scope.refresh(0);
     });
+
+    $scope.followArticle = function(CommuID){
+      console.log(CommuID);
+      Http.post('followcommunity', {
+       'UserID': $rootScope.UserID,
+       'CommuID': CommuID
+       })
+      .success(function(data){
+        $ionicLoading.show({
+          template: 'Community Followed',
+          duration : 1000
+        });
+        $scope.refresh(0);
+      })
+      .error(function(data){
+        console.log('You are ');
+      });
+    }
 
     $scope.likeArticle = function(index) {
 
@@ -307,12 +330,21 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 		 });
 		}
 		$scope.replyit = function(index, anon, reply){
+      if(!anon){
+				anon = 0;
+			}else{
+				anon = 1;
+			}
+      console.log(index);
+      console.log(anon);
+      console.log(reply);
 			var comid = $scope.comments[index].ComID;
+      console.log(comid);
 			Http.post('commentarticle', {
 				'reply' : 'dc',
 				'ComID' : comid,
 				'UserID' : $rootScope.UserID,
-				'Reply' : comment,
+				'Comment' : reply,
 				'Anon' : anon
 			}).success(function(data) {
 		 $scope.ResponseCode = data.Status.ResponseCode;
@@ -320,7 +352,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 		 $ionicLoading.hide();
 		 if ($scope.ResponseCode == 200) {
 			 var newreply = {'RepID' : data.Status.RepID, 'Reply' : reply, 'IsAnon' : anon, FullName : "Jon Snow", "RepID" : data.Status.RepID};
-			 $scope.comments.push(newreply);
+			 $scope.comments[index].Replies.push(newreply);
+			 $scope.commentmodal.someProperty[index] = "";
+			 $scope.commentmodal.isrepanon[index] = false;
 		 }
 			 else {
 				 $ionicPopup.alert({
@@ -335,6 +369,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 		 });
 		}
 		$scope.openCommentModal = function(item){
+      console.log(item);
 			$scope.currentshrid = item;
 			$ionicLoading.show({
 			template: 'Loading...',

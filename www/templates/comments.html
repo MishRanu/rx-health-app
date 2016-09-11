@@ -1,4 +1,4 @@
-<ion-view> 
+<ion-view>
   <ion-header-bar class="bar bar-header bar-positive ">
       <h1 class="title" style="left:0px;">Comments</h1>
       <button class="button button-clear" style="top:0px" ng-click="closeModal()"><i class="icon ion-close-circled"></i> </button>
@@ -22,17 +22,17 @@
 			                    <h2>{{(reply.IsAnon == 1)?'Anonymous':reply.FullName}}</h2>
 			                    <p>{{reply.Reply}}</p>
 			                </div>
-											<div class="item item-avatar ink item-text-wrap item-icon-right">
+											<div ng-show="comment.isrepopen" class="item item-avatar ink item-text-wrap item-icon-right">
 			                    <img src="img/jon-snow.jpg">
 			                    <h2>Jon Snow</h2>
 													<div class="list">
-														<textarea elastic class="item" placeholder="Write a reply..." ng-model="someProperty"></textarea>
+														<textarea elastic class="item" placeholder="Write a reply..." ng-model="commentmodal.someProperty[$index]"></textarea>
 														<div class = "item item-checkbox checkbox-clam">
-															<label class="checkbox" style="float : left">
-																<input type="checkbox" ng-model="isrepanon">
+															<label class="checkbox" style="float : left; width : 150px">
+																<input type="checkbox" ng-model="commentmodal.isrepanon[$index]">
 															</label>
 															IsAnonymous
-															<button style="float : right" class="button button-calm button-outline" ng-click = "replyit($index,isrepanon,someProperty)">Reply</button>
+															<a style="float : right; top : -15px" ng-click = "replyit($index,commentmodal.isrepanon[$index],commentmodal.someProperty[$index])">Reply</a>
 														</div>
 													</div>
 			                </div>
@@ -44,12 +44,12 @@
 										<div class="list">
                     	<textarea elastic class = "item" placeholder="Write a Comment..." ng-model="commentmodal.someotherProperty"></textarea>
 											<div class = "item item-checkbox checkbox-calm">
-												<label class="checkbox" style="float : left">
+												<label class="checkbox" style="float : left;width : 150px">
 													<input type="checkbox" ng-model="commentmodal.iscomanon">
 												</label>
 												IsAnonymous
+                        <a  style="float : right;top : -15px" ng-click = "commentit(commentmodal.iscomanon,commentmodal.someotherProperty)">Comment</a>
 											</div>
-												<button style="float : right" class="button button-calm button-outline" ng-click = "commentit(commentmodal.iscomanon,commentmodal.someotherProperty)">Comment</button>
 											<!-- </div> -->
 										</div>
                 </div>
