@@ -489,7 +489,51 @@
 
     // Set Motion
     $scope.CommuID =  $stateParams.CommuID;
+     var template = '<ion-popover-view style="height:110px"> ' +
+                    '   <ion-content >' +
+                    '       <div class="list">' +
+                    '         <a class="item" style="border-bottom:1px solid #fff" ng-click="removeMember(tempitem,CommuID)">' +
+                    '           Remove'+
+                    '         </a>'+
+                    '         <a class="item" ng-click="blockMember(tempitem,CommuID)">' +
+                    '           Block'+
+                    '         </a>'+
+                    '       </div>'
+                    '   </ion-content>' +
+                    '</ion-popover-view>';
 
+     $scope.popover2 = $ionicPopover.fromTemplate(template, {
+        scope: $scope
+    });
+     $scope.openPopover = function($event,item){
+      $scope.popover2.show($event);
+      $scope.tempitem = item;
+     };
+    $scope.closePopover = function () {
+        $scope.popover2.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function () {
+        $scope.popover2.remove();
+    });
+    $scope.removeMember = function(item,CommuID){
+      var index = $scope.connections.indexOf(item)
+      console.log(index);
+
+      Http.post('removefromcommunity',{
+        'CommuID':CommuID,
+        'UserID':item.UserID
+      })
+      .success(function(data){
+        $scope.ResponseCode = data.Status.ResponseCode;
+        $scope.ResponseMessage = data.Status.ResponseMessage;
+        if ($scope.ResponseCode == 200){
+          $scope.connections.splice(index, 1);
+        //article.Isbookmark = false;
+        }
+      })
+      $scope.closePopover();
+    }
 
     Http.post('getconnections', {
       'CommuID': $scope.CommuID
