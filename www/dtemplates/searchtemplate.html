@@ -1,28 +1,71 @@
-<ion-modal-view cache-view="false">
-	<ion-header-bar class="bar bar-header bar-positive ">
+<ion-view cache-view="false"  >
+	<!-- <ion-header-bar class="bar bar-header bar-positive ">
 		<h1 class="title" style="left:0px;">Search People, Communities and Articles</h1>
   		<button class="button button-clear" style="top:0px" ng-click="closeSearch()"><i class="icon ion-close-circled"></i>	</button>
-	</ion-header-bar>
+	</ion-header-bar> -->
+	<!-- <ion-nav-bar class="bar bar-header bar-positive">
+		<ion-nav-buttons side="left">
+	 		<button class="button button-clear ink" ng-click="goBack()"> <i class="icon ion-arrow-left-c" ></i> </button>
 
-	<ion-content class="has-header">
-		<ion-header-bar class="bar-positive item-input-inset">
+		</ion-nav-buttons>
+		<div>
+			<input ng-keydown="keyfunc($event, mysearch)" type="search" class="ion-autocomplete-search"  placeholder="Search by name , community and disease" ng-model = "mysearch" autofocus>
+		</div>
+
+	</ion-nav-bar> -->
+	<!-- <ion-header-bar class="bar-dark bar bar-header">
+<div class="buttons buttons-left header-item">
+<span class="left-buttons">
+<button class="button button-clear ink" ng-click="goBack()"> <i class="icon ion-arrow-left-c" ></i> </button>
+</span>
+</div>
+<div class="item item-input-inset">
+<label class="item-input-wrapper">
+<input type="text" placeholder="Search Business">
+</label> -->
+<!-- <span class="button button-small" ng-click="filterFeed()">
+<i class="icon ion-search placeholder-icon"></i>
+</span>
+<span class="button button-small" ng-click="filterFeed()">
+<i class="icon ion-ios-albums-outline placeholder-icon"></i>
+</span> -->
+<!-- </div>
+</ion-header-bar> -->
+	<!-- <ion-header-bar class="bar bar-header bar-positive">
+
+
+	</ion-header-bar> -->
+	<ion-nav-bar class="bar bar-header bar-positive">
+	<ion-nav-buttons side="left" style = "width:100%">
+	<ion-header-bar style="box-shadow:0 0">
+	 		<button class="button button-clear ink"  ng-click="goBack()"> <i class="icon ion-arrow-left-c" ></i> </button>
+	 						<input ng-keydown="keyfunc($event, mysearch)" style="width:100%;background-color: #387ef5;" type="search" class="ion-autocomplete-search"  placeholder="Search by name , community and disease" ng-model = "mysearch" autofocus>	
+				
+		</ion-nav-buttons>
+		</ion-header-bar>
+		
+	</ion-nav-bar>
+
+	<ion-content >
+		<!-- <ion-header-bar class="bar-positive item-input-inset">
 			<label class="item-input-wrapper" style="background-color: #fff;">
 				<i class="icon ion-search placeholder-icon"></i>
 				<input ng-keydown="keyfunc($event, mysearch)" type="search" class="ion-autocomplete-search"  placeholder="Search by name , community and disease" ng-model = "mysearch" autofocus>
 				<ion-spinner icon="ripple" ng-if="showLoadingIcon" style="float : right"></ion-spinner>
 			</label>
-		</ion-header-bar>
-		<div class="tabs tabs-icon-left static">
-            <a  class="tab-item" ng-click="goToActivity()">
+		</ion-header-bar> -->
+		<div class="tabs tabs-icon-left tabs-striped static">
+            <a  class="tab-item" ng-click="goToPeople()">
                 <i class="icon ion-person"></i> People
             </a>
-            <a  class="tab-item" ng-click="goToMembers()">
+            <a  class="tab-item" ng-click="goToCommunities()">
                 <i class="icon ion-android-people"></i> Communities
             </a>
-            <a  class="tab-item" ng-click="goToFollowers()">
+            <a  class="tab-item" ng-click="goToArticles()">
                 <i class="icon ion-images"></i> Articles
             </a>
         </div>
+
 		<ion-item ng-if="mysearch != null" ng-repeat="queryitem in querylist | filter : mysearch | limitTo : 5" item-height="55px" item-width="100%" ng-click="selectItem(queryitem)" class="item-text-wrap">
 			{{queryitem.Name}}
 		</ion-item>
@@ -50,4 +93,4 @@
 			</ion-slide>
     </ion-slide-box> -->
 	</ion-content>
-</ion-modal-view>
+</ion-view>

@@ -161,10 +161,10 @@ $ionicConfigProvider.tabs.position('top');
         }
     })
 
-    .state('comments', {
-        url: '/comments',
-        templateUrl: 'templates/comments.html',
-        controller: 'CommentsCtrl'
+    .state('search', {
+        url: '/search/:CurrentState',
+        templateUrl: 'dtemplates/searchtemplate.html',
+        controller: 'SearchCtrl'
     })
 
 
