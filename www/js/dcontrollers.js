@@ -488,7 +488,8 @@
     // }, 300);
 
     // Set Motion
-    $scope.CommuID =  $stateParams.CommuID; 
+    $scope.CommuID =  $stateParams.CommuID;
+
 
     Http.post('getconnections', {
       'CommuID': $scope.CommuID
@@ -597,6 +598,50 @@
 
     // Set Motion
     ionicMaterialMotion.fadeSlideInRight();
+
+
+
+
+  })
+ .controller('SearchCtrl', function($scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+  $scope.CurrentState =  $stateParams.CurrentState;
+  console.log($scope.CurrentState);
+  ionicMaterialInk.displayEffect();
+  $scope.me="Jaishriram";
+      
+  $rootScope.goBack = function() {
+    // implement custom behaviour here
+    $state.go($scope.CurrentState);
+  };
+  
+
+  $scope.$on('$ionicView.beforeEnter', function(event, viewData) {
+    viewData.enableBack = true;
+  }); 
+  $scope.keyfunc = function(keyevent, query) {
+  if (keyevent.which === 13) {
+    $scope.modal.hide();
+    //$scope.goToDocCards('query', query);
+  } else if (keyevent.which === 8 && query.length === 1) {
+    $scope.querylist = null;
+  } else {
+    var temp = String.fromCharCode(keyevent.which);
+    if ((query == null || query.length < 1) && keyevent.which !== 8) {
+      $scope.querylist = null;
+      $scope.showLoadingIcon = true;
+      Http.post('searchdoctor', {
+        'Data': temp
+      }).success(function(data) {
+        if (data.Status.ResponseCode == "200") {
+          $scope.querylist = data.Status.Result;
+        }
+        $scope.showLoadingIcon = false;
+      }).error(function(data) {
+        console.dir(data);
+      });
+    }
+  }
+}          
 
 
 
