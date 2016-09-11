@@ -10,6 +10,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 .controller('FeedCtrl', function($ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
     $rootScope.UserID = 1;
 		$scope.comments = null;
+		$scope.currentshrid = null;
 		$ionicModal.fromTemplateUrl('templates/comments.html', {
 		  scope: $scope,
 		  animation: 'slide-in-up'
@@ -61,19 +62,81 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
           $ionicLoading.hide();
         });
     });
-
+		$scope.commentit = function(anon,comment){
+			if(!anon){
+				anon = 0;
+			}else{
+				anon = 1;
+			}
+			Http.post('commentarticle', {
+				'ShrID' : $scope.currentshrid,
+				'UserID' : $rootScope.UserID,
+				'Comment' : comment,
+				'Anon' : anon
+			}).success(function(data) {
+		 $scope.ResponseCode = data.Status.ResponseCode;
+		 $scope.ResponseMessage = data.Status.ResponseMessage;
+		 $ionicLoading.hide();
+		 if ($scope.ResponseCode == 200) {
+			 var newcomment = {'Comment' : comment, 'IsAnon' : anon, 'Replies' : {}, 'ComID' : data.Status.ComID, FullName : "Jon Snow"};
+			 $scope.comments.push(newcomment);
+			 $scope.commentmodal.someotherProperty = "";
+			 $scope.commentmodal.iscomanon = false;
+		 }
+			 else {
+				 $ionicPopup.alert({
+					 title: 'Message',
+					 template: $scope.ResponseMessage
+				 });
+			 }
+		 }).error(function(data) {
+			 //$scope.data.error={message: error, status: status};
+			 console.log("error" + data);
+			 $ionicLoading.hide();
+		 });
+		}
+		$scope.replyit = function(index, anon, reply){
+			var comid = $scope.comments[index].ComID;
+			Http.post('commentarticle', {
+				'reply' : 'dc',
+				'ComID' : comid,
+				'UserID' : $rootScope.UserID,
+				'Reply' : comment,
+				'Anon' : anon
+			}).success(function(data) {
+		 $scope.ResponseCode = data.Status.ResponseCode;
+		 $scope.ResponseMessage = data.Status.ResponseMessage;
+		 $ionicLoading.hide();
+		 if ($scope.ResponseCode == 200) {
+			 var newreply = {'RepID' : data.Status.RepID, 'Reply' : reply, 'IsAnon' : anon, FullName : "Jon Snow", "RepID" : data.Status.RepID};
+			 $scope.comments.push(newreply);
+		 }
+			 else {
+				 $ionicPopup.alert({
+					 title: 'Message',
+					 template: $scope.ResponseMessage
+				 });
+			 }
+		 }).error(function(data) {
+			 //$scope.data.error={message: error, status: status};
+			 console.log("error" + data);
+			 $ionicLoading.hide();
+		 });
+		}
 		$scope.openCommentModal = function(item){
+			$scope.currentshrid = item;
 			$ionicLoading.show({
 			template: 'Loading...',
 			noBackdrop: true
 			});
-			Http.post('getcomments',{ShrID : item})
+			Http.post('getcomments',{ShrID : $scope.currentshrid})
 			 .success(function(data) {
 			$scope.ResponseCode = data.Status.ResponseCode;
 			$scope.ResponseMessage = data.Status.ResponseMessage;
 			$ionicLoading.hide();
 			if ($scope.ResponseCode == 200) {
 					$scope.comments = data.Status.Comments;
+					console.dir($scope.comments);
 			}else{
 				$ionicPopup.alert({
 					title: 'Message',
