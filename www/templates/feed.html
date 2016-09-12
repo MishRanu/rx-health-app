@@ -42,7 +42,7 @@
                         <a ng-class = "{likecolor: item.Liked }" class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="likeArticle($index)">
                             <i class="icon ion-thumbsup"></i> Like
                         </a>
-                        <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="BookmarkArticle()">
+                        <a ng-class = "{bookmarkcolor: item.Bookmarked }" class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="BookmarkArticle($index)">
                             <i class="icon ion-android-bookmark"></i> Bookmark
                         </a>
                     </div>
@@ -53,7 +53,7 @@
                         <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="openCommentModal(item.ShrID)" class = "animate  up-down">
                             <i class="icon ion-chatbox"></i> Comment
                         </a>
-                        <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="BookmarkArticle()">
+                        <a ng-class = "{bookmarkcolor: item.Bookmarked }" class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="BookmarkArticle($index)">
                             <i class="icon ion-android-bookmark"></i> Bookmark
                         </a>
                     </div>

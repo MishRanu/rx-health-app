@@ -202,7 +202,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
         template: 'Loading...',
         noBackdrop: true
         });
-        Http.post('getfeeds',{UserID : $rootScope.UserID, count : counter})
+        console.log($rootScope.UserID);
+        console.log(counter);
+        Http.post('getfeeds',{ "UserID" : 1, "count" : 0 })
         .success(function(data) {
           console.dir(data.Status.Articles);
           $scope.ResponseCode = data.Status.ResponseCode;
@@ -240,6 +242,31 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
           duration : 1000
         });
         $scope.refresh(0);
+      })
+      .error(function(data){
+        console.log('You are ');
+      });
+    }
+
+    $scope.BookmarkArticle = function(index){
+      console.log(index);
+      var options = {
+       'UserID': $rootScope.UserID,
+       'ShrID': $scope.feeds[index].ShrID
+     };
+      var booked = $scope.feeds[index].Bookmarked;
+      if(booked){
+        options.action = 0;
+      }else{
+        options.action = 1;
+      }
+      Http.post('bookmark',options)
+      .success(function(data){
+        $ionicLoading.show({
+          template: data.Status.ResponseMessage,
+          duration : 1000
+        });
+        $scope.feeds[index].Bookmarked = !$scope.feeds[index].Bookmarked;
       })
       .error(function(data){
         console.log('You are ');
