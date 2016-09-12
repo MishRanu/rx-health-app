@@ -273,6 +273,56 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       };
     }
 
+     
+     var template = '<ion-popover-view style="height:110px"> ' +
+                    '   <ion-content >' +
+                    '       <div class="list">' +
+                    '         <a class="item" style="border-bottom:1px solid #fff" ng-click="editArticle()">' +
+                    '           Edit'+
+                    '         </a>'+
+                    '         <a class="item" ng-click="deleteArticle(tempitem,UserID)">' +
+                    '           Delete'+
+                    '         </a>'+
+                    '       </div>'
+                    '   </ion-content>' +
+                    '</ion-popover-view>';
+
+     $scope.popover2 = $ionicPopover.fromTemplate(template, {
+        scope: $scope
+    });
+     $scope.openPopover1 = function($event,item){
+      $scope.popover2.show($event);
+      $scope.tempitem = item;
+     };
+    $scope.closePopover = function () {
+        $scope.popover2.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function () {
+        $scope.popover2.remove();
+    });
+    $scope.deleteArticle = function(item,UserID){
+      var index = $scope.feeds.indexOf(item)
+      console.log(index);
+      $scope.feeds.splice(index, 1);
+      Http.post('deletearticle',{
+        'ShrID':item.ShrID,
+        'UserID':UserID
+      })
+      .success(function(data){
+        $scope.ResponseCode = data.Status.ResponseCode;
+        $scope.ResponseMessage = data.Status.ResponseMessage;
+        if ($scope.ResponseCode == 200){
+          $scope.feeds.splice(index, 1);
+          
+          console.log("12344555555");
+        //article.Isbookmark = false;
+        }
+      })
+      $scope.popover2.hide();
+    }
+
+
 		$scope.commentit = function(anon,comment){
 			if(!anon){
 				anon = 0;
