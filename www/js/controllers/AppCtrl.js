@@ -55,4 +55,15 @@ app.controller('tabsController', function($scope, $ionicSideMenuDelegate, ionicM
     $scope.$on('$destroy', function () {
         $scope.popover.remove();
     });
+    $scope.openSearch = function() {
+    //$scope.modal.show();
+    var cstateName = $state.current.name;
+    //console.log(stateName);
+    $state.go('search1',{'CurrentState': cstateName}, {reload:false});
+  // if($rootScope.lat){
+  //   $scope.modal.show();
+  // }else{
+  //   GeoLocation.updatelocation("GPS required for search");
+  // }
+};
 });

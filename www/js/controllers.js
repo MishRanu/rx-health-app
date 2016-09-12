@@ -679,3 +679,51 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 
 // })
+
+.controller('SearchCtrl', function($scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+    $scope.CurrentState =  $stateParams.CurrentState;
+    console.log($scope.CurrentState);
+    ionicMaterialInk.displayEffect();
+    $scope.me="Jaishriram";
+
+    $rootScope.goBack = function() {
+      // implement custom behaviour here
+      $state.go($scope.CurrentState);
+    };
+
+
+    $scope.$on('$ionicView.beforeEnter', function(event, viewData) {
+      viewData.enableBack = true;
+    });
+
+    $scope.keyfunc = function(keyevent, query){
+      if(query === undefined){
+        query = "";
+      }
+      if (keyevent.which === 13) {
+        $state.go($scope.CurrentState);
+      } else if (keyevent.which === 8) {
+        $scope.query = query.slice(0,-1);
+        if(query.length === 1){
+          $scope.querylist = {};
+        }
+      } else {
+        $scope.query = query + String.fromCharCode(keyevent.which);
+        var temp = String.fromCharCode(keyevent.which);
+        if (query.length < 1 && keyevent.which !== 8) {
+          $scope.showLoadingIcon = true;
+          Http.post('search', {
+            'Data': temp
+          }).success(function(data) {
+            if (data.Status.ResponseCode == "200") {
+              $scope.querylist = data.Status.Result;
+              console.dir($scope.querylist);
+            }
+            $scope.showLoadingIcon = false;
+          }).error(function(data) {
+            console.dir(data);
+          });
+        }
+      }
+    }
+  })
