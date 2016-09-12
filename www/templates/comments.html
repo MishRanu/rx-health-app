@@ -14,7 +14,7 @@
                     <p>{{comment.Comment}}</p>
 										<div class="list" ng-if = "comment.Replies">
 											<div class="item item-icon-left" ng-click="comment.isrepopen = !comment.isrepopen">
-											<i ng-class="{'icon' : true, 'ion-chevron-right' : !comment.isrepopen, 'ion-chevron-down' : comment.isrepopen}"></i>
+											<i style="font-size : 16px; left : -12 px" ng-class="{'icon' : true, 'ion-chevron-right' : !comment.isrepopen, 'ion-chevron-down' : comment.isrepopen}"></i>
 											Replies
 											</div>
 											<div ng-show = "comment.isrepopen" class="item item-avatar ink item-text-wrap item-icon-right" ng-repeat = "reply in comment.Replies">
