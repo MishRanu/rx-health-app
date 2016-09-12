@@ -189,6 +189,12 @@ $ionicConfigProvider.tabs.position('top');
         templateUrl: 'dtemplates/searchtemplate.html',
         controller: 'SearchCtrl'
     })
+     .state('search1', {
+        url: '/search/:CurrentState',
+        templateUrl: 'templates/searchtemplate.html',
+        controller: 'SearchCtrl'
+    })
+
 
 
 
