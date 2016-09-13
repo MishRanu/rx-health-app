@@ -1,40 +1,5 @@
 <ion-view cache-view="false"  >
-	<!-- <ion-header-bar class="bar bar-header bar-positive ">
-		<h1 class="title" style="left:0px;">Search People, Communities and Articles</h1>
-  		<button class="button button-clear" style="top:0px" ng-click="closeSearch()"><i class="icon ion-close-circled"></i>	</button>
-	</ion-header-bar> -->
-	<!-- <ion-nav-bar class="bar bar-header bar-positive">
-		<ion-nav-buttons side="left">
-	 		<button class="button button-clear ink" ng-click="goBack()"> <i class="icon ion-arrow-left-c" ></i> </button>
-
-		</ion-nav-buttons>
-		<div>
-			<input ng-keydown="keyfunc($event, mysearch)" type="search" class="ion-autocomplete-search"  placeholder="Search by name , community and disease" ng-model = "mysearch" autofocus>
-		</div>
-
-	</ion-nav-bar> -->
-	<!-- <ion-header-bar class="bar-dark bar bar-header">
-<div class="buttons buttons-left header-item">
-<span class="left-buttons">
-<button class="button button-clear ink" ng-click="goBack()"> <i class="icon ion-arrow-left-c" ></i> </button>
-</span>
-</div>
-<div class="item item-input-inset">
-<label class="item-input-wrapper">
-<input type="text" placeholder="Search Business">
-</label> -->
-<!-- <span class="button button-small" ng-click="filterFeed()">
-<i class="icon ion-search placeholder-icon"></i>
-</span>
-<span class="button button-small" ng-click="filterFeed()">
-<i class="icon ion-ios-albums-outline placeholder-icon"></i>
-</span> -->
-<!-- </div>
-</ion-header-bar> -->
-	<!-- <ion-header-bar class="bar bar-header bar-positive">
-
-
-	</ion-header-bar> -->
+	
 <ion-nav-bar class="bar bar-header bar-positive">
 	<ion-nav-buttons side="left" style = "width:100%">
 		<ion-header-bar style="box-shadow:0 0">
@@ -51,7 +16,7 @@
 				<ion-spinner icon="ripple" ng-if="showLoadingIcon" style="float : right"></ion-spinner>
 			</label>
 		</ion-header-bar> -->
-		<div class="tabs tabs-icon-left tabs-striped static">
+		<!-- <div class="tabs tabs-icon-left tabs-striped static">
 	    <a  class="tab-item" ng-click="goToPeople()">
 	      <i class="icon ion-person"></i> People
 	    </a>
@@ -61,13 +26,74 @@
 	    <a class="tab-item" ng-click="goToArticles()">
 	      <i class="icon ion-images"></i> Tags
 	    </a>
-		</div>
+		</div> -->
 
 		<div style="height : 100%;width : 100%" ng-show="showLoadingIcon">
 			<ion-spinner icon="ripple" ng-if="showLoadingIcon" style="font-size : 128px"></ion-spinner>
 		</div>
+		<div ng-show="!showLoadingIcon">
+			<div class="card" ng-if="(querylist.People | filter : query).length > 0">
+				<div class="item" style="border-bottom:1px solid #f3f3f3;padding:5px 10px;min-height:20px;">
+				People
+				</div>
+				<div class="list " >
+                <a  class="item item-avatar" ng-repeat = "person in querylist.People | filter : query| limitTo : 5" >
+                    <img src="img/jon-snow.jpg">
+                    <h2>{{person.FullName}}</h2>
+                    <!-- <p>@nikname</p> -->
+                     <div class=" positive">
+                     <i class="icon ion-person-add "  ng-click="openPopover($event,item)"></i>     <span >Add</span>
+                     </div>
+                                
+                </a>
+			
+				</div>
+		 </div>
+		 <div class="card" ng-if="(querylist.Communities | filter : query).length > 0">
+				<div class="item" style="border-bottom:1px solid #f3f3f3;padding:5px 10px;min-height:20px;">
+				Communities
+				</div>
+				<div class="list " >
+                <a  class="item item-avatar " ng-repeat = "community in querylist.Communities | filter : query| limitTo : 5" >
+                    <img src="img/jon-snow.jpg">
+                    <h2>{{community.Name}}</h2>
+                    <div class="positive " >
+                     <i class="icon ion-android-happy "  ng-click="openPopover($event,item)"></i>     <span >Follow</span>
+                     </div>
 
-		<ion-slide-box  show-pager = 'false' ng-show="!showLoadingIcon">
+                </a>
+			
+				</div>
+		 </div>
+		 <div class="card" ng-if="(querylist.Tags | filter : query).length > 0">
+				<div class="item" style="border-bottom:1px solid #f3f3f3;padding:5px 10px;min-height:20px;">
+				Article tags
+				</div>
+				<div class="list " >
+                <a  class="item item-avatar " ng-repeat = "tag in querylist.Tags | filter : query| limitTo : 5" >
+                    <img src="img/jon-snow.jpg">
+                    <h2>{{tag.Tag}}</h2>
+                    <div class="positive " >
+                     <i class="icon ion-android-search "  ng-click="openPopover($event,item)"></i>     <span >Articles</span>
+                     </div>
+
+                     
+                                <!-- <i class="icon ion-person-add" style="top:-10px" ng-click="openPopover($event,item)"></i> -->
+                </a>
+			
+				</div>
+		 </div>
+			<!-- <div class="list card">
+				
+				<div class = "item" ng-repeat = "community in querylist.Communities | filter : query | limitTo : 5">{{community.Name}}</div>
+			</div>
+			<div class="list">
+				<div class = "item" ng-repeat = "tag in querylist.Tags | filter : query | limitTo : 5">{{tag.Name}}</div>
+			</div> -->
+			
+		</div>
+
+		<!-- <ion-slide-box  show-pager = 'false' ng-show="!showLoadingIcon">
       <ion-slide>
 				<div class="list">
 					<div class = "item" ng-repeat = "person in querylist.People | filter : query | limitTo : 5">{{person.FullName}}</div>
@@ -83,7 +109,7 @@
 					<div class = "item" ng-repeat = "tag in querylist.Tags | filter : query | limitTo : 5">{{tag.Name}}</div>
 				</div>
 			</ion-slide>
-    </ion-slide-box>
+    </ion-slide-box> -->
 
 		<!-- <ion-item ng-if="mysearch != null" ng-repeat="queryitem in querylist | filter : mysearch | limitTo : 5" item-height="55px" item-width="100%" ng-click="selectItem(queryitem)" class="item-text-wrap">
 			{{queryitem.Name}}
