@@ -296,6 +296,56 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       };
     }
 
+     
+     var template = '<ion-popover-view style="height:110px"> ' +
+                    '   <ion-content >' +
+                    '       <div class="list">' +
+                    '         <a class="item" style="border-bottom:1px solid #fff" ng-click="editArticle()">' +
+                    '           Edit'+
+                    '         </a>'+
+                    '         <a class="item" ng-click="deleteArticle(tempitem,UserID)">' +
+                    '           Delete'+
+                    '         </a>'+
+                    '       </div>'
+                    '   </ion-content>' +
+                    '</ion-popover-view>';
+
+     $scope.popover2 = $ionicPopover.fromTemplate(template, {
+        scope: $scope
+    });
+     $scope.openPopover1 = function($event,item){
+      $scope.popover2.show($event);
+      $scope.tempitem = item;
+     };
+    $scope.closePopover = function () {
+        $scope.popover2.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function () {
+        $scope.popover2.remove();
+    });
+    $scope.deleteArticle = function(item,UserID){
+      var index = $scope.feeds.indexOf(item)
+      console.log(index);
+      $scope.feeds.splice(index, 1);
+      Http.post('deletearticle',{
+        'ShrID':item.ShrID,
+        'UserID':UserID
+      })
+      .success(function(data){
+        $scope.ResponseCode = data.Status.ResponseCode;
+        $scope.ResponseMessage = data.Status.ResponseMessage;
+        if ($scope.ResponseCode == 200){
+          $scope.feeds.splice(index, 1);
+          
+          console.log("12344555555");
+        //article.Isbookmark = false;
+        }
+      })
+      $scope.popover2.hide();
+    }
+
+
 		$scope.commentit = function(anon,comment){
 			if(!anon){
 				anon = 0;
@@ -490,9 +540,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 
 .controller('GroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
-    $scope.myCommunities = Http.data.communities.myCommunities;
+    // $scope.myCommunities = Http.data.communities.myCommunities;
     $scope.connectCommunities = Http.data.connectCommunities;
-    $scope.adminCommunities = Http.data.adminCommunities;
+    // $scope.adminCommunities = Http.data.adminCommunities;
     $scope.following = Http.data.following;
     $timeout(function() {
         ionicMaterialMotion.fadeSlideInRight({
@@ -671,3 +721,51 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 
 // })
+
+.controller('SearchCtrl', function($scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+    $scope.CurrentState =  $stateParams.CurrentState;
+    console.log($scope.CurrentState);
+    ionicMaterialInk.displayEffect();
+    $scope.me="Jaishriram";
+
+    $rootScope.goBack = function() {
+      // implement custom behaviour here
+      $state.go($scope.CurrentState);
+    };
+
+
+    $scope.$on('$ionicView.beforeEnter', function(event, viewData) {
+      viewData.enableBack = true;
+    });
+
+    $scope.keyfunc = function(keyevent, query){
+      if(query === undefined){
+        query = "";
+      }
+      if (keyevent.which === 13) {
+        $state.go($scope.CurrentState);
+      } else if (keyevent.which === 8) {
+        $scope.query = query.slice(0,-1);
+        if(query.length === 1){
+          $scope.querylist = {};
+        }
+      } else {
+        $scope.query = query + String.fromCharCode(keyevent.which);
+        var temp = String.fromCharCode(keyevent.which);
+        if (query.length < 1 && keyevent.which !== 8) {
+          $scope.showLoadingIcon = true;
+          Http.post('search', {
+            'Data': temp
+          }).success(function(data) {
+            if (data.Status.ResponseCode == "200") {
+              $scope.querylist = data.Status.Result;
+              console.dir($scope.querylist);
+            }
+            $scope.showLoadingIcon = false;
+          }).error(function(data) {
+            console.dir(data);
+          });
+        }
+      }
+    }
+  })

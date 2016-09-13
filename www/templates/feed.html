@@ -16,8 +16,10 @@
 
                     <div class="item item-avatar">
                         <img src="img/arya.jpg">
+                        <i class="icon ion-android-more-vertical pull-right" style="font-size:25px ;padding:13px" ng-click="openPopover1($event,item)"></i>
                         <h2>{{item.Author}}</h2>
-                        <p> {{timeSince(item.LastEdited)}} &nbsp <i ng-if= "item.Type=='public'" class = "icon ion-earth" > </i> <i ng-if= "item.Type=='other'" class = "icon ion-ios-people" > </i></p>
+
+                        <p> {{timeSince(item.LastEdited)}} &nbsp <i ng-if= "item.isPublic=='1'" class = "icon ion-earth" > </i> <i ng-if= "item.isPublic!='1'" class = "icon ion-ios-people" > </i></p>  
                     </div>
                         <div class="item item-body" ng-click="openBrowser(item.Link)">
                         <img src="img/newmaterial.jpg">
