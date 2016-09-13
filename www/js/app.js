@@ -150,11 +150,12 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('app.tabs.feed', {
-        url: '/feed',
+        url: '/feed/:Prefs',
         views:{
             'feed':{
                 templateUrl: 'templates/feed.html',
-                controller: 'FeedCtrl'
+                controller: 'FeedCtrl',
+                params : {Prefs : null}
             }
         }
     })

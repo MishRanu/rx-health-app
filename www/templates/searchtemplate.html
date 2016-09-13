@@ -1,5 +1,5 @@
 <ion-view cache-view="false"  >
-	
+
 <ion-nav-bar class="bar bar-header bar-positive">
 	<ion-nav-buttons side="left" style = "width:100%">
 		<ion-header-bar style="box-shadow:0 0">
@@ -36,17 +36,15 @@
 				<div class="item" style="border-bottom:1px solid #f3f3f3;padding:5px 10px;min-height:20px;">
 				People
 				</div>
-				<div class="list " >
-                <a  class="item item-avatar" ng-repeat = "person in querylist.People | filter : query| limitTo : 5" >
-                    <img src="img/jon-snow.jpg">
-                    <h2>{{person.FullName}}</h2>
-                    <!-- <p>@nikname</p> -->
-                     <div class=" positive">
-                     <i class="icon ion-person-add "  ng-click="openPopover($event,item)"></i>     <span >Add</span>
-                     </div>
-                                
-                </a>
-			
+				<div class="list" >
+          <a class="item item-avatar" ng-repeat = "person in querylist.People | filter : query| limitTo : 5" >
+              <img src="img/jon-snow.jpg">
+              <h2>{{person.FullName}}</h2>
+              <!-- <p>@nikname</p> -->
+               <!-- <div class=" positive">
+               <i class="icon ion-person-add "  ng-click="openPopover($event,item)"></i>     <span >Add</span>
+						 </div> -->
+          </a>
 				</div>
 		 </div>
 		 <div class="card" ng-if="(querylist.Communities | filter : query).length > 0">
@@ -62,7 +60,7 @@
                      </div>
 
                 </a>
-			
+
 				</div>
 		 </div>
 		 <div class="card" ng-if="(querylist.Tags | filter : query).length > 0">
@@ -70,27 +68,27 @@
 				Article tags
 				</div>
 				<div class="list " >
-                <a  class="item item-avatar " ng-repeat = "tag in querylist.Tags | filter : query| limitTo : 5" >
+                <a  class="item item-avatar " ng-repeat = "tag in querylist.Tags | filter : query| limitTo : 5" ng-click="gotofeeds('tag',tag.TagID)">
                     <img src="img/jon-snow.jpg">
                     <h2>{{tag.Tag}}</h2>
                     <div class="positive " >
                      <i class="icon ion-android-search "  ng-click="openPopover($event,item)"></i>     <span >Articles</span>
                      </div>
 
-                     
+
                                 <!-- <i class="icon ion-person-add" style="top:-10px" ng-click="openPopover($event,item)"></i> -->
                 </a>
-			
+
 				</div>
 		 </div>
 			<!-- <div class="list card">
-				
+
 				<div class = "item" ng-repeat = "community in querylist.Communities | filter : query | limitTo : 5">{{community.Name}}</div>
 			</div>
 			<div class="list">
 				<div class = "item" ng-repeat = "tag in querylist.Tags | filter : query | limitTo : 5">{{tag.Name}}</div>
 			</div> -->
-			
+
 		</div>
 
 		<!-- <ion-slide-box  show-pager = 'false' ng-show="!showLoadingIcon">

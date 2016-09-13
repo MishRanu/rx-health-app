@@ -171,14 +171,16 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
    }
 
     $scope.$on("$ionicView.beforeEnter", function(){
-      $scope.refresh = function(counter){
+      $scope.refresh = function(counter,prefs=null){
         $ionicLoading.show({
         template: 'Loading...',
         noBackdrop: true
         });
-        console.log($rootScope.UserID);
-        console.log(counter);
-        Http.post('getfeeds',{ "UserID" : 1, "count" : 0 })
+        var options = { "UserID" : 1, "count" : 0 };
+        if(prefs){
+          options.Pref = prefs;
+        }
+        Http.post('getfeeds',options)
         .success(function(data) {
           console.dir(data.Status.Articles);
           $scope.ResponseCode = data.Status.ResponseCode;
@@ -201,7 +203,11 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
           $ionicLoading.hide();
         });
       }
-      $scope.refresh(0);
+      if($stateParams.Prefs){
+        $scope.refresh(0,$stateParams.Prefs);
+      }else{
+        $scope.refresh(0);
+      }
     });
 
     $interval(function(){
@@ -731,7 +737,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 // })
 
-.controller('SearchCtrl', function($scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+.controller('SearchCtrl', function($state,$scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
     $scope.CurrentState =  $stateParams.CurrentState;
     console.log($scope.CurrentState);
     ionicMaterialInk.displayEffect();
@@ -741,8 +747,16 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       // implement custom behaviour here
       $state.go($scope.CurrentState);
     };
-
-
+    $scope.gotofeeds = function(type,Id){
+      console.log('haha');
+      var obj;
+      if(type === 'user'){
+        obj = angular.toJSON({'doctorids' : Id});
+      }else{
+        obj = angular.toJSON({'doctorids' : Id});
+      }
+      $state.go('app.tabs.feed',{ Prefs : obj});
+    }
     $scope.$on('$ionicView.beforeEnter', function(event, viewData) {
       viewData.enableBack = true;
     });
