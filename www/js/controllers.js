@@ -135,7 +135,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 })
 
-.controller('FeedCtrl', function($ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
+.controller('FeedCtrl', function(Dates ,$ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
 		$scope.comments = null;
 		$scope.currentshrid = null;
     $scope.communities = Http.data.communities.myCommunities.concat(Http.data.communities.adminCommunities);
@@ -145,34 +145,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 		}).then(function(modal) {
 		  $scope.commentmodal = modal;
 		});
-    $scope.timeSince = function(date) {
-
-    date = Date.parse(date);
-    var seconds = Math.floor((new Date() - date) / 1000);
-
-    var interval = Math.floor(seconds / 31536000);
-
-    if (interval > 1) {
-        return interval + " years";
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-        return interval + " months";
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-        return interval + " days";
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-        return interval + " hours";
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) {
-        return interval + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
-}
+    $scope.timeSince = Dates.getintervalstring;
 
   $scope.$on('ngLastRepeat.mylist',function(e) {
   ionicMaterialInk.displayEffect();
@@ -635,7 +608,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('NotificationsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, Http, $scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
     // Set Header
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -648,6 +621,24 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     // }, 300);
 
     // Set Motion
+    console.log('haha');
+    $scope.$on('$ionicView.beforeEnter', function(){
+      Http.post('getnotifications',{UserID : $rootScope.UserID})
+      .success(function(data){
+        if(data.Status.ResponseCode == 200){
+          $scope.Notifications = data.Status.Notifications;
+          console.dir($scope.Notifications);
+        }else{
+          $ionicPopup.alert({
+            title: 'Message',
+            template: $scope.ResponseMessage
+          });
+        }
+      })
+      .error(function(data){
+        console.log("error" + data);
+      })
+    })
     $timeout(function() {
         ionicMaterialMotion.fadeSlideInRight({
             startVelocity: 3000
@@ -656,6 +647,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
     // Set Ink
     ionicMaterialInk.displayEffect();
+
 })
 
 
