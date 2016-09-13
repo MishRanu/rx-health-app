@@ -1,8 +1,10 @@
 
-<ion-view view-title="Groups"> 
+<ion-view view-title="Groups" cache-view="true"> 
   <ion-content class = "padding">
 
-<ion-list class  = "animate-fade-slide-in-right"> 
+
+<ion-list class  = "animate-fade-slide-in-right">
+
 
 
 
@@ -16,7 +18,7 @@
 
          <a class = "item" style= "text-align:center"> Connection Communities </a>
 
-                 <a class="item item-icon-left" ng-repeat ="item in connectCommunities" ng-click="goToCommunity(item.CommuID, item.UserType)">
+                 <a class="item item-icon-left" ng-repeat ="item in connectCommunities" ng-click="goToCommunity1(item.CommuID, item.UserType)">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
                     <span class="badge badge-assertive">0</span>
                 </a>
@@ -26,15 +28,13 @@
 
 <ion-item ng-if="following.length!=0">
          <a class = "item" style= "text-align:center"> Following Communities </a>
-                 <a class="item item-icon-left" ng-repeat ="item in following" ng-click="goToCommunity(item.CommuID, item.UserType)">
+                 <a class="item item-icon-left" ng-repeat ="item in following" ng-click="goToCommunity1(item.CommuID, item.UserType)">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
                     <span class="badge badge-assertive">0</span>
                 </a>
 
 
         </ion-item>
-</ion-list> 
 
-
-  </ion-content> 
+  </ion-list>
 </ion-view>

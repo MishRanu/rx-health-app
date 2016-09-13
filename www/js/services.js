@@ -65,6 +65,26 @@ angular.module('starter.services', [])
     };
   })
 
+  .directive('elastic',
+    function() {
+        return {
+            restrict: 'A',
+            link: function($scope, element) {
+                element.css({
+                  'resize' : 'none',
+                  'width' : '100%',
+                  'height' : '36px'
+                });
+                $scope.initialHeight = $scope.initialHeight || element[0].style.height;
+                var resize = function() {
+                    element[0].style.height = $scope.initialHeight;
+                    element[0].style.height = "" + element[0].scrollHeight + "px";
+                };
+                element.on("input change", resize);
+            }
+        };
+    })
+
 
 
 .factory('Http', function($http) {

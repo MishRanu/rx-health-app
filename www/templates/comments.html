@@ -1,37 +1,59 @@
-<ion-view> 
-    <ion-header-bar class="bar bar-header bar-positive ">
-        <h1 class="title" style="left:0px;">Comments</h1>
-        <button class="button button-clear" style="top:0px" ng-click="closeModal()"><i class="icon ion-close-circled"></i> </button>
-    </ion-header-bar>
+<ion-view>
+  <ion-header-bar class="bar bar-header bar-positive ">
+      <h1 class="title" style="left:0px;">Comments</h1>
+      <button class="button button-clear" style="top:0px" ng-click="closeModal()"><i class="icon ion-close-circled"></i> </button>
+  </ion-header-bar>
 	<ion-content>
-            
+
 
         <div class="content">
             <div class="list">
-                <div class="item item-avatar ink item-text-wrap item-icon-right">
+                <div class="item item-avatar ink item-text-wrap item-icon-right" ng-repeat = "comment in comments track by $index">
                     <img src="img/jon-snow.jpg">
-                    <h2>Jon Snow</h2>
-                    <p>Doctor i have an issue with my right eye. It is paining a lot. Could you please suggest me some alternate medicines</p>
+                    <h2>{{(comment.IsAnon == 1)?'Anonymous':comment.FullName}}</h2>
+                    <p>{{comment.Comment}}</p>
+										<div class="list" ng-if = "comment.Replies">
+											<div class="item item-icon-left" ng-click="comment.isrepopen = !comment.isrepopen">
+											<i style="font-size : 16px; left : -12 px" ng-class="{'icon' : true, 'ion-chevron-right' : !comment.isrepopen, 'ion-chevron-down' : comment.isrepopen}"></i>
+											Replies
+											</div>
+											<div ng-show = "comment.isrepopen" class="item item-avatar ink item-text-wrap item-icon-right" ng-repeat = "reply in comment.Replies">
+			                    <img src="img/jon-snow.jpg">
+			                    <h2>{{(reply.IsAnon == 1)?'Anonymous':reply.FullName}}</h2>
+			                    <p>{{reply.Reply}}</p>
+			                </div>
+											<div ng-show="comment.isrepopen" class="item item-avatar ink item-text-wrap item-icon-right">
+			                    <img src="img/jon-snow.jpg">
+			                    <h2>Jon Snow</h2>
+													<div class="list">
+														<textarea elastic class="item" placeholder="Write a reply..." ng-model="commentmodal.someProperty[$index]"></textarea>
+														<div class = "item item-checkbox checkbox-clam">
+															<label class="checkbox" style="float : left; width : 150px">
+																<input type="checkbox" ng-model="commentmodal.isrepanon[$index]">
+															</label>
+															IsAnonymous
+															<a style="float : right; top : -15px" ng-click = "replyit($index,commentmodal.isrepanon[$index],commentmodal.someProperty[$index])">Reply</a>
+														</div>
+													</div>
+			                </div>
+										</div>
                 </div>
                 <div class="item item-avatar ink item-text-wrap item-icon-right">
                     <img src="img/jon-snow.jpg">
                     <h2>Jon Snow</h2>
-                    <p>Doctor i have an issue with my right eye. It is paining a lot. </p>
-                </div>
-                <div class="item item-avatar ink item-text-wrap item-icon-right">
-                    <img src="img/jon-snow.jpg">
-                    <h2>Jon Snow</h2>
-                    <p>Doctor i have an issue with my right eye. It is paining a lot. </p>
-                </div>
-                <div class="item item-avatar ink item-text-wrap item-icon-right">
-                    <img src="img/jon-snow.jpg">
-                    <h2>Jon Snow</h2>
-                    <input type="text"  style = "width:100%" placeholder="Please enter your views here">
-
+										<div class="list">
+                    	<textarea elastic class = "item" placeholder="Write a Comment..." ng-model="commentmodal.someotherProperty"></textarea>
+											<div class = "item item-checkbox checkbox-calm">
+												<label class="checkbox" style="float : left;width : 150px">
+													<input type="checkbox" ng-model="commentmodal.iscomanon">
+												</label>
+												IsAnonymous
+                        <a  style="float : right;top : -15px" ng-click = "commentit(commentmodal.iscomanon,commentmodal.someotherProperty)">Comment</a>
+											</div>
+										</div>
                 </div>
             </div>
-
         </div>
 
-	</ion-content> 
+	</ion-content>
 </ion-view>

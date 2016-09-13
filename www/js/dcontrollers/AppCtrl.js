@@ -54,27 +54,18 @@ app.controller('dtabsController', function($scope, $ionicSideMenuDelegate, ionic
         $scope.popover.remove();
     });
 
-    $scope.query = null;
-$scope.showLoadingIcon = false;
-$scope.currentCity = null;
-$ionicModal.fromTemplateUrl('dtemplates/searchtemplate.html', {
-  scope: $scope,
-  animation: 'slide-in-up',
-  focusFirstInput: true
-}).then(function(modal) {
-  $scope.modal = modal;
-});
+  
 
 $scope.openSearch = function() {
-    $scope.modal.show();
+    //$scope.modal.show();
+    var cstateName = $state.current.name;
+    //console.log(stateName);
+    $state.go('search',{'CurrentState': cstateName}, {reload:false});
   // if($rootScope.lat){
   //   $scope.modal.show();
   // }else{
   //   GeoLocation.updatelocation("GPS required for search");
   // }
-};
-$scope.closeSearch = function() {
-  $scope.modal.hide();
 };
 
 $scope.keyfunc = function(keyevent, query) {

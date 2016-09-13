@@ -4,7 +4,7 @@
 .link {
     color: #116262;
     font-weight: bold;
-} 
+}
 
 
 .option {
@@ -229,11 +229,18 @@ p {
     left: initial !important;
     right: 30px !important;
     bottom: 10px !important;
-    width: 75px !important; 
+    width: 75px !important;
     height:90px !important;
     font-size: 15px;
 }
 .platform-android .popover{
-margin-top:10px;
+margin-top:5px;
 }
 
+.likecolor {
+    color: #387ef5;
+}
+
+.bookmarkcolor {
+    color: #387ef5;
+}
