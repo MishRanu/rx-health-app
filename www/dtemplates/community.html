@@ -52,13 +52,23 @@
 <div class="list card clear-bg ink">
                 <div class="item item-body">
                 <div class= "item no-padding"> <h3> Your Post Here </h3> </div>
-                <md-input-container>  
-            <textarea name="post" ng-model="posttext" rows="10" style= "width:100%"></textarea>
-            </md-input-container>
 
-                        <a class="subdued">500 characters left</a>
-                    
+
+                <label> Heading </label>  
+            <input type="text" ng-model="postheading" style= "width:100%; border:solid 1px grey;"></input>
+          
+                <label> Detail </label>  
+  
+            <textarea ng-model="posttext" rows="10" style= "width:100%; border:solid 1px grey;"></textarea>
+
+                <label>Link</label>  
+            <input name="post" ng-model="postlink" style= "width:100%; border:solid 1px grey;"></input>
+          
+
+ 
                 </div>
+
+
 
 
             <div class = "item" style= "width:100%"> 
@@ -76,6 +86,9 @@
         </ion-popover-view> 
         </script> 
  -->
+
+
+
             <div class ="item item-divider" style= "background-color:white"> 
  <select> <option>Only Connections</option> <option>Public</option>  <option selected>Followers</option> </select>
 
@@ -84,5 +97,13 @@
 &nbsp
 
 
-    </ion-content>
+    <!-- </ion-content> -->
+
+    <ion-item ng-controller="UploadController">
+  <input class="bottom-marg-15" type="file" name="file" file="file">
+  <button class="button button-small button-full button-positive" ng-disabled="file.size&amp;&amp;false || uploadProgress&gt;0" ng-click="upload()" ng-cloak="">Upload</button>
+  <img class="fit" ng-if="uploadUri" ng-src="{{uploadUri}}">
+  <a ng-href="{{uploadUri}}" ng-bind="uploadUri"></a>
+</ion-content>
+
 </ion-view>

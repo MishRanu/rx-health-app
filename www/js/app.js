@@ -33,6 +33,7 @@ $ionicConfigProvider.tabs.position('top');
         controller: 'AppCtrl'
     })
 
+
     .state('app.QRScanner', { 
         url: '/QRScanner', 
         views: {
@@ -176,12 +177,32 @@ $ionicConfigProvider.tabs.position('top');
         controller: 'dAppCtrl'
     })
 
-    .state('dapp.lists', {
-        url: '/lists',
+    .state('dapp.profile', {
+        url: '/profile',
         views: {
             'dmenuContent': {
-                templateUrl: 'dtemplates/lists.html',
-                controller: 'dListsCtrl'
+                templateUrl: 'dtemplates/profile.html',
+                controller: 'dProfileCtrl'
+            }
+        }
+    })
+
+    .state('dapp.bookmarks', {
+        url: '/bookmarks',
+        views: {
+            'dmenuContent': {
+                templateUrl: 'dtemplates/bookmarks.html',
+                controller: 'dBookmarkCtrl'
+            }
+        }
+    })
+
+    .state('dapp.preferences', {
+        url: '/preferences',
+        views: {
+            'dmenuContent': {
+                templateUrl: 'dtemplates/preferences.html',
+                controller: 'dPreferencesCtrl'
             }
         }
     })
@@ -372,4 +393,27 @@ $ionicConfigProvider.tabs.position('top');
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/welcome');
+})
+
+.controller('UploadController', function ($scope, $ionicLoading){
+  var imageUploader = new ImageUploader();
+  $scope.result = {};
+  $scope.file = {};
+  $scope.upload = function() {
+    $ionicLoading.show({
+      template: 'Uploading...'
+    });
+    imageUploader.push($scope.file)
+      .then((data) => {
+        console.debug('Upload complete. Data:', data);
+        $ionicLoading.hide();
+        $scope.result.url = data.url;
+        $scope.$digest();
+      })
+      .catch((err) => {
+        console.error(err);
+        $ionicLoading.hide();
+        $scope.result.error = err;
+      });
+  };
 });

@@ -8,7 +8,7 @@ app.controller('dtabsController', function($scope, $ionicSideMenuDelegate, ionic
 
 })
  
- app.controller('dAppCtrl', function ($scope, $stateParams, $state, $ionicModal, $ionicPopover, $timeout, $ionicSideMenuDelegate, ionicMaterialInk) {
+ app.controller('dAppCtrl', function ($scope, $ionicLoading, Http, $stateParams, $state, $ionicModal, $ionicPopover, $timeout, $ionicSideMenuDelegate, ionicMaterialInk) {
 
 
     // Form data for the login modal
@@ -101,4 +101,27 @@ $scope.keyfunc = function(keyevent, query) {
     }
   }
 }
+
+
+  Http.post('dmenutab', {
+    'UserID': 1
+  })
+  .success(function(data) {
+    $scope.ResponseCode = data.Status.ResponseCode;
+    $scope.ResponseMessage = data.Status.ResponseMessage;
+
+    if ($scope.ResponseCode == 200) {
+      $scope.details = data.Status;
+    } else {
+      alert($scope.ResponseMessage);
+      $ionicLoading.hide();
+    }
+  }).error(function(data, status, headers, config) {
+                //$scope.data.error={message: error, status: status};
+                alert("error" + data);
+                $ionicLoading.hide();
+              });
+
+
+
 });
