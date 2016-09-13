@@ -2,11 +2,11 @@
     <!-- <ion-content ng-class="{expanded:isExpanded}"> -->
     <ion-content>
         <div class="content">
-            <div class="list animate-fade-slide-in-right" ng-repeat="notification in Notifications">
-                <div class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{background-color : notification.Viewed}">
-                    <img ng-src="notification.Pic">
+            <div class="list animate-fade-slide-in-right">
+                <div class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{'background-color' : notification.Viewed}" ng-repeat="notification in Notifications">
+                    <img ng-src="{{notification.Pic}}">
                     <p>{{notification.Summary}}</p>
-                    <p>{{Dates.getintervalstring(notification.NGT)}}</p>
+                    <p>{{stringify(notification.NGT)}}</p>
                 </div>
             </div>
         </div>

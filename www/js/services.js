@@ -89,6 +89,8 @@ angular.module('starter.services', [])
 
 .factory('Http', function($http) {
   var rooturl = "http://dxhealth.esy.es/RxHealth0.1/";
+  var datam = {};
+  var extras = {};
   return {
     get: function(url) {
       return $http({
@@ -109,7 +111,17 @@ angular.module('starter.services', [])
         data: params
       });
     },
-    data: {}
+    setdata: function(dat,Name,extra=null){
+      datam[Name] = dat;
+      if(extra){
+        extras[Name] = extra;
+      }
+    },
+    getdata : function(Name){
+      var result = {'data' : datam[Name], 'extras' : extras[Name]};
+      return result;
+    },
+    data : {}
   };
 })
 
@@ -691,9 +703,7 @@ angular.module('starter.services', [])
 
 .factory('Dates', function(){
   return {
-    getintervalstring : function(date) {
-      date = Date.parse(date);
-      var seconds = Math.floor((new Date() - date) / 1000);
+    getintervalstring : function(seconds) {
       var interval = Math.floor(seconds / 31536000);
       if (interval > 1) {
           return interval + " years";

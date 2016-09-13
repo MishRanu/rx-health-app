@@ -135,10 +135,11 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 })
 
-.controller('FeedCtrl', function(Dates ,$ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
+.controller('FeedCtrl', function(Dates ,$interval,$ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
 		$scope.comments = null;
 		$scope.currentshrid = null;
-    $scope.communities = Http.data.communities.myCommunities.concat(Http.data.communities.adminCommunities);
+    var communities = Http.getdata('communities').data;
+    $scope.communities = communities.myCommunities.concat(communities.adminCommunities);
 		$ionicModal.fromTemplateUrl('templates/comments.html', {
 		  scope: $scope,
 		  animation: 'slide-in-up'
@@ -202,6 +203,13 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       }
       $scope.refresh(0);
     });
+
+    $interval(function(){
+      var i = 0;
+      for(i=0;i < $scope.feeds.length;i++){
+        $scope.feeds[i].LastEdited+=60;
+      }
+    },60000);
 
     $scope.followArticle = function(CommuID){
       console.log(CommuID);
@@ -296,7 +304,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       };
     }
 
-     
+
      var template = '<ion-popover-view style="height:110px"> ' +
                     '   <ion-content >' +
                     '       <div class="list">' +
@@ -337,7 +345,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
         $scope.ResponseMessage = data.Status.ResponseMessage;
         if ($scope.ResponseCode == 200){
           $scope.feeds.splice(index, 1);
-          
+
           console.log("12344555555");
         //article.Isbookmark = false;
         }
@@ -540,10 +548,11 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 
 .controller('GroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
-    // $scope.myCommunities = Http.data.communities.myCommunities;
-    $scope.connectCommunities = Http.data.connectCommunities;
-    // $scope.adminCommunities = Http.data.adminCommunities;
-    $scope.following = Http.data.following;
+    var communities = Http.getdata('communities').data;
+    // $scope.myCommunities = communities.myCommunities;
+    $scope.connectCommunities = communities.connectCommunities;
+    // $scope.adminCommunities = communities.adminCommunities;
+    $scope.following = communities.following;
     $timeout(function() {
         ionicMaterialMotion.fadeSlideInRight({
             startVelocity: 3000
@@ -658,7 +667,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, Http, $scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, Http, $scope, $stateParams, $timeout,$interval, ionicMaterialInk, ionicMaterialMotion) {
     // Set Header
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -673,28 +682,28 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     // Set Motion
     console.log('haha');
     $scope.$on('$ionicView.beforeEnter', function(){
-      Http.post('getnotifications',{UserID : $rootScope.UserID})
-      .success(function(data){
-        if(data.Status.ResponseCode == 200){
-          $scope.Notifications = data.Status.Notifications;
-          console.dir($scope.Notifications);
-        }else{
-          $ionicPopup.alert({
-            title: 'Message',
-            template: $scope.ResponseMessage
-          });
-        }
-      })
-      .error(function(data){
-        console.log("error" + data);
-      })
+      var temp = Http.getdata('notifications');
+      $scope.Notifications = temp.data;
+      var dat = new Date()
+      var l = Math.floor((dat.getTime()-temp.extras.getTime())/1000);
+      var i;
+      for(i=0;i < $scope.Notifications.length;i++){
+        $scope.Notifications[i].NGT+= l;
+      }
+      $scope.stringify = Dates.getintervalstring;
     })
     $timeout(function() {
         ionicMaterialMotion.fadeSlideInRight({
             startVelocity: 3000
         });
     }, 700);
-
+    $interval(function(){
+      console.log('mama');
+      var i = 0;
+      for(i=0;i < $scope.Notifications.length;i++){
+        $scope.Notifications[i].NGT+=60;
+      }
+    },60000);
     // Set Ink
     ionicMaterialInk.displayEffect();
 
