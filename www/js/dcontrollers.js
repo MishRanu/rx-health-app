@@ -755,7 +755,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
 })
 
 
-.controller('CommunityCtrl', function($scope, Http, $stateParams,$state,  $cordovaImagePicker, $ionicPlatform, $timeout, ionicMaterialMotion, ionicMaterialInk, $ionicPopover, $ionicPopup, $cordovaFileTransfer, $ionicLoading) {
+.controller('dCommunityCtrl', function($scope, Http, $stateParams,$state, $rootScope, $cordovaImagePicker, $ionicPlatform, $timeout, ionicMaterialMotion, ionicMaterialInk, $ionicPopover, $ionicPopup, $cordovaFileTransfer, $ionicLoading) {
     // Set Header
 
 
@@ -792,8 +792,10 @@ $scope.$on('$ionicView.beforeEnter', function() {
 //   $scope.$on('popover.removed', function() {
 //     // Execute action
 //   });
-
-
+  $scope.postmat= {};
+  $scope.postmat.posttext = "";
+  $scope.postmat.postheading = "";
+  $scope.postmat.postlink = "";
 
 
 
@@ -804,7 +806,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
 
 
 
-
+    $scope.visible = "0";
 
     $scope.CommuID =  $stateParams.CommuID;
     $scope.UserType = $stateParams.UserType;
@@ -848,22 +850,70 @@ $scope.$on('$ionicView.beforeEnter', function() {
   })
 // });
 }
-  $scope.posttext;
 
 
   var Poptions = {
   fileKey: "userid",
   httpMethod: "POST",
   mimeType: "image/jpeg",
-  params: {myDescription: $scope.posttext, rating: 5},
+  params: {myDescription: $scope.postmat.posttext, rating: 5},
   chunkedMode: true
   };
   Poptions.params.headers = {'Content-Type': 'application/json'}
 
   var url = "http://dxhealth.esy.es/RxHealth0.1/upload.php";
   var filepath = $scope.images;
+$scope.visible = '0';
+$scope.selectUpdated = function(optionSelected) {
+    console.log('Updated');
+    console.log(optionSelected);
+    $scope.visible = optionSelected; 
+}
 
-  $scope.post = function(){
+  $scope.post = function(){ 
+    console.log($scope.visible);
+    console.log($scope.postmat.postheading);
+    console.log($scope.postmat.postlink);
+
+    console.log($scope.postmat.posttext);
+
+if($scope.visible=='0'||$scope.visible=='1'){
+    Http.post('sharearticle', {
+      "Type": 0, 
+      "IsPublic": parseInt($scope.visible), 
+      "UserID": '1', 
+      "CommuID": $scope.CommuID, 
+      "Summary": '',
+      "Details": $scope.postmat.posttext, 
+      "Header": $scope.postmat.postheading,
+      "Link": $scope.postmat.postlink, 
+      "ImageLink": $rootScope.imgurl 
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      if ($scope.ResponseCode == 200) {
+        
+        console.log('success');
+        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+      });
+
+}
+else{
+          $ionicPopup.alert({
+          title: 'Form not complete',
+          template: 'Please fill the form before posting'
+        });
+
+}
+  }
+  $scope.postimg = function(){
 
     console.log(images);
     document.addEventListener('deviceready', function(){
@@ -917,30 +967,6 @@ $scope.$on('$ionicView.beforeEnter', function() {
       })
     })
 
-    // Http.post('sharearticle', {
-    //   'CommuID': $scope.CommuID, 
-    //   'UserID': $scope.UserID, 
-    //   'Text': $scope.posttext, 
-    //   'Image': $scope.awsimage
-    // })
-    // .success(function(data) {
-    //   $scope.ResponseCode = data.Status.ResponseCode;
-    //   $scope.ResponseMessage = data.Status.ResponseMessage;
-    //   $ionicLoading.hide();
-    //   if ($scope.ResponseCode == 200) {
-    //     $scope.connections = data.Status.ConnectionData.Connection;
-        
-    //     console.log($scope.connections);
-    //     // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
-    //   } else {
-    //     alert($scope.ResponseMessage);
-    //   }
-    // }).error(function(data, status, headers, config) {
-    //     //$scope.data.error={message: error, status: status};
-    //     alert("error" + data);
-    //     $ionicLoading.hide();
-    //   });
-
 
 
 }
@@ -973,7 +999,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
     ionicMaterialInk.displayEffect();
 })
 
- .controller('Community1Ctrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+ .controller('dCommunity1Ctrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     // Set Header
     console.log("dsds");
     // $scope.showHeader();
@@ -1018,7 +1044,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
 })
 
 
- .controller('ActivityCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+ .controller('dActivityCtrl', function($scope,$rootScope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
 
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -1041,7 +1067,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
   })
- .controller('ConnectionsCtrl', function($scope,$rootScope,Http,$ionicLoading, $stateParams, $timeout, ionicMaterialInk,$ionicPopover, ionicMaterialMotion) {
+ .controller('dConnectionsCtrl', function($scope,$rootScope,Http,$ionicLoading, $stateParams, $timeout, ionicMaterialInk,$ionicPopover, ionicMaterialMotion) {
    // $rootScope.hideTabsBar = true;
     // Set Header
     // $scope.$parent.showHeader();
@@ -1132,7 +1158,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
     // Set Ink
     ionicMaterialInk.displayEffect();
   })
- .controller('FollowersCtrl', function($scope,$rootScope, $stateParams,Http,$ionicLoading, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+ .controller('dFollowersCtrl', function($scope,$rootScope, $stateParams,Http,$ionicLoading, $timeout, ionicMaterialInk, ionicMaterialMotion) {
     //$rootScope.hideTabsBar = true;
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();

@@ -18,27 +18,6 @@
                 <i class="icon ion-images"></i> Followers
             </a>
         </div>
-<!--         <h4 class="content padding double-padding-x">Following</h4>
- -->        <!-- <div class="list animate-fade-slide-in-right">
-            <a ui-sref="app.friends" class="item item-avatar item-icon-right">
-                <img src="img/jon-snow.jpg">
-                <h2>Jon Snow</h2>
-                <p>Da illest illegitimate</p>
-                <i class="icon ion-chatbubble muted"></i>
-            </a>
-            <a ui-sref="app.friends" class="item item-avatar item-icon-right">
-                <img src="img/sansa.jpg">
-                <h2>Sansa Stark</h2>
-                <p>&amp; Joffrey <strike>sitting</strike> sat in a tree</p>
-                <i class="icon ion-chatbubble muted"></i>
-            </a>
-            <a ui-sref="app.friends" class="item item-avatar item-icon-right">
-                <img src="img/tyrion.jpg">
-                <h2>Tyrion Lannister</h2>
-                <p>B.A.M.F. imp</p>
-                <i class="icon ion-chatbubble muted"></i>
-            </a>
-        </div> -->
 
         <div class = "list card clear-bg ink"> 
 
@@ -55,56 +34,52 @@
 
 
                 <label> Heading </label>  
-            <input type="text" ng-model="postheading" style= "width:100%; border:solid 1px grey;"></input>
+            <input type="text" ng-model="postmat.postheading" style= "width:100%; border:solid 1px grey;"></input>
           
                 <label> Detail </label>  
   
-            <textarea ng-model="posttext" rows="10" style= "width:100%; border:solid 1px grey;"></textarea>
+            <textarea ng-model="postmat.posttext" rows="10" style= "width:100%; border:solid 1px grey;"></textarea>
 
                 <label>Link</label>  
-            <input name="post" ng-model="postlink" style= "width:100%; border:solid 1px grey;"></input>
-          
-
- 
-                </div>
+            <input type = "text" name="post" ng-model="postmat.postlink" style= "width:100%; border:solid 1px grey;"></input>
 
 
+ </div>
+
+    <div class = "item item-body" ng-controller="UploadController">
+
+            <input name="file" type = "file" file = "file"></input>
 
 
-            <div class = "item" style= "width:100%"> 
-                <div class = "button button-small button-positive" ng-click="uploadPhoto()"> Upload Photo </div> 
-   
-            </div>
-        </div>
-<!-- 
-        <script id = "pic-upload.html" type = "text/ng-template"> 
-        <ion-popover-view> 
-            <ion-content> 
-            <div class= "button button-small button-positive"> Camera </div> 
-            <div class= "button button-small button-positive"> Gallery </div>  
-            </ion-content> 
-        </ion-popover-view> 
-        </script> 
- -->
+  <button class="button button-small button-positive" ng-disabled="file.size&amp;&amp;false || uploadProgress&gt;0" ng-click="upload()" ng-cloak="" style="float:center">Upload</button>
+
+
+<!--   <img class="fit" ng-if="uploadUri" ng-src="{{uploadUri}}">
+  <a ng-href="{{uploadUri}}" ng-bind="uploadUri"></a> -->
+</div>
+
+
+<label class = "item item-input item-select">
+    <div class="input-label">
+      Visibility
+    </div>
+<select ng-model="optionSelected" ng-change="selectUpdated(optionSelected)">
+    <option value="">Select an option</option>
+    <option value='0'>Followers</option>
+    <option value='1'>Public</option>
+</select>
+</label> 
+
+
+            <button class="button button-block button-positive" ng-click = "post()">
+                Post
+            </button>
+   </div> 
 
 
 
-            <div class ="item item-divider" style= "background-color:white"> 
- <select> <option>Only Connections</option> <option>Public</option>  <option selected>Followers</option> </select>
-
-<div class = "button button-small button-positive" ng-click = "post()" style= "float:right"> Post </div> 
-            </div> 
-&nbsp
 
 
-    <!-- </ion-content> -->
-
-    <ion-item ng-controller="UploadController">
-  <input class="bottom-marg-15" type="file" name="file" file="file">
-  <button class="button button-small button-full button-positive" ng-disabled="file.size&amp;&amp;false || uploadProgress&gt;0" ng-click="upload()" ng-cloak="">Upload</button>
-  <img class="fit" ng-if="uploadUri" ng-src="{{uploadUri}}">
-  <a ng-href="{{uploadUri}}" ng-bind="uploadUri"></a>
-</ion-item>
 </ion-content>
 
 </ion-view>

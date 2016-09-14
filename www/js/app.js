@@ -412,7 +412,7 @@ $ionicConfigProvider.tabs.position('top');
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/community.html',
-                controller: 'CommunityCtrl'
+                controller: 'dCommunityCtrl'
             },
             'fabContent': {
                 template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
@@ -429,7 +429,7 @@ $ionicConfigProvider.tabs.position('top');
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/community1.html',
-                controller: 'Community1Ctrl'
+                controller: 'dCommunity1Ctrl'
             },
             'fabContent': {
                 template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
@@ -446,7 +446,7 @@ $ionicConfigProvider.tabs.position('top');
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/activity.html',
-                controller: 'ActivityCtrl'
+                controller: 'dActivityCtrl'
             },
             'fabContent': {
                 template: '<button id="fab-activity" class="button button-fab button-fab-top-right expanded button-energized-900 flap"><i class="icon ion-paper-airplane"></i></button>',
@@ -464,7 +464,7 @@ $ionicConfigProvider.tabs.position('top');
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/connections.html',
-                controller: 'ConnectionsCtrl'
+                controller: 'dConnectionsCtrl'
             },
             'fabContent': {
                 template: '<button id="fab-friends" class="button button-fab button-fab-top-left expanded button-energized-900 spin"><i class="icon ion-chatbubbles"></i></button>',
@@ -482,7 +482,7 @@ $ionicConfigProvider.tabs.position('top');
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/followers.html',
-                controller: 'FollowersCtrl'
+                controller: 'dFollowersCtrl'
             },
             'fabContent': {
                 template: '<button id="fab-gallery" class="button button-fab button-fab-top-right expanded button-energized-900 drop"><i class="icon ion-heart"></i></button>',
@@ -506,7 +506,7 @@ $ionicConfigProvider.tabs.position('top');
     $urlRouterProvider.otherwise('/welcome');
 })
 
-app.controller('UploadController', function ($scope, $ionicLoading){
+app.controller('UploadController', function ($scope, $ionicLoading, $rootScope){
   var imageUploader = new ImageUploader();
   $scope.result = {};
   $scope.file = {};
@@ -519,6 +519,7 @@ app.controller('UploadController', function ($scope, $ionicLoading){
         console.log('Upload complete. Data:', data);
         $ionicLoading.hide();
         $scope.result.url = data.url;
+        $rootScope.imgurl = $scope.result.url
         $scope.$digest();
       }, function(err) {
         // console.error(err);
