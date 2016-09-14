@@ -13,29 +13,29 @@
     return text
   }
 
-  // var defaultConfig = {
-  //   accessKeyId: 'AKIAJDDLMBIFFIUWYCEA',
-  //   bucket: {},
-  //   bucketName: 'com.thinkcrazy.ionicimageupload',
-  //   bucketUrl: 'https://s3.amazonaws.com/com.thinkcrazy.ionicimageupload/',
-  //   file: {},
-  //   region: 'us-east-1',
-  //   secretAccessKey: 'gCF19auerZBOx9IvpPpKAlCJYbD0yUo+bLyNB+wA',
-  //   sizeLimit: sizeLimit,
-  //   uploadProgress: 0
-  // }
-
   var defaultConfig = {
-    accessKeyId: 'AKIAII7UYQMWMRXJAEQQ',
+    accessKeyId: 'AKIAJDDLMBIFFIUWYCEA',
     bucket: {},
-    bucketName: 'anurag-misra',
-    bucketUrl: 'https://s3.amazonaws.com/anurag-misra/',
+    bucketName: 'com.thinkcrazy.ionicimageupload',
+    bucketUrl: 'https://s3.amazonaws.com/com.thinkcrazy.ionicimageupload/',
     file: {},
-    region: 'ap-south-1',
-    secretAccessKey: 'Je8M8YwEtowyzcnjsfUtMQhN3+jnpHaLwuT1e0BE', 
+    region: 'us-east-1',
+    secretAccessKey: 'gCF19auerZBOx9IvpPpKAlCJYbD0yUo+bLyNB+wA',
     sizeLimit: sizeLimit,
     uploadProgress: 0
   }
+
+  // var defaultConfig = {
+  //   accessKeyId: 'AKIAII7UYQMWMRXJAEQQ',
+  //   bucket: {},
+  //   bucketName: 'anurag-misra',
+  //   bucketUrl: 'https://s3.amazonaws.com/anurag-misra/',
+  //   file: {},
+  //   region: 'ap-south-1',
+  //   secretAccessKey: 'Je8M8YwEtowyzcnjsfUtMQhN3+jnpHaLwuT1e0BE', 
+  //   sizeLimit: sizeLimit,
+  //   uploadProgress: 0
+  // }
 
 
 

@@ -58,13 +58,36 @@
     </ion-side-menu-content>
     <ion-side-menu side="left">
         <ion-header-bar class="expanded">
-            <img src="img/logor.png" class="avatar motion spin fade">
+            <img src="{{full.Pic}}" class="avatar motion spin fade">
             <div class="menu-bottom">
-                RxHealth Services
+                {{full.FName}} {{full.LName}}
             </div>
         </ion-header-bar>
         <ion-content class="stable-bg has-expanded-header">
             <ion-list>
+                <ion-item class = "ink item-icon-left" nav-clear menu-close href="#/app/profile">
+                    <i class="icon ion-at"></i> My Profile
+                </ion-item>
+
+                <ion-item class = "ink item-icon-left" nav-clear menu-close href="#/app/bookingschedule">
+                    <i class="icon ion-calendar"></i> My Booking Schedule
+                </ion-item>
+                <ion-item class = "ink item-icon-left" nav-clear menu-close href="#/app/mypatients">
+                    <i class="icon ion-person-stalker"></i> My Patients
+                </ion-item>
+                <ion-item class = "ink item-icon-left" nav-clear menu-close href="#/dapp/myprescriptions">
+                    <i class="icon ion-compose"></i> My Prescriptions
+                </ion-item>
+                <ion-item class = "ink item-icon-left" nav-clear menu-close href="#/app/components">
+                    <i class="icon ion-medkit"></i> My Clinics
+                </ion-item>
+                <ion-item class = "ink item-icon-left" nav-clear menu-close href="#/app/bookmarks">
+                    <i class="icon ion-bookmark"></i> My Bookmarks
+                </ion-item>
+                <ion-item class = "ink item-icon-left" nav-clear menu-close href="#/app/preferences">
+                    <i class="icon ion-gear-b"></i> My Preferences
+                </ion-item>
+
                 <ion-item nav-clear menu-close href="#/app/My Profile">
                     Components+
                 </ion-item>
