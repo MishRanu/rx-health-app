@@ -11,18 +11,53 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ioni
         // for form inputs)
         //$cordovaSplashscreen.show();
         $rootScope.UserID = 1;
+        $rootScope.refresh = function(counter,prefs=null){
+          var feeds = {};
+          $ionicLoading.show({
+          template: 'Loading...',
+          noBackdrop: true
+          });
+          var options = { "UserID" : 1, "count" : 0 };
+          if(prefs){
+            options.Pref = prefs;
+          }
+          Http.post('getfeeds',options)
+          .success(function(data) {
+            console.dir(data.Status.Articles);
+            var ResponseCode = data.Status.ResponseCode;
+            var ResponseMessage = data.Status.ResponseMessage;
+            $ionicLoading.hide();
+            if (ResponseCode == 200) {
+                feeds = data.Status.Articles;
+                console.dir(feeds);
+                return feeds;
+            }
+              else {
+                $ionicPopup.alert({
+                  title: 'Message',
+                  template: $scope.ResponseMessage
+                });
+              }
+          })
+          .error(function(data) {
+            //$scope.data.error={message: error, status: status};
+            console.log("error" + data);
+            $ionicLoading.hide();
+          });
+        }
+
         Http.post('getcommunities', {
           'UserID': $rootScope.UserID
         })
         .success(function(data) {
           $ionicLoading.hide();
           if (data.Status.ResponseCode == 200) {
-            Http.data.communities = {};
-            Http.data.communities.myCommunities = data.Status.myCommunities;
-            Http.data.communities.connectCommunities = data.Status.connectCommunities;
-
-            Http.data.communities.adminCommunities = data.Status.adminCommunities;
-            Http.data.communities.following = data.Status.following;
+            var communities = {};
+            communities.myCommunities = data.Status.myCommunities;
+            communities.connectCommunities = data.Status.connectCommunities;
+            communities.adminCommunities = data.Status.adminCommunities;
+            communities.following = data.Status.following;
+            Http.setdata(communities,'communities');
             // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
             //$cordovaSplashscreen.hide();
           } else {
@@ -32,6 +67,20 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ioni
             //$scope.data.error={message: error, status: status};
             alert("error" + data);
             $ionicLoading.hide();
+          });
+          Http.post('getnotifications',{UserID : $rootScope.UserID})
+          .success(function(data){
+            if(data.Status.ResponseCode == 200){
+              Http.setdata(data.Status.Notifications,'notifications',new Date());
+            }else{
+              $ionicPopup.alert({
+                title: 'Message',
+                template: $scope.ResponseMessage
+              });
+            }
+          })
+          .error(function(data){
+            console.log("error" + data);
           });
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -168,11 +217,12 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('app.tabs.feed', {
-        url: '/feed',
+        url: '/feed/:Prefs',
         views:{
             'feed':{
                 templateUrl: 'templates/feed.html',
-                controller: 'FeedCtrl'
+                controller: 'FeedCtrl',
+                params : {Prefs : null}
             }
         }
     })

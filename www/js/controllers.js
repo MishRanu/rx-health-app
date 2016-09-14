@@ -137,6 +137,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 })
 
+
 .controller('ProfileCtrl', function($scope, $rootScope, $ionicLoading, Http, $state, $ionicPopup, $ionicModal, ionicMaterialInk, ionicMaterialMotion, $ionicHistory, $ionicPlatform) {
   ionicMaterialInk.displayEffect();
   $scope.showContactCard = true;
@@ -559,347 +560,10 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 })
 
 
-.controller('FeedCtrl', function($ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
-		$scope.comments = null;
-		$scope.currentshrid = null;
-    $scope.communities = Http.data.communities.myCommunities.concat(Http.data.communities.adminCommunities);
-		$ionicModal.fromTemplateUrl('templates/comments.html', {
-		  scope: $scope,
-		  animation: 'slide-in-up'
-		}).then(function(modal) {
-		  $scope.commentmodal = modal;
-		});
-    $scope.timeSince = function(date) {
-
-    date = Date.parse(date);
-    var seconds = Math.floor((new Date() - date) / 1000);
-
-    var interval = Math.floor(seconds / 31536000);
-
-    if (interval > 1) {
-        return interval + " years";
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-        return interval + " months";
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-        return interval + " days";
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-        return interval + " hours";
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) {
-        return interval + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
-}
-
+.controller('FeedCtrl', function(Dates ,$interval,$ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http){
   $scope.$on('ngLastRepeat.mylist',function(e) {
   ionicMaterialInk.displayEffect();
 })
-
-  var options = {
-      location: 'yes',
-      clearcache: 'yes',
-      toolbar: 'no'
-   };
-
-   $scope.openBrowser = function(link) {
-      $cordovaInAppBrowser.open(link, '_blank', options)
-
-      .then(function(event) {
-         // success
-      })
-
-      .catch(function(event) {
-         // error
-      });
-   }
-
-    $scope.$on("$ionicView.beforeEnter", function(){
-      $scope.refresh = function(counter){
-        $ionicLoading.show({
-        template: 'Loading...',
-        noBackdrop: true
-        });
-        console.log($rootScope.UserID);
-        console.log(counter);
-        Http.post('getfeeds',{ "UserID" : 1, "count" : 0 })
-        .success(function(data) {
-          console.dir(data.Status.Articles);
-          $scope.ResponseCode = data.Status.ResponseCode;
-          $scope.ResponseMessage = data.Status.ResponseMessage;
-          $ionicLoading.hide();
-          if ($scope.ResponseCode == 200) {
-              $scope.feeds = data.Status.Articles;
-              console.dir($scope.feeds);
-          }
-            else {
-              $ionicPopup.alert({
-                title: 'Message',
-                template: $scope.ResponseMessage
-              });
-            }
-        })
-        .error(function(data) {
-          //$scope.data.error={message: error, status: status};
-          console.log("error" + data);
-          $ionicLoading.hide();
-        });
-      }
-      $scope.refresh(0);
-    });
-
-    $scope.followArticle = function(CommuID){
-      console.log(CommuID);
-      Http.post('followcommunity', {
-       'UserID': $rootScope.UserID,
-       'CommuID': CommuID
-       })
-      .success(function(data){
-        $ionicLoading.show({
-          template: 'Community Followed',
-          duration : 1000
-        });
-        $scope.refresh(0);
-      })
-      .error(function(data){
-        console.log('You are ');
-      });
-    }
-
-    $scope.BookmarkArticle = function(index){
-      console.log(index);
-      var options = {
-       'UserID': $rootScope.UserID,
-       'ShrID': $scope.feeds[index].ShrID
-     };
-      var booked = $scope.feeds[index].Bookmarked;
-      if(booked){
-        options.action = 0;
-      }else{
-        options.action = 1;
-      }
-      Http.post('bookmark',options)
-      .success(function(data){
-        $ionicLoading.show({
-          template: data.Status.ResponseMessage,
-          duration : 1000
-        });
-        $scope.feeds[index].Bookmarked = !$scope.feeds[index].Bookmarked;
-      })
-      .error(function(data){
-        console.log('You are ');
-      });
-    }
-
-    $scope.likeArticle = function(index) {
-
-      if($rootScope.UserID && $scope.feeds[index].Liked == 0){
-        Http.post('likearticle', {
-         'UserID': $rootScope.UserID,
-         'ShrID': $scope.feeds[index].ShrID,
-           'Like': 'suar' // Like key for like and no Like key for unlike
-         })
-        .success(function(data){
-          $scope.ResponseCode = data.Status.ResponseCode;
-          $scope.ResponseMessage = data.Status.ResponseMessage;
-          if ($scope.ResponseCode == 200) {
-            $scope.feeds[index].Likes++;
-            $scope.feeds[index].Liked = 1;
-          }
-          else {
-            $ionicPopup.alert({
-              title: 'Message',
-              template: $scope.ResponseMessage
-            });
-          }
-        })
-        .error(function(data){
-          console.log('You are ');
-        });
-      }else {
-        Http.post('likearticle', {
-         'UserID': $rootScope.UserID,
-         'ShrID': $scope.feeds[index].ShrID,
-          // Like key for like and no Like key for unlike
-         })
-        .success(function(data){
-          $scope.ResponseCode = data.Status.ResponseCode;
-          $scope.ResponseMessage = data.Status.ResponseMessage;
-          if ($scope.ResponseCode == 200) {
-            $scope.feeds[index].Likes--;
-            $scope.feeds[index].Liked = 0;
-          }else{
-            $ionicPopup.alert({
-              title: 'Message',
-              template: $scope.ResponseMessage
-            });
-          }
-        })
-        .error(function(data){
-          console.log('You are not sure');
-        });
-      };
-    }
-
-     
-     var template = '<ion-popover-view style="height:110px"> ' +
-                    '   <ion-content >' +
-                    '       <div class="list">' +
-                    '         <a class="item" style="border-bottom:1px solid #fff" ng-click="editArticle()">' +
-                    '           Edit'+
-                    '         </a>'+
-                    '         <a class="item" ng-click="deleteArticle(tempitem,UserID)">' +
-                    '           Delete'+
-                    '         </a>'+
-                    '       </div>'
-                    '   </ion-content>' +
-                    '</ion-popover-view>';
-
-     $scope.popover2 = $ionicPopover.fromTemplate(template, {
-        scope: $scope
-    });
-     $scope.openPopover1 = function($event,item){
-      $scope.popover2.show($event);
-      $scope.tempitem = item;
-     };
-    $scope.closePopover = function () {
-        $scope.popover2.hide();
-    };
-    //Cleanup the popover when we're done with it!
-    $scope.$on('$destroy', function () {
-        $scope.popover2.remove();
-    });
-    $scope.deleteArticle = function(item,UserID){
-      var index = $scope.feeds.indexOf(item)
-      console.log(index);
-      $scope.feeds.splice(index, 1);
-      Http.post('deletearticle',{
-        'ShrID':item.ShrID,
-        'UserID':UserID
-      })
-      .success(function(data){
-        $scope.ResponseCode = data.Status.ResponseCode;
-        $scope.ResponseMessage = data.Status.ResponseMessage;
-        if ($scope.ResponseCode == 200){
-          $scope.feeds.splice(index, 1);
-          
-          console.log("12344555555");
-        //article.Isbookmark = false;
-        }
-      })
-      $scope.popover2.hide();
-    }
-
-
-		$scope.commentit = function(anon,comment){
-			if(!anon){
-				anon = 0;
-			}else{
-				anon = 1;
-			}
-			Http.post('commentarticle', {
-				'ShrID' : $scope.currentshrid,
-				'UserID' : $rootScope.UserID,
-				'Comment' : comment,
-				'Anon' : anon
-			}).success(function(data) {
-		 $scope.ResponseCode = data.Status.ResponseCode;
-		 $scope.ResponseMessage = data.Status.ResponseMessage;
-		 $ionicLoading.hide();
-		 if ($scope.ResponseCode == 200) {
-			 var newcomment = {'Comment' : comment, 'IsAnon' : anon, 'Replies' : {}, 'ComID' : data.Status.ComID, FullName : "Jon Snow"};
-			 $scope.comments.push(newcomment);
-			 $scope.commentmodal.someotherProperty = "";
-			 $scope.commentmodal.iscomanon = false;
-		 }
-			 else {
-				 $ionicPopup.alert({
-					 title: 'Message',
-					 template: $scope.ResponseMessage
-				 });
-			 }
-		 }).error(function(data) {
-			 //$scope.data.error={message: error, status: status};
-			 console.log("error" + data);
-			 $ionicLoading.hide();
-		 });
-		}
-		$scope.replyit = function(index, anon, reply){
-      if(!anon){
-				anon = 0;
-			}else{
-				anon = 1;
-			}
-      console.log(index);
-      console.log(anon);
-      console.log(reply);
-			var comid = $scope.comments[index].ComID;
-      console.log(comid);
-			Http.post('commentarticle', {
-				'reply' : 'dc',
-				'ComID' : comid,
-				'UserID' : $rootScope.UserID,
-				'Comment' : reply,
-				'Anon' : anon
-			}).success(function(data) {
-		 $scope.ResponseCode = data.Status.ResponseCode;
-		 $scope.ResponseMessage = data.Status.ResponseMessage;
-		 $ionicLoading.hide();
-		 if ($scope.ResponseCode == 200) {
-			 var newreply = {'RepID' : data.Status.RepID, 'Reply' : reply, 'IsAnon' : anon, FullName : "Jon Snow", "RepID" : data.Status.RepID};
-			 $scope.comments[index].Replies.push(newreply);
-			 $scope.commentmodal.someProperty[index] = "";
-			 $scope.commentmodal.isrepanon[index] = false;
-		 }
-			 else {
-				 $ionicPopup.alert({
-					 title: 'Message',
-					 template: $scope.ResponseMessage
-				 });
-			 }
-		 }).error(function(data) {
-			 //$scope.data.error={message: error, status: status};
-			 console.log("error" + data);
-			 $ionicLoading.hide();
-		 });
-		}
-		$scope.openCommentModal = function(item){
-      console.log(item);
-			$scope.currentshrid = item;
-			$ionicLoading.show({
-			template: 'Loading...',
-			noBackdrop: true
-			});
-			Http.post('getcomments',{ShrID : $scope.currentshrid})
-			 .success(function(data) {
-			$scope.ResponseCode = data.Status.ResponseCode;
-			$scope.ResponseMessage = data.Status.ResponseMessage;
-			$ionicLoading.hide();
-			if ($scope.ResponseCode == 200) {
-					$scope.comments = data.Status.Comments;
-					console.dir($scope.comments);
-			}else{
-				$ionicPopup.alert({
-					title: 'Message',
-					template: $scope.ResponseMessage
-				});
-			}
-			}).error(function(data) {
-				//$scope.data.error={message: error, status: status};
-				console.log("error" + data);
-				$ionicLoading.hide();
-			});
-			$scope.commentmodal.show();
-		}
-    $scope.closeModal = function() {
-      $scope.commentmodal.hide();
-      };
 	$scope.me="Jaishriram";
     ionicMaterialInk.displayEffect();
 
@@ -922,79 +586,15 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
         $scope.optionpopover.remove();
     });
 
-    $scope.showPopup = function(shrid) {
-        $scope.alertPopup = $ionicPopup.show({
-        	template: '<select ng-model="alertPopup.selectedCommunity" ng-options="x.Name for x in communities"></select> <textarea elastic placeholder="Place your thoughts..." ng-model="alertPopup.shareSummary"></textarea>',
-            title: 'Share',
-            subTitle: 'Select one of your groups to share',
-            scope: $scope,
-            buttons: [
-            	{ text: 'Cancel' },
-            	{
-            		text: '<b>Share</b>',
-            		type: 'button-positive',
-         			onTap: function(e) {
-                console.dir($scope.alertPopup);
-                if($scope.alertPopup.selectedCommunity != null){
-                  console.log('Yeah');
-                  var options = {
-                    UserID : $rootScope.UserID,
-                    ShrID : shrid,
-                    CommuID : $scope.alertPopup.selectedCommunity.CommuID,
-                    Type : 2
-                  }
-                  if($scope.alertPopup.shareSummary){
-                    options.Summary = $scope.alertPopup.shareSummary;
-                  }
-                  $ionicLoading.show({
-            			template: 'Sharing...',
-            			noBackdrop: true
-            			});
-                  console.dir(options);
-                  Http.post('sharearticle',options)
-                  .success(function(data){
-                    $scope.ResponseCode = data.Status.ResponseCode;
-              			$scope.ResponseMessage = data.Status.ResponseMessage;
-              			$ionicLoading.hide();
-              			if ($scope.ResponseCode == 200) {
-                      $ionicLoading.show({
-                			template: 'Article Shared',
-                			duration : 1000
-                			});
-                      return data;
-              			}else{
-              				$ionicPopup.alert({
-              					title: 'Message',
-              					template: $scope.ResponseMessage
-              				});
-              			}
-                  })
-                  .error(function(data){
-                    console.log("error" + data);
-            				$ionicLoading.hide();
-                  })
-                }else{
-                  e.preventDefault();
-                }
-              }
-       		},
-     		]
-        });
-
-        $timeout(function() {
-            //ionic.material.ink.displayEffect();
-            ionicMaterialInk.displayEffect();
-        }, 0);
-    };
-
 })
 
 
 .controller('GroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
-    // $scope.myCommunities = Http.data.communities.myCommunities;
-    $scope.connectCommunities = Http.data.connectCommunities;
-    // $scope.adminCommunities = Http.data.adminCommunities;
-    $scope.following = Http.data.following;
+    var communities = Http.getdata('communities').data;
+    // $scope.myCommunities = communities.myCommunities;
+    $scope.connectCommunities = communities.connectCommunities;
+    // $scope.adminCommunities = communities.adminCommunities;
+    $scope.following = communities.following;
     $timeout(function() {
         ionicMaterialMotion.fadeSlideInRight({
             startVelocity: 3000
@@ -1109,7 +709,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('NotificationsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, Http, $scope, $stateParams, $timeout,$interval, ionicMaterialInk, ionicMaterialMotion) {
     // Set Header
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -1122,14 +722,33 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     // }, 300);
 
     // Set Motion
+    console.log('haha');
+    $scope.$on('$ionicView.beforeEnter', function(){
+      var temp = Http.getdata('notifications');
+      $scope.Notifications = temp.data;
+      var dat = new Date()
+      var l = Math.floor((dat.getTime()-temp.extras.getTime())/1000);
+      var i;
+      for(i=0;i < $scope.Notifications.length;i++){
+        $scope.Notifications[i].NGT+= l;
+      }
+      $scope.stringify = Dates.getintervalstring;
+    })
     $timeout(function() {
         ionicMaterialMotion.fadeSlideInRight({
             startVelocity: 3000
         });
     }, 700);
-
+    $interval(function(){
+      console.log('mama');
+      var i = 0;
+      for(i=0;i < $scope.Notifications.length;i++){
+        $scope.Notifications[i].NGT+=60;
+      }
+    },60000);
     // Set Ink
     ionicMaterialInk.displayEffect();
+
 })
 
 
@@ -1154,7 +773,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 // })
 
-.controller('SearchCtrl', function($scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+.controller('SearchCtrl', function($state,$scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
     $scope.CurrentState =  $stateParams.CurrentState;
     console.log($scope.CurrentState);
     ionicMaterialInk.displayEffect();
@@ -1164,8 +783,16 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       // implement custom behaviour here
       $state.go($scope.CurrentState);
     };
-
-
+    $scope.gotofeeds = function(type,Id){
+      console.log('haha');
+      var obj;
+      if(type === 'user'){
+        obj = angular.toJSON({'doctorids' : Id});
+      }else{
+        obj = angular.toJSON({'doctorids' : Id});
+      }
+      $state.go('app.tabs.feed',{ Prefs : obj});
+    }
     $scope.$on('$ionicView.beforeEnter', function(event, viewData) {
       viewData.enableBack = true;
     });
