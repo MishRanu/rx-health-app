@@ -1210,7 +1210,51 @@ else{
 
   })
 
+.controller('dPatientProfileCtrl', function($scope, Http, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk, $ionicLoading) {
+    $timeout(function() {
+        ionicMaterialMotion.slideUp({
+            selector: '.slide-up'
+        });
+    }, 300);
 
+    $timeout(function() {
+        ionicMaterialMotion.fadeSlideInRight({
+            startVelocity: 3000
+        });
+    }, 700);
+
+    // Set Ink
+    ionicMaterialInk.displayEffect();
+
+        $ionicLoading.show({
+          template: 'Loading...',
+          noBackdrop: true
+        });
+        Http.post('pmenutab', {
+          "UserID": '2'
+        })
+        .success(function(data) {
+          $scope.ResponseCode = data.Status.ResponseCode;
+          $scope.ResponseMessage = data.Status.ResponseMessage;
+          //console.log($scope.ResponseMessage);
+          $ionicLoading.hide();
+          if ($scope.ResponseCode == 200) {
+            $scope.full = data.Status;
+
+            console.dir($scope.full);
+          } else {
+            alert($scope.ResponseMessage);
+          }
+        }).error(function(data, status, headers, config) {
+          //$scope.data.error={message: error, status: status};
+          alert("error" + data);
+          $ionicLoading.hide();
+        });
+      // });
+
+
+
+})
 
  .controller('dNotificationsCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
 

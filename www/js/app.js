@@ -397,6 +397,7 @@ $ionicConfigProvider.tabs.position('top');
         }
     })
 
+
     .state('dapp.dtabs.notifications', {
         url: '/notifications',
         views:{
@@ -407,6 +408,24 @@ $ionicConfigProvider.tabs.position('top');
         }
     })
 
+    .state('dapp.patient', {
+        url: '/patients/:PID',
+        views: {
+            'dmenuContent': {
+                templateUrl: 'dtemplates/patientprofile.html',
+                controller: 'dPatientProfileCtrl'
+            },
+            'fabContent': {
+                template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
+                controller: function ($timeout) {
+                    /*$timeout(function () {
+                        document.getElementById('fab-profile').classList.toggle('on');
+                    }, 800);*/
+                }
+            }
+        }
+    })
+   
     .state('dapp.dtabs.community', {
         url: '/groups/:CommuID/:UserType',
         views: {
@@ -424,6 +443,7 @@ $ionicConfigProvider.tabs.position('top');
             }
         }
     })
+
         .state('dapp.dtabs.community1', {
         url: '/groups/:CommuID/:UserType',
         views: {
