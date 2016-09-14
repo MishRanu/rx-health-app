@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('starter', ['ionic', 'ionic-material' ,'starter.services', 'starter.controllers', 'starter.dcontrollers', 'ngCordova']);
+var app = angular.module('starter', ['ionic', 'ionic-material' ,'starter.services', 'starter.directives', 'starter.controllers', 'starter.dcontrollers', 'ngCordova']);
 
 app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ionicLoading, $cordovaSplashscreen, $rootScope) {
     $ionicPlatform.ready(function () {
@@ -11,40 +11,6 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ioni
         // for form inputs)
         //$cordovaSplashscreen.show();
         $rootScope.UserID = 1;
-        $rootScope.refresh = function(counter,prefs=null){
-          var feeds = {};
-          $ionicLoading.show({
-          template: 'Loading...',
-          noBackdrop: true
-          });
-          var options = { "UserID" : 1, "count" : 0 };
-          if(prefs){
-            options.Pref = prefs;
-          }
-          Http.post('getfeeds',options)
-          .success(function(data) {
-            console.dir(data.Status.Articles);
-            var ResponseCode = data.Status.ResponseCode;
-            var ResponseMessage = data.Status.ResponseMessage;
-            $ionicLoading.hide();
-            if (ResponseCode == 200) {
-                feeds = data.Status.Articles;
-                console.dir(feeds);
-                return feeds;
-            }
-              else {
-                $ionicPopup.alert({
-                  title: 'Message',
-                  template: $scope.ResponseMessage
-                });
-              }
-          })
-          .error(function(data) {
-            //$scope.data.error={message: error, status: status};
-            console.log("error" + data);
-            $ionicLoading.hide();
-          });
-        }
 
         Http.post('getcommunities', {
           'UserID': $rootScope.UserID
