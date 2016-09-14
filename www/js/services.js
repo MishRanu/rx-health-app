@@ -65,27 +65,411 @@ angular.module('starter.services', [])
     };
   })
 
-  .directive('elastic',
-    function() {
-        return {
-            restrict: 'A',
-            link: function($scope, element) {
-                element.css({
-                  'resize' : 'none',
-                  'width' : '100%',
-                  'height' : '36px'
-                });
-                $scope.initialHeight = $scope.initialHeight || element[0].style.height;
-                var resize = function() {
-                    element[0].style.height = $scope.initialHeight;
-                    element[0].style.height = "" + element[0].scrollHeight + "px";
-                };
-                element.on("input change", resize);
+.directive('elastic',function() {
+  return {
+    restrict: 'A',
+    link: function($scope, element) {
+      element.css({
+        'resize' : 'none',
+        'width' : '100%',
+        'height' : '36px'
+      });
+      $scope.initialHeight = $scope.initialHeight || element[0].style.height;
+      var resize = function() {
+          element[0].style.height = $scope.initialHeight;
+          element[0].style.height = "" + element[0].scrollHeight + "px";
+      };
+      element.on("input change", resize);
+    }
+  };
+})
+
+.directive('feed',function($ionicPopover, Dates ,$interval,$ionicLoading, $cordovaInAppBrowser, $ionicModal, $ionicPopup, $timeout,Http) {
+  return {
+    restrict: 'E',
+    scope : {
+      prefs : '='
+    },
+    templateUrl : 'templates/articlelist.html',
+    link: function($scope, element,attrs) {
+      $scope.refresh = function(counter,prefs=null){
+        var feeds = {};
+        $ionicLoading.show({
+        template: 'Loading...',
+        noBackdrop: true
+        });
+        var options = { "UserID" : 1, "count" : 0 };
+        if(prefs){
+          options.Pref = prefs;
+        }
+        Http.post('getfeeds',options)
+        .success(function(data) {
+          console.dir(data.Status.Articles);
+          var ResponseCode = data.Status.ResponseCode;
+          var ResponseMessage = data.Status.ResponseMessage;
+          $ionicLoading.hide();
+          if (ResponseCode == 200) {
+              $scope.feeds = data.Status.Articles;
+              console.dir(feeds);
+          }
+            else {
+              $ionicPopup.alert({
+                title: 'Message',
+                template: $scope.ResponseMessage
+              });
             }
+        })
+        .error(function(data) {
+          //$scope.data.error={message: error, status: status};
+          console.log("error" + data);
+          $ionicLoading.hide();
+        });
+      }
+      if($scope.prefs){
+        $scope.refresh(0,$scope.prefs);
+      }else{
+        $scope.refresh(0);
+      }
+      $scope.comments = null;
+  		$scope.currentshrid = null;
+      var communities = Http.getdata('communities').data;
+      $scope.communities = communities.myCommunities.concat(communities.adminCommunities);
+  		$ionicModal.fromTemplateUrl('templates/comments.html', {
+  		  scope: $scope,
+  		  animation: 'slide-in-up'
+  		}).then(function(modal) {
+  		  $scope.commentmodal = modal;
+  		});
+      $scope.timeSince = Dates.getintervalstring;
+      var options = {
+          location: 'yes',
+          clearcache: 'yes',
+          toolbar: 'no'
+       };
+       $scope.openBrowser = function(link) {
+          $cordovaInAppBrowser.open(link, '_blank', options)
+
+          .then(function(event) {
+             // success
+          })
+
+          .catch(function(event) {
+             // error
+          });
+       }
+       $interval(function(){
+         var i = 0;
+         for(i=0;i < $scope.feeds.length;i++){
+           $scope.feeds[i].LastEdited+=60;
+         }
+       },60000);
+
+       $scope.followArticle = function(CommuID){
+         console.log(CommuID);
+         Http.post('followcommunity', {
+          'UserID': $rootScope.UserID,
+          'CommuID': CommuID
+          })
+         .success(function(data){
+           $ionicLoading.show({
+             template: 'Community Followed',
+             duration : 1000
+           });
+           $scope.refresh(0);
+         })
+         .error(function(data){
+           console.log('You are ');
+         });
+       }
+
+       $scope.BookmarkArticle = function(index){
+         console.log(index);
+         var options = {
+          'UserID': $rootScope.UserID,
+          'ShrID': $scope.feeds[index].ShrID
         };
-    })
+         var booked = $scope.feeds[index].Bookmarked;
+         if(booked){
+           options.action = 0;
+         }else{
+           options.action = 1;
+         }
+         Http.post('bookmark',options)
+         .success(function(data){
+           $ionicLoading.show({
+             template: data.Status.ResponseMessage,
+             duration : 1000
+           });
+           $scope.feeds[index].Bookmarked = !$scope.feeds[index].Bookmarked;
+         })
+         .error(function(data){
+           console.log('You are ');
+         });
+       }
+
+       $scope.likeArticle = function(index) {
+
+         if($rootScope.UserID && $scope.feeds[index].Liked == 0){
+           Http.post('likearticle', {
+            'UserID': $rootScope.UserID,
+            'ShrID': $scope.feeds[index].ShrID,
+              'Like': 'suar' // Like key for like and no Like key for unlike
+            })
+           .success(function(data){
+             $scope.ResponseCode = data.Status.ResponseCode;
+             $scope.ResponseMessage = data.Status.ResponseMessage;
+             if ($scope.ResponseCode == 200) {
+               $scope.feeds[index].Likes++;
+               $scope.feeds[index].Liked = 1;
+             }
+             else {
+               $ionicPopup.alert({
+                 title: 'Message',
+                 template: $scope.ResponseMessage
+               });
+             }
+           })
+           .error(function(data){
+             console.log('You are ');
+           });
+         }else {
+           Http.post('likearticle', {
+            'UserID': $rootScope.UserID,
+            'ShrID': $scope.feeds[index].ShrID,
+             // Like key for like and no Like key for unlike
+            })
+           .success(function(data){
+             $scope.ResponseCode = data.Status.ResponseCode;
+             $scope.ResponseMessage = data.Status.ResponseMessage;
+             if ($scope.ResponseCode == 200) {
+               $scope.feeds[index].Likes--;
+               $scope.feeds[index].Liked = 0;
+             }else{
+               $ionicPopup.alert({
+                 title: 'Message',
+                 template: $scope.ResponseMessage
+               });
+             }
+           })
+           .error(function(data){
+             console.log('You are not sure');
+           });
+         };
+       }
+       var template = '<ion-popover-view style="height:110px"> ' +
+                      '   <ion-content >' +
+                      '       <div class="list">' +
+                      '         <a class="item" style="border-bottom:1px solid #fff" ng-click="editArticle()">' +
+                      '           Edit'+
+                      '         </a>'+
+                      '         <a class="item" ng-click="deleteArticle(tempitem,UserID)">' +
+                      '           Delete'+
+                      '         </a>'+
+                      '       </div>'
+                      '   </ion-content>' +
+                      '</ion-popover-view>';
+
+       $scope.popover2 = $ionicPopover.fromTemplate(template, {
+          scope: $scope
+      });
+       $scope.openPopover1 = function($event,item){
+        $scope.popover2.show($event);
+        $scope.tempitem = item;
+       };
+      $scope.closePopover = function () {
+          $scope.popover2.hide();
+      };
+      //Cleanup the popover when we're done with it!
+      $scope.$on('$destroy', function () {
+          $scope.popover2.remove();
+      });
+       $scope.deleteArticle = function(item,UserID){
+         var index = $scope.feeds.indexOf(item)
+         console.log(index);
+         $scope.feeds.splice(index, 1);
+         Http.post('deletearticle',{
+           'ShrID':item.ShrID,
+           'UserID':UserID
+         })
+         .success(function(data){
+           $scope.ResponseCode = data.Status.ResponseCode;
+           $scope.ResponseMessage = data.Status.ResponseMessage;
+           if ($scope.ResponseCode == 200){
+             $scope.feeds.splice(index, 1);
+
+             console.log("12344555555");
+           //article.Isbookmark = false;
+           }
+         })
+         $scope.popover2.hide();
+       }
 
 
+   		$scope.commentit = function(anon,comment){
+   			if(!anon){
+   				anon = 0;
+   			}else{
+   				anon = 1;
+   			}
+   			Http.post('commentarticle', {
+   				'ShrID' : $scope.currentshrid,
+   				'UserID' : $rootScope.UserID,
+   				'Comment' : comment,
+   				'Anon' : anon
+   			}).success(function(data) {
+   		 $scope.ResponseCode = data.Status.ResponseCode;
+   		 $scope.ResponseMessage = data.Status.ResponseMessage;
+   		 $ionicLoading.hide();
+   		 if ($scope.ResponseCode == 200) {
+   			 var newcomment = {'Comment' : comment, 'IsAnon' : anon, 'Replies' : {}, 'ComID' : data.Status.ComID, FullName : "Jon Snow"};
+   			 $scope.comments.push(newcomment);
+   			 $scope.commentmodal.someotherProperty = "";
+   			 $scope.commentmodal.iscomanon = false;
+   		 }
+   			 else {
+   				 $ionicPopup.alert({
+   					 title: 'Message',
+   					 template: $scope.ResponseMessage
+   				 });
+   			 }
+   		 }).error(function(data) {
+   			 //$scope.data.error={message: error, status: status};
+   			 console.log("error" + data);
+   			 $ionicLoading.hide();
+   		 });
+   		}
+   		$scope.replyit = function(index, anon, reply){
+         if(!anon){
+   				anon = 0;
+   			}else{
+   				anon = 1;
+   			}
+         console.log(index);
+         console.log(anon);
+         console.log(reply);
+   			var comid = $scope.comments[index].ComID;
+         console.log(comid);
+   			Http.post('commentarticle', {
+   				'reply' : 'dc',
+   				'ComID' : comid,
+   				'UserID' : $rootScope.UserID,
+   				'Comment' : reply,
+   				'Anon' : anon
+   			}).success(function(data) {
+   		 $scope.ResponseCode = data.Status.ResponseCode;
+   		 $scope.ResponseMessage = data.Status.ResponseMessage;
+   		 $ionicLoading.hide();
+   		 if ($scope.ResponseCode == 200) {
+   			 var newreply = {'RepID' : data.Status.RepID, 'Reply' : reply, 'IsAnon' : anon, FullName : "Jon Snow", "RepID" : data.Status.RepID};
+   			 $scope.comments[index].Replies.push(newreply);
+   			 $scope.commentmodal.someProperty[index] = "";
+   			 $scope.commentmodal.isrepanon[index] = false;
+   		 }
+   			 else {
+   				 $ionicPopup.alert({
+   					 title: 'Message',
+   					 template: $scope.ResponseMessage
+   				 });
+   			 }
+   		 }).error(function(data) {
+   			 //$scope.data.error={message: error, status: status};
+   			 console.log("error" + data);
+   			 $ionicLoading.hide();
+   		 });
+   		}
+   		$scope.openCommentModal = function(item){
+         console.log(item);
+   			$scope.currentshrid = item;
+   			$ionicLoading.show({
+   			template: 'Loading...',
+   			noBackdrop: true
+   			});
+   			Http.post('getcomments',{ShrID : $scope.currentshrid})
+   			 .success(function(data) {
+   			$scope.ResponseCode = data.Status.ResponseCode;
+   			$scope.ResponseMessage = data.Status.ResponseMessage;
+   			$ionicLoading.hide();
+   			if ($scope.ResponseCode == 200) {
+   					$scope.comments = data.Status.Comments;
+   					console.dir($scope.comments);
+   			}else{
+   				$ionicPopup.alert({
+   					title: 'Message',
+   					template: $scope.ResponseMessage
+   				});
+   			}
+   			}).error(function(data) {
+   				//$scope.data.error={message: error, status: status};
+   				console.log("error" + data);
+   				$ionicLoading.hide();
+   			});
+   			$scope.commentmodal.show();
+   		}
+       $scope.closeModal = function() {
+         $scope.commentmodal.hide();
+         };
+         $scope.showPopup = function(shrid) {
+             $scope.alertPopup = $ionicPopup.show({
+             	template: '<select ng-model="alertPopup.selectedCommunity" ng-options="x.Name for x in communities"></select> <textarea elastic placeholder="Place your thoughts..." ng-model="alertPopup.shareSummary"></textarea>',
+                 title: 'Share',
+                 subTitle: 'Select one of your groups to share',
+                 scope: $scope,
+                 buttons: [
+                 	{ text: 'Cancel' },
+                 	{
+                 		text: '<b>Share</b>',
+                 		type: 'button-positive',
+              			onTap: function(e) {
+                     console.dir($scope.alertPopup);
+                     if($scope.alertPopup.selectedCommunity != null){
+                       console.log('Yeah');
+                       var options = {
+                         UserID : $rootScope.UserID,
+                         ShrID : shrid,
+                         CommuID : $scope.alertPopup.selectedCommunity.CommuID,
+                         Type : 2
+                       }
+                       if($scope.alertPopup.shareSummary){
+                         options.Summary = $scope.alertPopup.shareSummary;
+                       }
+                       $ionicLoading.show({
+                 			template: 'Sharing...',
+                 			noBackdrop: true
+                 			});
+                       console.dir(options);
+                       Http.post('sharearticle',options)
+                       .success(function(data){
+                         $scope.ResponseCode = data.Status.ResponseCode;
+                   			$scope.ResponseMessage = data.Status.ResponseMessage;
+                   			$ionicLoading.hide();
+                   			if ($scope.ResponseCode == 200) {
+                           $ionicLoading.show({
+                     			template: 'Article Shared',
+                     			duration : 1000
+                     			});
+                           return data;
+                   			}else{
+                   				$ionicPopup.alert({
+                   					title: 'Message',
+                   					template: $scope.ResponseMessage
+                   				});
+                   			}
+                       })
+                       .error(function(data){
+                         console.log("error" + data);
+                 				$ionicLoading.hide();
+                       })
+                     }else{
+                       e.preventDefault();
+                     }
+                   }
+            		},
+          		]
+             });
+         };
+    }
+  };
+})
 
 .factory('Http', function($http) {
   var rooturl = "http://dxhealth.esy.es/RxHealth0.1/";
@@ -120,8 +504,7 @@ angular.module('starter.services', [])
     getdata : function(Name){
       var result = {'data' : datam[Name], 'extras' : extras[Name]};
       return result;
-    },
-    data : {}
+    }
   };
 })
 
