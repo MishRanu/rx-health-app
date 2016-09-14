@@ -118,6 +118,8 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
+
+
 .controller('QRScannerCtrl', function($scope, $state, $cordovaBarcodeScanner){
 
 
@@ -134,6 +136,428 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 
 })
+
+.controller('ProfileCtrl', function($scope, $rootScope, $ionicLoading, Http, $state, $ionicPopup, $ionicModal, ionicMaterialInk, ionicMaterialMotion, $ionicHistory, $ionicPlatform) {
+  ionicMaterialInk.displayEffect();
+  $scope.showContactCard = true;
+  $scope.showContactEditCard = false;
+  $scope.showEditButton = true;
+  $scope.showsaveButton = false;
+
+  $scope.addressContent = false;
+  $scope.addressInputContent = false;
+  $scope.showPtopInfo = true;
+  $scope.editModePtopInfo = false;
+  $scope.addressEditMode = false;
+  $scope.showEditModeAddress = false;
+  $scope.showBasicCard = true;
+  $scope.showBasicEditCard = false;
+  $scope.showMedicalCard = true;
+  $scope.showMedicalEditCard = false;
+
+  $scope.requestToUpdate = function() {
+    Http.post('edit_patientfullprofile', {
+      'UserID': $rootScope.UserID,
+      'DOB': $scope.contactInfo.dob,
+      'Email': $scope.contactInfo.emailId,
+      'FName': $scope.contactInfo.Fname,
+      'LName': $scope.contactInfo.Lname,
+      'Phone': $scope.contactInfo.mobile,
+      'Gender': $scope.contactInfo.gender,
+      'BloodGroup': $scope.contactInfo.sbg,
+      'Address1': $scope.contactInfo.address.flatNo,
+      'Address2': $scope.contactInfo.address.locality,
+      'City': $scope.contactInfo.address.city,
+      'PinCode': $scope.contactInfo.address.pinCode,
+      'Height': $scope.contactInfo.heights,
+      'Weight': $scope.contactInfo.weight,
+      'Allergies': $scope.contactInfo.allergies,
+      'Hereditory': $scope.contactInfo.hereditory
+    }) .success(function(data){
+          template: data.Status.ResponseMessage,
+          duration : 1000
+        });
+        $scope.feeds[index].Bookmarked = !$scope.feeds[index].Bookmarked;
+      })
+      .error(function(data){
+        console.log('You are ');
+      });
+    }
+  };
+
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+   // $rootScope.UserID = 1;
+   $ionicLoading.show({
+    template: 'Loading...',
+    noBackdrop: true
+  });
+   Http.post('getpatientprofile2', {
+    "UserID": '2'
+  })
+   .success(function(data) {
+    $scope.ResponseCode = data.Status.ResponseCode;
+    $scope.ResponseMessage = data.Status.ResponseMessage;
+        //console.log($scope.ResponseMessage);
+        $ionicLoading.hide();
+        if ($scope.ResponseCode == 200) {
+          $scope.full = data.Status;
+          $scope.contactInfo = {
+            'Fname': $scope.full.FName,
+            'Lname': $scope.full.LName,
+            'emailId': $scope.full.Email,
+            'mobile': $scope.full.Phone,
+            'address': {
+              'flatNo': $scope.full.Address1,
+              'locality': $scope.full.Address2,
+              'city': $scope.full.City,
+              'pinCode': $scope.full.PinCode
+            },
+            'gender': $scope.full.Gender,
+            'sbg': $scope.full.BloodGroup,
+            'dob': $scope.full.DOB,
+            'heights': $scope.full.Height,
+            'weight': $scope.full.Weight,
+            'allergies': $scope.full.Allergies,
+            'hereditory': $scope.full.Hereditory,
+            'pic': $scope.full.Pic
+          }
+          console.log($scope.contactInfo)
+          if ($scope.contactInfo.address.flatNo == 'NA' && $scope.contactInfo.address.locality == 'NA' && $scope.contactInfo.address.city == 'NA' && $scope.contactInfo.address.pinCode == 'NA') {
+            $scope.addressButton = true;
+          } else {
+            $scope.addressButton = false;
+            $scope.addressContent = true;
+            $scope.addressEditMode = true;
+          }
+          console.dir($scope.full);
+        } else {
+          alert($scope.ResponseMessage);
+        }
+      }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
+    });
+  //$scope.showEdit
+
+
+  $scope.cityList = [{
+    "name": "Pune",
+    "id": "1"
+  }, {
+    "name": "Mumbai",
+    "id": "2"
+  }];
+  $scope.bg = ['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'];
+  $scope.pgender = ['male', 'female'];
+  $ionicModal.fromTemplateUrl('templates/modalppic.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.fucking = function() {
+    console.log("hi");
+  };
+
+  //console.log($scope.contactInfo.mobile);
+  $scope.showAlert = function(message) {
+
+    var alertPopup = $ionicPopup.alert({
+      title: 'Title',
+      template: message
+    });
+  };
+
+
+  $scope.takePhoto = function() {
+    var options = {
+      fileKey: "avatar",
+      fileName: "image.png",
+      chunkedMode: "false",
+      mimeType: "false",
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+      $scope.imgdata = imageData;
+      $scope.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.uploadpic();
+    }, function(err) {
+      // An error occured. Show a message to the user
+    });
+  };
+
+  $scope.selectPicture = function() {
+    var options = {
+      fileKey: "file",
+      fileName: "image.png",
+      chunkedMode: "false",
+      mimeType: "false",
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+      $scope.imgdata = imageData;
+      $scope.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.uploadpic();
+    }, function(err) {
+      // An error occured. Show a message to the user
+    });
+  };
+  $scope.uploadpic = function() {
+    //console.log(imageData);
+    //console.log(options);
+    $ionicLoading.show({
+      template: 'Loading...',
+      noBackdrop: true
+    });
+
+  }
+
+  $scope.patientProfile = function() {
+
+    var date = new Date();
+
+    var options = {
+      fileKey: "image",
+      fileName: "image.jpg",
+      chunkedMode: false,
+      params: {
+        'UserID': $rootScope.UserID
+      },
+      mimeType: "image/jpg"
+    };
+
+    $cordovaFileTransfer.upload(server, filePath, options).then(function(result) {
+
+      alert("Pic Uploaded");
+      $ionicLoading.hide();
+      $scope.modal.hide();
+      //$ionicHistory.clearCache();
+      //$state.go($state.current, {}, {reload: true});
+    }, function(err) {
+      console.log("ERROR: " + JSON.stringify(err));
+      $ionicLoading.hide();
+      alert("Some error occured.. Please try again.");
+      //alert(JSON.stringify(err));
+    }, function(progress) {
+      // constant progress updates
+    });
+
+  }
+
+
+  $scope.cancelInfo = function(id) {
+    $scope.showEditButton = true;
+    if (id == 1) {
+      $scope.showContactCard = true;
+      $scope.showContactEditCard = false;
+    };
+    if (id == 2) {
+      $scope.showBasicCard = true;
+      $scope.showBasicEditCard = false;
+    };
+    if (id == 3) {
+      $scope.showMedicalCard = true;
+      $scope.showMedicalEditCard = false;
+    };
+    //document.getElementById("contactInfo").reset();
+  };
+  // $scope.saveInfo = function(id) {
+  //   $scope.showEditButton = true;
+
+  // };
+  $scope.goBack = function() {
+    $state.go('tab.pmenu');
+    //$ionicHistory.goBack();
+
+  };
+  $scope.editPtopInfo = function() {
+    $scope.showPtopInfo = false;
+    $scope.editModePtopInfo = true;
+  };
+  $scope.editInfo = function(id) {
+    $scope.showEditButton = false;
+    if (id == 1) {
+      $scope.showContactCard = false;
+      $scope.showContactEditCard = true;
+      if ($scope.addressEditMode) {
+        $scope.showEditModeAddress = true;
+      };
+    };
+    if (id == 2) {
+      $scope.showBasicCard = false;
+      $scope.showBasicEditCard = true;
+      //alert("2");
+    };
+    if (id == 3) {
+      $scope.showMedicalCard = false;
+      $scope.showMedicalEditCard = true;
+    }
+
+  };
+  $scope.addAddress = function() {
+    $scope.addressButton = false;
+    $scope.addressInputContent = true;
+    $scope.showEditButton = false;
+
+  };
+  $scope.saveAddress = function() {
+    $scope.showEditButton = true;
+    $scope.addressInputContent = false;
+    //console.log(document.getElementById('patientAddress'));
+
+
+    var flatNo = document.getElementById('flatNo').value;
+    var locality = document.getElementById('locality').value;
+    var city = document.getElementById('city').value;
+    var pinCode = document.getElementById('pinCode').value;
+    console.log(flatNo);
+    if (flatNo == '' && locality == '' && city == '' && pinCode == '') {
+      $scope.addressButton = true;
+    } else {
+      $scope.addressContent = true;
+      $scope.addressEditMode = true;
+      $scope.contactInfo.address.flatNo = flatNo;
+      $scope.contactInfo.address.locality = locality;
+      $scope.contactInfo.address.city = city;
+      $scope.contactInfo.address.pinCode = pinCode;
+    };
+    console.log($scope.contactInfo.address.flatNo);
+  };
+
+  $scope.cancelInfo = function(id) {
+    $scope.showEditButton = true;
+    if (id == 1) {
+      $scope.showContactCard = true;
+      $scope.showContactEditCard = false;
+    };
+    if (id == 2) {
+      $scope.showBasicCard = true;
+      $scope.showBasicEditCard = false;
+    };
+    if (id == 3) {
+      $scope.showMedicalCard = true;
+      $scope.showMedicalEditCard = false;
+    };
+    //document.getElementById("contactInfo").reset();
+  };
+  $scope.saveInfo = function(id) {
+    $scope.showEditButton = true;
+
+    if (id == 1) {
+      $scope.showContactCard = true;
+      $scope.showContactEditCard = false;
+      //$scope.mobile = document.getElementsByName('mobile').value;
+      //var email = document.getElementsByName('email').value;
+      var editMobile = document.getElementById('editMobile').value;
+      var editEmail = document.getElementById('editEmail').value;
+      //console.log(editMobile.length);
+      if (editMobile.length == 10) {
+        $scope.contactInfo.mobile = editMobile;
+      } else {
+        $scope.showAlert('Phone number should contain 10 digits');
+      }
+      var atpos = editEmail.indexOf("@");
+      var dotpos = editEmail.lastIndexOf(".");
+      if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= editEmail.length) {
+        $scope.showAlert('Not a valid Email Address');
+        //return false;
+      } else {
+        $scope.contactInfo.emailId = editEmail;
+      }
+      var flatNo = document.getElementById('eflatNo').value;
+      var locality = document.getElementById('elocality').value;
+      var city = document.getElementById('ecity').value;
+      var pinCode = document.getElementById('epinCode').value;
+      //console.log(flatNo);
+      if (flatNo == '' && locality == '' && city == '' && pinCode == '') {
+        $scope.addressButton = true;
+        $scope.addressContent = false;
+      } else {
+        $scope.addressContent = true;
+        $scope.addressEditMode = true;
+        $scope.contactInfo.address.flatNo = flatNo;
+        $scope.contactInfo.address.locality = locality;
+        $scope.contactInfo.address.city = city;
+        $scope.contactInfo.address.pinCode = pinCode;
+      };
+    };
+    if (id == 2) {
+      $scope.showBasicCard = true;
+      $scope.showBasicEditCard = false;
+      $scope.contactInfo.dob = document.getElementById('pdob').value;
+      $scope.contactInfo.gender = document.getElementById('pgender').value;
+    };
+    if (id == 3) {
+      $scope.showMedicalCard = true;
+      $scope.showMedicalEditCard = false;
+      console.log(document.getElementById('bloodgroup'));
+      $scope.contactInfo.sbg = document.getElementById('bloodgroup').value;
+    };
+    $scope.requestToUpdate();
+
+
+  };
+  $scope.addAddress = function() {
+    $scope.addressButton = false;
+    $scope.addressInputContent = true;
+    $scope.showEditButton = false;
+
+  };
+  $scope.saveAddress = function() {
+    $scope.showEditButton = true;
+    $scope.addressInputContent = false;
+    var flatNo = document.getElementById('flatNo').value;
+    var locality = document.getElementById('locality').value;
+    var city = document.getElementById('city').value;
+    var pinCode = document.getElementById('pinCode').value;
+    console.log(flatNo);
+    if (flatNo == '' && locality == '' && city == '' && pinCode == '') {
+      $scope.addressButton = true;
+    } else {
+      $scope.addressContent = true;
+      $scope.addressEditMode = true;
+      $scope.contactInfo.address.flatNo = flatNo;
+      $scope.contactInfo.address.locality = locality;
+      $scope.contactInfo.address.city = city;
+      $scope.contactInfo.address.pinCode = pinCode;
+    };
+    $scope.requestToUpdate();
+  };
+})
+
+
+.controller('PreferencesCtrl', function($scope, $state, $stateParams, ionicMaterialInk){
+
+  ionicMaterialInk.displayEffect();
+
+})
+
+
+.controller('BookmarkCtrl', function($scope, $state, $stateParams, ionicMaterialInk){
+
+  ionicMaterialInk.displayEffect();
+
+})
+
 
 .controller('FeedCtrl', function($ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
 		$scope.comments = null;

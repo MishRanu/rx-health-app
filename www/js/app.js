@@ -66,6 +66,38 @@ $ionicConfigProvider.tabs.position('top');
             }
         }
     })
+    
+
+    .state('app.profile', {
+        url: '/profile',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/profile.html',
+                controller: 'ProfileCtrl'
+            }
+        }
+    })
+
+    .state('app.bookmarks', {
+        url: '/bookmarks',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/bookmarks.html',
+                controller: 'BookmarkCtrl'
+            }
+        }
+    })
+
+    .state('app.preferences', {
+        url: '/preferences',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/preferences.html',
+                controller: 'PreferencesCtrl'
+            }
+        }
+    })
+
     .state('app.lists', {
         url: '/lists',
         views: {
@@ -424,7 +456,7 @@ $ionicConfigProvider.tabs.position('top');
     $urlRouterProvider.otherwise('/welcome');
 })
 
-.controller('UploadController', function ($scope, $ionicLoading){
+app.controller('UploadController', function ($scope, $ionicLoading){
   var imageUploader = new ImageUploader();
   $scope.result = {};
   $scope.file = {};
@@ -433,16 +465,16 @@ $ionicConfigProvider.tabs.position('top');
       template: 'Uploading...'
     });
     imageUploader.push($scope.file)
-      .then((data) => {
-        console.debug('Upload complete. Data:', data);
+      .then(function(data) {
+        console.log('Upload complete. Data:', data);
         $ionicLoading.hide();
         $scope.result.url = data.url;
         $scope.$digest();
-      })
-      .catch((err) => {
-        console.error(err);
+      }, function(err) {
+        // console.error(err);
         $ionicLoading.hide();
         $scope.result.error = err;
       });
   };
+
 });

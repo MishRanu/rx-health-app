@@ -95,7 +95,7 @@ $scope.keyfunc = function(keyevent, query) {
 
 
   Http.post('dmenutab', {
-    'UserID': 1
+    'UserID': '1'
   })
   .success(function(data) {
     $scope.ResponseCode = data.Status.ResponseCode;

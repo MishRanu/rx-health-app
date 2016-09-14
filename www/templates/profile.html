@@ -1,0 +1,220 @@
+<ion-view view-title="PatientProfile"  cache-view="false" animation="slide-left-right">
+	<!-- <ion-nav-buttons side="left" >
+	        <button class="button" style="box-shadow:none; background-color:#5c99ff !important;" ng-click="myGoBack()"><i class="ion-arrow-left-c" style="color:#f6f6f6; font-size:30px;"></i></button>
+	</ion-nav-buttons> -->
+	<!-- <ion-nav-buttons side="left">
+ 		<button class="button button-clear ink" ng-click="goBack()"> <i class="icon ion-arrow-left-c" ></i> </button>
+	</ion-nav-buttons> -->
+  <ion-content class="view-background">
+  	
+    <div class="card padding">
+
+      <div class="item item-image padding"style="clear:both">
+        <img class = "p-pic" src={{contactInfo.pic}} style="width: 160px;height:160px" ng-click="modal.show()"/>
+
+        <div class="edit-photo" style="margin-top:5%" ng-click="modal.show()">
+          <i class="icon ion-camera"></i>
+          <span>Edit</span>
+        </div> 
+      </div>
+      <div class = "item item-divider" style= "text-align:center"> 
+        <i style= "text-align:center; font-size: 20px;"> {{ contactInfo.Fname}} {{ contactInfo.Lname}} </i>
+      </div> 
+
+      <p class="ion-location icon-color" style="text-align:center"> {{contactInfo.address.city}}</p>
+
+      
+    </div>
+    
+  	<div class="card card-contact-info"  ng-show="showContactCard">
+  		<div class="card-edit-header">
+  			<span> Contact Info </span>
+  			
+  				<i ng-click="editInfo('1')" class="icon ion-edit" style="float:right;" ng-show="showEditButton"></i>
+  			
+  		</div>
+  		<div class="card-content">
+  			<div class="card-content-item">
+  				<span class="item-name">Mobile Phone</span>
+  				<span class="item-value"> {{contactInfo.mobile}} </span>
+  			</div>
+  			<div class="card-content-item">
+  				<span class="item-name">Email Address</span>
+  				<span class="item-value">{{contactInfo.emailId}}</span>
+  			</div>
+  			<div class="card-content-item last add" ng-click="addAddress()" ng-show="addressButton">
+  				<i class="icon ion-plus-circled"></i> 
+  				<span> Add your address</span>
+  				
+  			</div>
+  			<div class="card-content-item last" ng-show="addressInputContent">
+  				<div class="card-content-inner" >
+	  				<label class="item item-input "> <span class="input-label">Flat No.</span>
+	        		<input type="text" placeholder="Ex. C21, Eifil Towers" class="mine-input-bottom" id="flatNo" style="width:100%;" >
+	        		</label>
+	        	</div>
+  				<div class="card-content-inner" >
+	  				<label class="item item-input "> <span class="input-label">Locality</span>
+	        		<input type="text" placeholder="Ex. Rajiv Chowk, Meena Bazar etc." class="mine-input-bottom" id="locality" style="width:100%;" >
+	        		</label>
+	        	</div>
+	        	<div class="card-content-inner" >
+	  				<label class="item item-input "> <span class="input-label">City</span>
+	        		<input type="text" placeholder="Ex. Pune, Mumbai" class="mine-input-bottom" id="city" style="width:100%;" >
+	        		</label>
+	        	</div>
+	        	<div class="card-content-inner" >
+	  				<label class="item item-input "> <span class="input-label">PinCode</span>
+	        		<input type="number" placeholder="Ex. 411028" class="mine-input-bottom" id="pinCode" style="width:100%;" >
+	        		</label>
+	        	</div>
+	        	<div style="text-align:center;">
+	        		<button class="button button-raised button-small mine-button mine-save-button" ng-click="saveAddress()">save</button>
+	        	</div>
+  			</div>
+  			<div class="card-content-item" ng-show="addressContent">
+  				<span class="item-name">Address :</span>
+  				<div  style="color:#101010" id="patientAddress">
+  					<span> {{contactInfo.address.flatNo}}  <br> 
+  							{{(contactInfo.address.city)?(contactInfo.address.city + ','):''}} {{contactInfo.address.locality}} <br>{{contactInfo.address.pinCode}}
+  					</span>
+  				</div>
+  				<!-- <div class="line-divider"></div>
+  				 -->
+  			</div>
+  			
+  		</div>
+
+  		
+  	</div>
+  	<div class="card card-contact-info-edit" ng-show="showContactEditCard">
+  		<div class="card-edit-header">
+  			<span> Contact Info </span>
+  			<div style="float:right;">
+	  			<button class="button button-raised button-small mine-button mine-cancel-button" ng-click="cancelInfo('1')">cancel</button>
+	  			<button class="button button-raised button-small mine-button mine-save-button" ng-click="saveInfo('1')">save</button>
+  			</div>
+  			
+  				<!-- <i ng-click="editContactInfo()" class="icon ion-edit" style="float:right;"></i> -->
+  			
+  		</div>
+  		<div>
+	  		<div class="card-content" >
+	       		<input type="tel" placeholder="Mobile Number" class="mine-input-bottom" id="editMobile" value={{contactInfo.mobile}} style="width:100%;" > </label>
+	        </div>
+	        <div class="card-content" >
+				  <input type="email" placeholder="Email Address" class="mine-input-bottom" id="editEmail" value={{contactInfo.emailId}} style="width:100%;"> </label>
+	  		</div>
+	  		<div class="card-content-item last" ng-show="showEditModeAddress">
+  				<div class="card-content-inner" >
+	  				 <label class="item item-input "> <span class="input-label">Flat No.</span>
+	        		<input type="text" placeholder="Ex. C21, Eifil Towers" class="mine-input-bottom" id="eflatNo" value={{contactInfo.address.flatNo}} style="width:100%;" >
+	        		</label>
+	        	</div>
+  				<div class="card-content-inner" >
+	  				<label class="item item-input "> <span class="input-label">Locality</span>
+	        		<input type="text" placeholder="Ex. Rajiv Chowk, Meena Bazar etc." class="mine-input-bottom" id="elocality" value={{contactInfo.address.locality}} style="width:100%;" >
+	        		</label>
+	        	</div>
+	        	<div class="card-content-inner" >
+	  				<label class="item item-input "> <span class="input-label">City</span>
+	        		<input type="text" placeholder="Ex. Pune, Mumbai" class="mine-input-bottom" id="ecity" value={{contactInfo.address.city}} style="width:100%;" >
+	        		</label>
+	        	</div>
+	        	<div class="card-content-inner" >
+	  				<label class="item item-input "> <span class="input-label">PinCode</span>
+	        		<input type="number" placeholder="Ex. 411028" class="mine-input-bottom" id="epinCode" value={{contactInfo.address.pinCode}} style="width:100%;" >
+	        		</label>
+	        	</div>
+	        	
+  			</div>
+  		</div>
+
+  		
+  	</div>
+  	<div class="card card-basic-info" ng-show="showBasicCard">
+  		<div class="card-edit-header">
+  			<span> Basic Info </span>
+  			<i class="icon ion-edit" style="float:right;" ng-show="showEditButton" ng-click="editInfo('2')"></i>
+  		</div>
+  		<div class="card-content">
+  			<div class="card-content-item">
+  				<span class="item-name">Birthday</span>
+  				<span class="item-value">{{contactInfo.dob}}</span>
+  			</div>
+  			<div class="card-content-item">
+  				<span class="item-name">Gender</span>
+  				<span class="item-value">{{contactInfo.gender}}</span>
+  			</div>
+  			<div class="card-content-item last add">
+  				<i class="icon ion-plus-circled"></i> 
+  				<span> Add more details</span>
+  				
+  			</div>
+  			
+  		</div>
+  	</div>
+  	<div class="card card-basic-info-edit" ng-show="showBasicEditCard">
+  		<div class="card-edit-header">
+  			<span> Contact Info </span>
+  			<div style="float:right;">
+	  			<button class="button button-raised button-small mine-button mine-cancel-button" ng-click="cancelInfo('2')">cancel</button>
+	  			<button class="button button-raised button-small mine-button mine-save-button" ng-click="saveInfo('2')">save</button>
+  			</div>
+  		</div>
+  		<div class="list">
+          <label class="item-input" style="width:100%">
+            <span class="input-label item-note">DOB</span>
+            <input type="date" placeholder="DOB" id="pdob" value="{{contactInfo.dob}}">
+          </label>
+          <label class="item-input">
+            <span class="input-label item-note">gender</span>
+            <select id="pgender">
+              <option ng-repeat="item in pgender" >{{item}}</option>
+            </select>
+          </label>
+        </div>
+  	</div>
+  	<div class="card card-medical-info" ng-show="showMedicalCard">
+  		<div class="card-edit-header">
+  			<span> Medical Info </span>
+  			<i class="icon ion-edit" style="float:right;" ng-show="showEditButton" ng-click="editInfo('3')"></i>
+  		</div>
+  		<div class="card-content">
+  			<!-- <div class="card-content-item">
+  				<span class="item-name">Allergies</span>
+  				<span class="item-value">xyz</span>
+  			</div> -->
+  			<div class="card-content-item">
+  				<span class="item-name">Blood Group</span>
+  				<span class="item-value">{{contactInfo.sbg}}</span>
+  			</div>
+  			<div class="card-content-item last add">
+  				<i class="icon ion-plus-circled"></i> 
+  				<span> Add more details</span>
+  				
+  			</div>
+  			
+  		</div>
+  	</div>
+  	<div class="card card-medical-info-edit" ng-show="showMedicalEditCard">
+  		<div class="card-edit-header">
+  			<span> Medical Info </span>
+  			<div style="float:right;">
+	  			<button class="button button-raised button-small mine-button mine-cancel-button" ng-click="cancelInfo('3')">cancel</button>
+	  			<button class="button button-raised button-small mine-button mine-save-button" ng-click="saveInfo('3')">save</button>
+  			</div>
+  		</div>
+  		<div class="card-content">
+          <label class="item-input">
+            <span class="input-label item-note">BloodGroup</span>
+            <select id="bloodgroup">
+              <option ng-repeat="item in bg" >{{item}}</option>
+            </select>
+          </label>
+        </div>
+  	</div>
+  	
+  	
+  </ion-content>
+</ion-view>
