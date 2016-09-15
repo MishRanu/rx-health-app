@@ -88,8 +88,9 @@ angular.module('starter.directives', [])
   return {
     restrict: 'E',
     scope : {
-      prefs : '='
-      community : '='
+      prefs : '=?',
+      community : '=?',
+      shrid : '=?'
     },
     templateUrl : 'templates/articlelist.html',
     link: function($scope, element,attrs) {
@@ -100,10 +101,12 @@ angular.module('starter.directives', [])
         noBackdrop: true
         });
         var options = { "UserID" : 1, "count" : 0 };
-        if(prefs){
+        if(angular.isDefined(prefs) && prefs){
           options.Pref = prefs;
-        }else if(community){
+        }else if(angular.isDefined(community) && community){
           options.CommuID = community;
+        }else if(angular.isDefined(shrid) && shrid){
+          options.ShrID = shrid;
         }
         Http.post('getfeeds',options)
         .success(function(data) {

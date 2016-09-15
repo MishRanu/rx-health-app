@@ -174,16 +174,16 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       'Weight': $scope.contactInfo.weight,
       'Allergies': $scope.contactInfo.allergies,
       'Hereditory': $scope.contactInfo.hereditory
-    }) .success(function(data){
-          template: data.Status.ResponseMessage,
-          duration : 1000
-        });
-        $scope.feeds[index].Bookmarked = !$scope.feeds[index].Bookmarked;
-      })
-      .error(function(data){
-        console.log('You are ');
+    }).success(function(data){
+      $ionicLoading.show({
+        template : data.Status.ResponseMessage,
+        duration : 1000
       });
-    }
+      $scope.feeds[index].Bookmarked = !$scope.feeds[index].Bookmarked;
+    })
+    .error(function(data){
+      console.log('You are ');
+    });
   };
 
 
@@ -561,6 +561,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 
 .controller('FeedCtrl', function(Dates ,$interval,$ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http){
+  $scope.Prefs = JSON.parse($stateParams.Prefs);
+  $scope.CommuID = $stateParams.CommuID;
+  $scope.ShrID = $stateParams.ShrID;
   $scope.$on('ngLastRepeat.mylist',function(e) {
   ionicMaterialInk.displayEffect();
 })
@@ -789,7 +792,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       if(type === 'user'){
         obj = angular.toJSON({'doctorids' : Id});
       }else{
-        obj = angular.toJSON({'doctorids' : Id});
+        obj = angular.toJSON({'tagids' : Id});
       }
       $state.go('app.tabs.feed',{ Prefs : obj});
     }
