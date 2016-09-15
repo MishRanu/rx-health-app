@@ -174,18 +174,21 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       'Weight': $scope.contactInfo.weight,
       'Allergies': $scope.contactInfo.allergies,
       'Hereditory': $scope.contactInfo.hereditory
-    }).success(function(data){
-      $ionicLoading.show({
-        template : data.Status.ResponseMessage,
-        duration : 1000
-      });
-      $scope.feeds[index].Bookmarked = !$scope.feeds[index].Bookmarked;
-    })
-    .error(function(data){
-      console.log('You are ');
-    });
-  };
+    }) .success(function(data){
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
 
+        if($scope.ResponseCode==200){
+          console.log('Success'); }
+         else {
+          alert($scope.ResponseMessage);
+        }
+      }).error(function(data) {
+        //$scope.data.error={message: error, status: status};
+        console.log("error" + data);
+        // $ionicLoading.hide();
+      });
+}
 
   $scope.$on('$ionicView.beforeEnter', function() {
    // $rootScope.UserID = 1;
@@ -223,7 +226,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
             'hereditory': $scope.full.Hereditory,
             'pic': $scope.full.Pic
           }
-          console.log($scope.contactInfo)
+          console.log($scope.contactInfo);
           if ($scope.contactInfo.address.flatNo == 'NA' && $scope.contactInfo.address.locality == 'NA' && $scope.contactInfo.address.city == 'NA' && $scope.contactInfo.address.pinCode == 'NA') {
             $scope.addressButton = true;
           } else {
