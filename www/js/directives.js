@@ -94,18 +94,18 @@ angular.module('starter.directives', [])
     },
     templateUrl : 'templates/articlelist.html',
     link: function($scope, element,attrs) {
-      $scope.refresh = function(counter,prefs=null){
+      $scope.refresh = function(counter){
         var feeds = {};
         $ionicLoading.show({
         template: 'Loading...',
         noBackdrop: true
         });
         var options = { "UserID" : 1, "count" : 0 };
-        if(angular.isDefined(prefs) && prefs){
+        if(angular.isDefined($scope.prefs) && $scope.prefs){
           options.Pref = prefs;
-        }else if(angular.isDefined(community) && community){
+        }else if(angular.isDefined($scope.community) && $scope.community){
           options.CommuID = community;
-        }else if(angular.isDefined(shrid) && shrid){
+        }else if(angular.isDefined($scope.shrid) && $scope.shrid){
           options.ShrID = shrid;
         }
         Http.post('getfeeds',options)
@@ -131,11 +131,7 @@ angular.module('starter.directives', [])
           $ionicLoading.hide();
         });
       }
-      if($scope.prefs){
-        $scope.refresh(0,$scope.prefs);
-      }else{
-        $scope.refresh(0);
-      }
+      $scope.refresh(0);
       $scope.comments = null;
   		$scope.currentshrid = null;
       var communities = Http.getdata('communities').data;
