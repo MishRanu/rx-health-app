@@ -85,7 +85,7 @@ app.controller('tabsController', function($scope, $ionicSideMenuDelegate, ionicM
     $scope.openSearch = function() {
     //$scope.modal.show();
     var cstateName = $state.current.name;
-    //console.log(stateName);
+    console.log(cstateName);
     $state.go('search1',{'CurrentState': cstateName}, {reload:false});
   // if($rootScope.lat){
   //   $scope.modal.show();

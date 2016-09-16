@@ -37,7 +37,7 @@
 				People
 				</div>
 				<div class="list" >
-          <a class="item item-avatar" ng-repeat = "person in querylist.People | filter : query| limitTo : 5" >
+          <a class="item item-avatar" ng-repeat = "person in querylist.People | filter : query| limitTo : 5" ng-click="gotofeeds('user',person.UserID)" >
               <img src="img/jon-snow.jpg">
               <h2>{{person.FullName}}</h2>
               <!-- <p>@nikname</p> -->
