@@ -1210,19 +1210,20 @@ else{
 
   })
 
-.controller('dPatientProfileCtrl', function($scope, Http, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk, $ionicLoading) {
-    $timeout(function() {
-        ionicMaterialMotion.slideUp({
-            selector: '.slide-up'
-        });
-    }, 300);
+.controller('dPersonProfileCtrl', function($scope, Http, $ionicPopup, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk, $ionicLoading) {
+    // $timeout(function() {
+    //     ionicMaterialMotion.slideUp({
+    //         selector: '.slide-up'
+    //     });
+    // }, 300);
 
-    $timeout(function() {
-        ionicMaterialMotion.fadeSlideInRight({
-            startVelocity: 3000
-        });
-    }, 700);
+    // $timeout(function() {
+    //     ionicMaterialMotion.fadeSlideInRight({
+    //         startVelocity: 3000
+    //     });
+    // }, 700);
 
+    $scope.PersonID= $stateParams.UserID;
     // Set Ink
     ionicMaterialInk.displayEffect();
 
@@ -1230,8 +1231,8 @@ else{
           template: 'Loading...',
           noBackdrop: true
         });
-        Http.post('pmenutab', {
-          "UserID": '2'
+        Http.post('userdetail', {
+          "UserID": $scope.PersonID
         })
         .success(function(data) {
           $scope.ResponseCode = data.Status.ResponseCode;
@@ -1253,6 +1254,109 @@ else{
       // });
 
 
+  Http.post('getcommunities', {
+      'UserID': $scope.PersonID
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      $ionicLoading.hide();
+      if ($scope.ResponseCode == 200) {
+        $scope.personconnectCommunities = data.Status.connectCommunities;
+        $scope.len= $scope.personconnectCommunities.length;
+        console.log($scope.len);
+        console.log(data.Status);
+        // $scope.communities = angular.extend({}, $scope.adminCommunities, $scope.myCommunities);
+// console.log($scope.communities);
+        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
+
+$scope.UserID= 1; 
+$scope.flag= 1;
+
+if($scope.PersonID==$scope.UserID)
+  $scope.flag = 0; 
+
+  Http.post('getcommunities', {
+      'UserID': $scope.UserID
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      $ionicLoading.hide();
+      if ($scope.ResponseCode == 200) {
+        $scope.myCommunities = data.Status.myCommunities;
+        $scope.connectCommunities = data.Status.connectCommunities;
+
+        $scope.adminCommunities = data.Status.adminCommunities;
+        $scope.following = data.Status.following;
+        console.log(data.Status);
+        // $scope.communities = angular.extend({}, $scope.adminCommunities, $scope.myCommunities);
+// console.log($scope.communities);
+        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
+$scope.selectcommunity;
+
+$scope.communities=[]; 
+
+
+
+for(i=0; i<$scope.len; i++){
+  // for(j=0; i<$scope.myCommunities.length; i++){
+    if($scope.connectCommunities[i].CommuID==$scope.myCommunities[0].CommuID)
+    $scope.myCommunities=[];
+}
+
+$scope.selectUpdated = function(optionSelected) {
+    console.log('Updated');
+    console.log(optionSelected);
+    $scope.selectedCommunity = optionSelected; 
+}
+
+
+$scope.addConnection = function(){
+
+  Http.post('sendcommunityrequest', {
+      'To': [$scope.PersonID], 
+      'UserID': $scope.UserID, 
+      'CommuID': $scope.selectedCommunity
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      $ionicLoading.hide();
+      if ($scope.ResponseCode == 200) {
+  
+          $ionicPopup.alert({
+          title: 'Success',
+          template: 'Person has been added to the group'
+        });
+
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
+
+
+}
 
 })
 
@@ -1290,11 +1394,32 @@ else{
     ionicMaterialInk.displayEffect();
     $scope.me="Jaishriram";
 
+
+  $scope.$on('ngLastRepeat.mylist',function(e) {
+  ionicMaterialInk.displayEffect();
+})
+
+
+
     $rootScope.goBack = function() {
       // implement custom behaviour here
       $state.go($scope.CurrentState);
     };
 
+    $scope.goPeople=function(person){
+      $state.go('dapp.people', {UserID: person.UserID}, {reload:false})
+      console.log(person); 
+    }
+
+    $scope.goCommunity=function(community){
+      console.log(community); 
+
+    }
+
+
+    $scope.goArticle=function(tag){ 
+      console.log(tag); 
+    }
 
     $scope.$on('$ionicView.beforeEnter', function(event, viewData) {
       viewData.enableBack = true;

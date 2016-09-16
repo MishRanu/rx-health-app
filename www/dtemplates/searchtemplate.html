@@ -37,14 +37,14 @@
 				People
 				</div>
 				<div class="list " >
-                <a  class="item item-avatar" ng-repeat = "person in querylist.People | filter : query| limitTo : 5" >
+                <a  class="item item-avatar" ng-repeat = "person in querylist.People | filter : query| limitTo : 5" ng-click = "goPeople(person, $index)" ng-last-repeat="mylist">
                     <img src="img/jon-snow.jpg">
                     <h2>{{person.FullName}}</h2>
                     <!-- <p>@nikname</p> -->
-                     <div class=" positive">
+<!--                      <div class=" positive">
                      <i class="icon ion-person-add "  ng-click="openPopover($event,item)"></i>     <span >Add</span>
                      </div>
-                                
+ -->                                
                 </a>
 			
 				</div>
@@ -54,13 +54,13 @@
 				Communities
 				</div>
 				<div class="list " >
-                <a  class="item item-avatar " ng-repeat = "community in querylist.Communities | filter : query| limitTo : 5" >
+                <a  class="item item-avatar " ng-repeat = "community in querylist.Communities | filter : query| limitTo : 5" ng-click = "goCommunity(community)" >
                     <img src="img/jon-snow.jpg">
                     <h2>{{community.Name}}</h2>
-                    <div class="positive " >
+<!--                     <div class="positive " >
                      <i class="icon ion-android-happy "  ng-click="openPopover($event,item)"></i>     <span >Follow</span>
                      </div>
-
+ -->
                 </a>
 			
 				</div>
@@ -70,13 +70,13 @@
 				Article tags
 				</div>
 				<div class="list " >
-                <a  class="item item-avatar " ng-repeat = "tag in querylist.Tags | filter : query| limitTo : 5" >
+                <a  class="item item-avatar " ng-repeat = "tag in querylist.Tags | filter : query| limitTo : 5" ng-click = "goArticle(tag)" >
                     <img src="img/jon-snow.jpg">
                     <h2>{{tag.Tag}}</h2>
-                    <div class="positive " >
+<!--                     <div class="positive " >
                      <i class="icon ion-android-search "  ng-click="openPopover($event,item)"></i>     <span >Articles</span>
                      </div>
-
+ -->
                      
                                 <!-- <i class="icon ion-person-add" style="top:-10px" ng-click="openPopover($event,item)"></i> -->
                 </a>
