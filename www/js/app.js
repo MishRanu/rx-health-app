@@ -41,7 +41,7 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ioni
             }else{
               $ionicPopup.alert({
                 title: 'Message',
-                template: $scope.ResponseMessage
+                template: data.Status.ResponseMessage
               });
             }
           })
@@ -183,12 +183,12 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('app.tabs.feed', {
-        url: '/feed/:Prefs',
+        url: '/feed/:Prefs/:ShrID/:CommuID',
         views:{
             'feed':{
                 templateUrl: 'templates/feed.html',
                 controller: 'FeedCtrl',
-                params : {Prefs : null}
+                params : {Prefs : null, ShrID : null, CommuID : null}
             }
         }
     })

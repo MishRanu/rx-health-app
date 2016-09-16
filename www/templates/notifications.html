@@ -3,7 +3,7 @@
     <ion-content>
         <div class="content">
             <div class="list animate-fade-slide-in-right">
-                <div class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{'background-color' : notification.Viewed}" ng-repeat="notification in Notifications">
+                <div class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{'background-color' : notification.Viewed}" ng-repeat="notification in Notifications" ng-click="doit(notification)">
                     <img ng-src="{{notification.Pic}}">
                     <p>{{notification.Summary}}</p>
                     <p>{{stringify(notification.NGT)}}</p>
@@ -12,3 +12,23 @@
         </div>
     </ion-content>
 </ion-view>
+
+<!-- Codes:
+DoctorAccept : 0
+DoctorReject : 1
+DoctorReschedule : 2
+PatientRescheduleAccept : 3
+PatientRescheduleReject : 4
+PatientBookingCancelled : 5
+DoctorBookingCancelled : 6
+PatientBookingReminder : 7
+PatientBookingDone : 8
+PatientBookedAuto : 9
+PatientPreCancelAppointment : 10
+DoctorConnectionRequest : 11
+PatientConnectionAcceptNotification : 12
+Patient Follow Notification : 13
+Like Notification : 14
+Comment Notification : 15
+Share Notification : 16
+ -->

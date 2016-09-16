@@ -569,6 +569,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
   }
   $scope.CommuID = $stateParams.CommuID;
   $scope.ShrID = $stateParams.ShrID;
+  console.log($scope.ShrID);
   $scope.$on('ngLastRepeat.mylist',function(e) {
   ionicMaterialInk.displayEffect();
 })
@@ -717,7 +718,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, Http, $scope, $stateParams, $timeout,$interval, ionicMaterialInk, ionicMaterialMotion) {
+.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, $state, Http, $scope, $stateParams, $timeout,$interval, ionicMaterialInk, ionicMaterialMotion) {
     // Set Header
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -756,6 +757,34 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     },60000);
     // Set Ink
     ionicMaterialInk.displayEffect();
+
+    $scope.doit = function(notification){
+      console.log(notification.Type);
+      switch(notification.Type){
+        case "11":
+
+        break;
+        case "12":
+
+        break;
+        case "13":
+
+        break;
+        case "14":
+        console.log("sad");
+        console.dir(notification);
+        $state.go('app.tabs.feed',{ShrID : notification.Extra.ShrID});
+
+        break;
+        case "15":
+        $state.go('app.tabs.feed',{ShrID : notification.Extra.ShrID});
+        break;
+        case "16":
+        console.dir(notification);
+        $state.go('app.tabs.feed',{ShrID : notification.Extra.ShrID});
+        break;
+      }
+    }
 
 })
 

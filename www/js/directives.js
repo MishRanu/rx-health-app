@@ -102,11 +102,11 @@ angular.module('starter.directives', [])
         });
         var options = { "UserID" : 1, "count" : 0 };
         if(angular.isDefined($scope.prefs) && $scope.prefs){
-          options.Pref = prefs;
+          options.Pref = $scope.prefs;
         }else if(angular.isDefined($scope.community) && $scope.community){
-          options.CommuID = community;
+          options.CommuID = $scope.community;
         }else if(angular.isDefined($scope.shrid) && $scope.shrid){
-          options.ShrID = shrid;
+          options.ShrID = $scope.shrid;
         }
         Http.post('getfeeds',options)
         .success(function(data) {
