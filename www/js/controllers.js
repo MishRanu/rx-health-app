@@ -779,9 +779,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 // })
 
-.controller('SearchCtrl', function($state,$scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+.controller('pSearchCtrl', function($state,$scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
     $scope.CurrentState =  $stateParams.CurrentState;
-    console.log($scope.CurrentState);
+    console.log("cf");
     ionicMaterialInk.displayEffect();
     $scope.me="Jaishriram";
 
@@ -793,9 +793,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       console.log('haha');
       var obj;
       if(type === 'user'){
-        obj = angular.toJSON({'doctorids' : Id});
+        obj = JSON.stringify({'doctorids' : Id});
       }else{
-        obj = angular.toJSON({'tagids' : Id});
+        obj = JSON.stringify({'tagids' : Id});
       }
       $state.go('app.tabs.feed',{ Prefs : obj});
     }
