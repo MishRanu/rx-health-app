@@ -564,7 +564,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 
 .controller('FeedCtrl', function(Dates ,$interval,$ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http){
-  $scope.Prefs = JSON.parse($stateParams.Prefs);
+  if($stateParams.Prefs){
+    $scope.Prefs = JSON.parse($stateParams.Prefs);
+  }
   $scope.CommuID = $stateParams.CommuID;
   $scope.ShrID = $stateParams.ShrID;
   $scope.$on('ngLastRepeat.mylist',function(e) {
