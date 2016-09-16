@@ -118,6 +118,8 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
+
+
 .controller('QRScannerCtrl', function($scope, $state, $cordovaBarcodeScanner){
 
 
@@ -135,320 +137,439 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 })
 
-.controller('FeedCtrl', function(Dates ,$ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http ){
-		$scope.comments = null;
-		$scope.currentshrid = null;
-    $scope.communities = Http.data.communities.myCommunities.concat(Http.data.communities.adminCommunities);
-		$ionicModal.fromTemplateUrl('templates/comments.html', {
-		  scope: $scope,
-		  animation: 'slide-in-up'
-		}).then(function(modal) {
-		  $scope.commentmodal = modal;
-		});
-    $scope.timeSince = Dates.getintervalstring;
 
+.controller('ProfileCtrl', function($scope, $rootScope, $ionicLoading, Http, $state, $ionicPopup, $ionicModal, ionicMaterialInk, ionicMaterialMotion, $ionicHistory, $ionicPlatform) {
+  ionicMaterialInk.displayEffect();
+  $scope.showContactCard = true;
+  $scope.showContactEditCard = false;
+  $scope.showEditButton = true;
+  $scope.showsaveButton = false;
+
+  $scope.addressContent = false;
+  $scope.addressInputContent = false;
+  $scope.showPtopInfo = true;
+  $scope.editModePtopInfo = false;
+  $scope.addressEditMode = false;
+  $scope.showEditModeAddress = false;
+  $scope.showBasicCard = true;
+  $scope.showBasicEditCard = false;
+  $scope.showMedicalCard = true;
+  $scope.showMedicalEditCard = false;
+
+  $scope.requestToUpdate = function() {
+    Http.post('edit_patientfullprofile', {
+      'UserID': $rootScope.UserID,
+      'DOB': $scope.contactInfo.dob,
+      'Email': $scope.contactInfo.emailId,
+      'FName': $scope.contactInfo.Fname,
+      'LName': $scope.contactInfo.Lname,
+      'Phone': $scope.contactInfo.mobile,
+      'Gender': $scope.contactInfo.gender,
+      'BloodGroup': $scope.contactInfo.sbg,
+      'Address1': $scope.contactInfo.address.flatNo,
+      'Address2': $scope.contactInfo.address.locality,
+      'City': $scope.contactInfo.address.city,
+      'PinCode': $scope.contactInfo.address.pinCode,
+      'Height': $scope.contactInfo.heights,
+      'Weight': $scope.contactInfo.weight,
+      'Allergies': $scope.contactInfo.allergies,
+      'Hereditory': $scope.contactInfo.hereditory
+    }) .success(function(data){
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+
+        if($scope.ResponseCode==200){
+          console.log('Success'); }
+         else {
+          alert($scope.ResponseMessage);
+        }
+      }).error(function(data) {
+        //$scope.data.error={message: error, status: status};
+        console.log("error" + data);
+        // $ionicLoading.hide();
+      });
+}
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+   // $rootScope.UserID = 1;
+   $ionicLoading.show({
+    template: 'Loading...',
+    noBackdrop: true
+  });
+   Http.post('getpatientprofile2', {
+    "UserID": '2'
+  })
+   .success(function(data) {
+    $scope.ResponseCode = data.Status.ResponseCode;
+    $scope.ResponseMessage = data.Status.ResponseMessage;
+        //console.log($scope.ResponseMessage);
+        $ionicLoading.hide();
+        if ($scope.ResponseCode == 200) {
+          $scope.full = data.Status;
+          $scope.contactInfo = {
+            'Fname': $scope.full.FName,
+            'Lname': $scope.full.LName,
+            'emailId': $scope.full.Email,
+            'mobile': $scope.full.Phone,
+            'address': {
+              'flatNo': $scope.full.Address1,
+              'locality': $scope.full.Address2,
+              'city': $scope.full.City,
+              'pinCode': $scope.full.PinCode
+            },
+            'gender': $scope.full.Gender,
+            'sbg': $scope.full.BloodGroup,
+            'dob': $scope.full.DOB,
+            'heights': $scope.full.Height,
+            'weight': $scope.full.Weight,
+            'allergies': $scope.full.Allergies,
+            'hereditory': $scope.full.Hereditory,
+            'pic': $scope.full.Pic
+          }
+          console.log($scope.contactInfo);
+          if ($scope.contactInfo.address.flatNo == 'NA' && $scope.contactInfo.address.locality == 'NA' && $scope.contactInfo.address.city == 'NA' && $scope.contactInfo.address.pinCode == 'NA') {
+            $scope.addressButton = true;
+          } else {
+            $scope.addressButton = false;
+            $scope.addressContent = true;
+            $scope.addressEditMode = true;
+          }
+          console.dir($scope.full);
+        } else {
+          alert($scope.ResponseMessage);
+        }
+      }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
+    });
+  //$scope.showEdit
+
+
+  $scope.cityList = [{
+    "name": "Pune",
+    "id": "1"
+  }, {
+    "name": "Mumbai",
+    "id": "2"
+  }];
+  $scope.bg = ['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'];
+  $scope.pgender = ['male', 'female'];
+  $ionicModal.fromTemplateUrl('templates/modalppic.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.fucking = function() {
+    console.log("hi");
+  };
+
+  //console.log($scope.contactInfo.mobile);
+  $scope.showAlert = function(message) {
+
+    var alertPopup = $ionicPopup.alert({
+      title: 'Title',
+      template: message
+    });
+  };
+
+
+  $scope.takePhoto = function() {
+    var options = {
+      fileKey: "avatar",
+      fileName: "image.png",
+      chunkedMode: "false",
+      mimeType: "false",
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+      $scope.imgdata = imageData;
+      $scope.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.uploadpic();
+    }, function(err) {
+      // An error occured. Show a message to the user
+    });
+  };
+
+  $scope.selectPicture = function() {
+    var options = {
+      fileKey: "file",
+      fileName: "image.png",
+      chunkedMode: "false",
+      mimeType: "false",
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+      $scope.imgdata = imageData;
+      $scope.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.uploadpic();
+    }, function(err) {
+      // An error occured. Show a message to the user
+    });
+  };
+  $scope.uploadpic = function() {
+    //console.log(imageData);
+    //console.log(options);
+    $ionicLoading.show({
+      template: 'Loading...',
+      noBackdrop: true
+    });
+
+  }
+
+  $scope.patientProfile = function() {
+
+    var date = new Date();
+
+    var options = {
+      fileKey: "image",
+      fileName: "image.jpg",
+      chunkedMode: false,
+      params: {
+        'UserID': $rootScope.UserID
+      },
+      mimeType: "image/jpg"
+    };
+
+    $cordovaFileTransfer.upload(server, filePath, options).then(function(result) {
+
+      alert("Pic Uploaded");
+      $ionicLoading.hide();
+      $scope.modal.hide();
+      //$ionicHistory.clearCache();
+      //$state.go($state.current, {}, {reload: true});
+    }, function(err) {
+      console.log("ERROR: " + JSON.stringify(err));
+      $ionicLoading.hide();
+      alert("Some error occured.. Please try again.");
+      //alert(JSON.stringify(err));
+    }, function(progress) {
+      // constant progress updates
+    });
+
+  }
+
+
+  $scope.cancelInfo = function(id) {
+    $scope.showEditButton = true;
+    if (id == 1) {
+      $scope.showContactCard = true;
+      $scope.showContactEditCard = false;
+    };
+    if (id == 2) {
+      $scope.showBasicCard = true;
+      $scope.showBasicEditCard = false;
+    };
+    if (id == 3) {
+      $scope.showMedicalCard = true;
+      $scope.showMedicalEditCard = false;
+    };
+    //document.getElementById("contactInfo").reset();
+  };
+  // $scope.saveInfo = function(id) {
+  //   $scope.showEditButton = true;
+
+  // };
+  $scope.goBack = function() {
+    $state.go('tab.pmenu');
+    //$ionicHistory.goBack();
+
+  };
+  $scope.editPtopInfo = function() {
+    $scope.showPtopInfo = false;
+    $scope.editModePtopInfo = true;
+  };
+  $scope.editInfo = function(id) {
+    $scope.showEditButton = false;
+    if (id == 1) {
+      $scope.showContactCard = false;
+      $scope.showContactEditCard = true;
+      if ($scope.addressEditMode) {
+        $scope.showEditModeAddress = true;
+      };
+    };
+    if (id == 2) {
+      $scope.showBasicCard = false;
+      $scope.showBasicEditCard = true;
+      //alert("2");
+    };
+    if (id == 3) {
+      $scope.showMedicalCard = false;
+      $scope.showMedicalEditCard = true;
+    }
+
+  };
+  $scope.addAddress = function() {
+    $scope.addressButton = false;
+    $scope.addressInputContent = true;
+    $scope.showEditButton = false;
+
+  };
+  $scope.saveAddress = function() {
+    $scope.showEditButton = true;
+    $scope.addressInputContent = false;
+    //console.log(document.getElementById('patientAddress'));
+
+
+    var flatNo = document.getElementById('flatNo').value;
+    var locality = document.getElementById('locality').value;
+    var city = document.getElementById('city').value;
+    var pinCode = document.getElementById('pinCode').value;
+    console.log(flatNo);
+    if (flatNo == '' && locality == '' && city == '' && pinCode == '') {
+      $scope.addressButton = true;
+    } else {
+      $scope.addressContent = true;
+      $scope.addressEditMode = true;
+      $scope.contactInfo.address.flatNo = flatNo;
+      $scope.contactInfo.address.locality = locality;
+      $scope.contactInfo.address.city = city;
+      $scope.contactInfo.address.pinCode = pinCode;
+    };
+    console.log($scope.contactInfo.address.flatNo);
+  };
+
+  $scope.cancelInfo = function(id) {
+    $scope.showEditButton = true;
+    if (id == 1) {
+      $scope.showContactCard = true;
+      $scope.showContactEditCard = false;
+    };
+    if (id == 2) {
+      $scope.showBasicCard = true;
+      $scope.showBasicEditCard = false;
+    };
+    if (id == 3) {
+      $scope.showMedicalCard = true;
+      $scope.showMedicalEditCard = false;
+    };
+    //document.getElementById("contactInfo").reset();
+  };
+  $scope.saveInfo = function(id) {
+    $scope.showEditButton = true;
+
+    if (id == 1) {
+      $scope.showContactCard = true;
+      $scope.showContactEditCard = false;
+      //$scope.mobile = document.getElementsByName('mobile').value;
+      //var email = document.getElementsByName('email').value;
+      var editMobile = document.getElementById('editMobile').value;
+      var editEmail = document.getElementById('editEmail').value;
+      //console.log(editMobile.length);
+      if (editMobile.length == 10) {
+        $scope.contactInfo.mobile = editMobile;
+      } else {
+        $scope.showAlert('Phone number should contain 10 digits');
+      }
+      var atpos = editEmail.indexOf("@");
+      var dotpos = editEmail.lastIndexOf(".");
+      if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= editEmail.length) {
+        $scope.showAlert('Not a valid Email Address');
+        //return false;
+      } else {
+        $scope.contactInfo.emailId = editEmail;
+      }
+      var flatNo = document.getElementById('eflatNo').value;
+      var locality = document.getElementById('elocality').value;
+      var city = document.getElementById('ecity').value;
+      var pinCode = document.getElementById('epinCode').value;
+      //console.log(flatNo);
+      if (flatNo == '' && locality == '' && city == '' && pinCode == '') {
+        $scope.addressButton = true;
+        $scope.addressContent = false;
+      } else {
+        $scope.addressContent = true;
+        $scope.addressEditMode = true;
+        $scope.contactInfo.address.flatNo = flatNo;
+        $scope.contactInfo.address.locality = locality;
+        $scope.contactInfo.address.city = city;
+        $scope.contactInfo.address.pinCode = pinCode;
+      };
+    };
+    if (id == 2) {
+      $scope.showBasicCard = true;
+      $scope.showBasicEditCard = false;
+      $scope.contactInfo.dob = document.getElementById('pdob').value;
+      $scope.contactInfo.gender = document.getElementById('pgender').value;
+    };
+    if (id == 3) {
+      $scope.showMedicalCard = true;
+      $scope.showMedicalEditCard = false;
+      console.log(document.getElementById('bloodgroup'));
+      $scope.contactInfo.sbg = document.getElementById('bloodgroup').value;
+    };
+    $scope.requestToUpdate();
+
+
+  };
+  $scope.addAddress = function() {
+    $scope.addressButton = false;
+    $scope.addressInputContent = true;
+    $scope.showEditButton = false;
+
+  };
+  $scope.saveAddress = function() {
+    $scope.showEditButton = true;
+    $scope.addressInputContent = false;
+    var flatNo = document.getElementById('flatNo').value;
+    var locality = document.getElementById('locality').value;
+    var city = document.getElementById('city').value;
+    var pinCode = document.getElementById('pinCode').value;
+    console.log(flatNo);
+    if (flatNo == '' && locality == '' && city == '' && pinCode == '') {
+      $scope.addressButton = true;
+    } else {
+      $scope.addressContent = true;
+      $scope.addressEditMode = true;
+      $scope.contactInfo.address.flatNo = flatNo;
+      $scope.contactInfo.address.locality = locality;
+      $scope.contactInfo.address.city = city;
+      $scope.contactInfo.address.pinCode = pinCode;
+    };
+    $scope.requestToUpdate();
+  };
+})
+
+
+.controller('PreferencesCtrl', function($scope, $state, $stateParams, ionicMaterialInk){
+
+  ionicMaterialInk.displayEffect();
+
+})
+
+
+.controller('BookmarkCtrl', function($scope, $state, $stateParams, ionicMaterialInk){
+
+  ionicMaterialInk.displayEffect();
+
+})
+
+
+.controller('FeedCtrl', function(Dates ,$interval,$ionicLoading, $cordovaInAppBrowser, $ionicModal, $scope, $stateParams, $ionicPopup, $rootScope, $timeout, $state, ionicMaterialInk, $ionicPopover ,Http){
+  $scope.Prefs = JSON.parse($stateParams.Prefs);
+  $scope.CommuID = $stateParams.CommuID;
+  $scope.ShrID = $stateParams.ShrID;
   $scope.$on('ngLastRepeat.mylist',function(e) {
   ionicMaterialInk.displayEffect();
 })
-
-  var options = {
-      location: 'yes',
-      clearcache: 'yes',
-      toolbar: 'no'
-   };
-
-   $scope.openBrowser = function(link) {
-      $cordovaInAppBrowser.open(link, '_blank', options)
-
-      .then(function(event) {
-         // success
-      })
-
-      .catch(function(event) {
-         // error
-      });
-   }
-
-    $scope.$on("$ionicView.beforeEnter", function(){
-      $scope.refresh = function(counter){
-        $ionicLoading.show({
-        template: 'Loading...',
-        noBackdrop: true
-        });
-        console.log($rootScope.UserID);
-        console.log(counter);
-        Http.post('getfeeds',{ "UserID" : 1, "count" : 0 })
-        .success(function(data) {
-          console.dir(data.Status.Articles);
-          $scope.ResponseCode = data.Status.ResponseCode;
-          $scope.ResponseMessage = data.Status.ResponseMessage;
-          $ionicLoading.hide();
-          if ($scope.ResponseCode == 200) {
-              $scope.feeds = data.Status.Articles;
-              console.dir($scope.feeds);
-          }
-            else {
-              $ionicPopup.alert({
-                title: 'Message',
-                template: $scope.ResponseMessage
-              });
-            }
-        })
-        .error(function(data) {
-          //$scope.data.error={message: error, status: status};
-          console.log("error" + data);
-          $ionicLoading.hide();
-        });
-      }
-      $scope.refresh(0);
-    });
-
-    $scope.followArticle = function(CommuID){
-      console.log(CommuID);
-      Http.post('followcommunity', {
-       'UserID': $rootScope.UserID,
-       'CommuID': CommuID
-       })
-      .success(function(data){
-        $ionicLoading.show({
-          template: 'Community Followed',
-          duration : 1000
-        });
-        $scope.refresh(0);
-      })
-      .error(function(data){
-        console.log('You are ');
-      });
-    }
-
-    $scope.BookmarkArticle = function(index){
-      console.log(index);
-      var options = {
-       'UserID': $rootScope.UserID,
-       'ShrID': $scope.feeds[index].ShrID
-     };
-      var booked = $scope.feeds[index].Bookmarked;
-      if(booked){
-        options.action = 0;
-      }else{
-        options.action = 1;
-      }
-      Http.post('bookmark',options)
-      .success(function(data){
-        $ionicLoading.show({
-          template: data.Status.ResponseMessage,
-          duration : 1000
-        });
-        $scope.feeds[index].Bookmarked = !$scope.feeds[index].Bookmarked;
-      })
-      .error(function(data){
-        console.log('You are ');
-      });
-    }
-
-    $scope.likeArticle = function(index) {
-
-      if($rootScope.UserID && $scope.feeds[index].Liked == 0){
-        Http.post('likearticle', {
-         'UserID': $rootScope.UserID,
-         'ShrID': $scope.feeds[index].ShrID,
-           'Like': 'suar' // Like key for like and no Like key for unlike
-         })
-        .success(function(data){
-          $scope.ResponseCode = data.Status.ResponseCode;
-          $scope.ResponseMessage = data.Status.ResponseMessage;
-          if ($scope.ResponseCode == 200) {
-            $scope.feeds[index].Likes++;
-            $scope.feeds[index].Liked = 1;
-          }
-          else {
-            $ionicPopup.alert({
-              title: 'Message',
-              template: $scope.ResponseMessage
-            });
-          }
-        })
-        .error(function(data){
-          console.log('You are ');
-        });
-      }else {
-        Http.post('likearticle', {
-         'UserID': $rootScope.UserID,
-         'ShrID': $scope.feeds[index].ShrID,
-          // Like key for like and no Like key for unlike
-         })
-        .success(function(data){
-          $scope.ResponseCode = data.Status.ResponseCode;
-          $scope.ResponseMessage = data.Status.ResponseMessage;
-          if ($scope.ResponseCode == 200) {
-            $scope.feeds[index].Likes--;
-            $scope.feeds[index].Liked = 0;
-          }else{
-            $ionicPopup.alert({
-              title: 'Message',
-              template: $scope.ResponseMessage
-            });
-          }
-        })
-        .error(function(data){
-          console.log('You are not sure');
-        });
-      };
-    }
-
-     
-     var template = '<ion-popover-view style="height:110px"> ' +
-                    '   <ion-content >' +
-                    '       <div class="list">' +
-                    '         <a class="item" style="border-bottom:1px solid #fff" ng-click="editArticle()">' +
-                    '           Edit'+
-                    '         </a>'+
-                    '         <a class="item" ng-click="deleteArticle(tempitem,UserID)">' +
-                    '           Delete'+
-                    '         </a>'+
-                    '       </div>'
-                    '   </ion-content>' +
-                    '</ion-popover-view>';
-
-     $scope.popover2 = $ionicPopover.fromTemplate(template, {
-        scope: $scope
-    });
-     $scope.openPopover1 = function($event,item){
-      $scope.popover2.show($event);
-      $scope.tempitem = item;
-     };
-    $scope.closePopover = function () {
-        $scope.popover2.hide();
-    };
-    //Cleanup the popover when we're done with it!
-    $scope.$on('$destroy', function () {
-        $scope.popover2.remove();
-    });
-    $scope.deleteArticle = function(item,UserID){
-      var index = $scope.feeds.indexOf(item)
-      console.log(index);
-      $scope.feeds.splice(index, 1);
-      Http.post('deletearticle',{
-        'ShrID':item.ShrID,
-        'UserID':UserID
-      })
-      .success(function(data){
-        $scope.ResponseCode = data.Status.ResponseCode;
-        $scope.ResponseMessage = data.Status.ResponseMessage;
-        if ($scope.ResponseCode == 200){
-          $scope.feeds.splice(index, 1);
-          
-          console.log("12344555555");
-        //article.Isbookmark = false;
-        }
-      })
-      $scope.popover2.hide();
-    }
-
-
-		$scope.commentit = function(anon,comment){
-			if(!anon){
-				anon = 0;
-			}else{
-				anon = 1;
-			}
-			Http.post('commentarticle', {
-				'ShrID' : $scope.currentshrid,
-				'UserID' : $rootScope.UserID,
-				'Comment' : comment,
-				'Anon' : anon
-			}).success(function(data) {
-		 $scope.ResponseCode = data.Status.ResponseCode;
-		 $scope.ResponseMessage = data.Status.ResponseMessage;
-		 $ionicLoading.hide();
-		 if ($scope.ResponseCode == 200) {
-			 var newcomment = {'Comment' : comment, 'IsAnon' : anon, 'Replies' : {}, 'ComID' : data.Status.ComID, FullName : "Jon Snow"};
-			 $scope.comments.push(newcomment);
-			 $scope.commentmodal.someotherProperty = "";
-			 $scope.commentmodal.iscomanon = false;
-		 }
-			 else {
-				 $ionicPopup.alert({
-					 title: 'Message',
-					 template: $scope.ResponseMessage
-				 });
-			 }
-		 }).error(function(data) {
-			 //$scope.data.error={message: error, status: status};
-			 console.log("error" + data);
-			 $ionicLoading.hide();
-		 });
-		}
-		$scope.replyit = function(index, anon, reply){
-      if(!anon){
-				anon = 0;
-			}else{
-				anon = 1;
-			}
-      console.log(index);
-      console.log(anon);
-      console.log(reply);
-			var comid = $scope.comments[index].ComID;
-      console.log(comid);
-			Http.post('commentarticle', {
-				'reply' : 'dc',
-				'ComID' : comid,
-				'UserID' : $rootScope.UserID,
-				'Comment' : reply,
-				'Anon' : anon
-			}).success(function(data) {
-		 $scope.ResponseCode = data.Status.ResponseCode;
-		 $scope.ResponseMessage = data.Status.ResponseMessage;
-		 $ionicLoading.hide();
-		 if ($scope.ResponseCode == 200) {
-			 var newreply = {'RepID' : data.Status.RepID, 'Reply' : reply, 'IsAnon' : anon, FullName : "Jon Snow", "RepID" : data.Status.RepID};
-			 $scope.comments[index].Replies.push(newreply);
-			 $scope.commentmodal.someProperty[index] = "";
-			 $scope.commentmodal.isrepanon[index] = false;
-		 }
-			 else {
-				 $ionicPopup.alert({
-					 title: 'Message',
-					 template: $scope.ResponseMessage
-				 });
-			 }
-		 }).error(function(data) {
-			 //$scope.data.error={message: error, status: status};
-			 console.log("error" + data);
-			 $ionicLoading.hide();
-		 });
-		}
-		$scope.openCommentModal = function(item){
-      console.log(item);
-			$scope.currentshrid = item;
-			$ionicLoading.show({
-			template: 'Loading...',
-			noBackdrop: true
-			});
-			Http.post('getcomments',{ShrID : $scope.currentshrid})
-			 .success(function(data) {
-			$scope.ResponseCode = data.Status.ResponseCode;
-			$scope.ResponseMessage = data.Status.ResponseMessage;
-			$ionicLoading.hide();
-			if ($scope.ResponseCode == 200) {
-					$scope.comments = data.Status.Comments;
-					console.dir($scope.comments);
-			}else{
-				$ionicPopup.alert({
-					title: 'Message',
-					template: $scope.ResponseMessage
-				});
-			}
-			}).error(function(data) {
-				//$scope.data.error={message: error, status: status};
-				console.log("error" + data);
-				$ionicLoading.hide();
-			});
-			$scope.commentmodal.show();
-		}
-    $scope.closeModal = function() {
-      $scope.commentmodal.hide();
-      };
 	$scope.me="Jaishriram";
     ionicMaterialInk.displayEffect();
 
@@ -471,79 +592,15 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
         $scope.optionpopover.remove();
     });
 
-    $scope.showPopup = function(shrid) {
-        $scope.alertPopup = $ionicPopup.show({
-        	template: '<select ng-model="alertPopup.selectedCommunity" ng-options="x.Name for x in communities"></select> <textarea elastic placeholder="Place your thoughts..." ng-model="alertPopup.shareSummary"></textarea>',
-            title: 'Share',
-            subTitle: 'Select one of your groups to share',
-            scope: $scope,
-            buttons: [
-            	{ text: 'Cancel' },
-            	{
-            		text: '<b>Share</b>',
-            		type: 'button-positive',
-         			onTap: function(e) {
-                console.dir($scope.alertPopup);
-                if($scope.alertPopup.selectedCommunity != null){
-                  console.log('Yeah');
-                  var options = {
-                    UserID : $rootScope.UserID,
-                    ShrID : shrid,
-                    CommuID : $scope.alertPopup.selectedCommunity.CommuID,
-                    Type : 2
-                  }
-                  if($scope.alertPopup.shareSummary){
-                    options.Summary = $scope.alertPopup.shareSummary;
-                  }
-                  $ionicLoading.show({
-            			template: 'Sharing...',
-            			noBackdrop: true
-            			});
-                  console.dir(options);
-                  Http.post('sharearticle',options)
-                  .success(function(data){
-                    $scope.ResponseCode = data.Status.ResponseCode;
-              			$scope.ResponseMessage = data.Status.ResponseMessage;
-              			$ionicLoading.hide();
-              			if ($scope.ResponseCode == 200) {
-                      $ionicLoading.show({
-                			template: 'Article Shared',
-                			duration : 1000
-                			});
-                      return data;
-              			}else{
-              				$ionicPopup.alert({
-              					title: 'Message',
-              					template: $scope.ResponseMessage
-              				});
-              			}
-                  })
-                  .error(function(data){
-                    console.log("error" + data);
-            				$ionicLoading.hide();
-                  })
-                }else{
-                  e.preventDefault();
-                }
-              }
-       		},
-     		]
-        });
-
-        $timeout(function() {
-            //ionic.material.ink.displayEffect();
-            ionicMaterialInk.displayEffect();
-        }, 0);
-    };
-
 })
 
 
 .controller('GroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
-    // $scope.myCommunities = Http.data.communities.myCommunities;
-    $scope.connectCommunities = Http.data.connectCommunities;
-    // $scope.adminCommunities = Http.data.adminCommunities;
-    $scope.following = Http.data.following;
+    var communities = Http.getdata('communities').data;
+    // $scope.myCommunities = communities.myCommunities;
+    $scope.connectCommunities = communities.connectCommunities;
+    // $scope.adminCommunities = communities.adminCommunities;
+    $scope.following = communities.following;
     $timeout(function() {
         ionicMaterialMotion.fadeSlideInRight({
             startVelocity: 3000
@@ -658,7 +715,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, Http, $scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, Http, $scope, $stateParams, $timeout,$interval, ionicMaterialInk, ionicMaterialMotion) {
     // Set Header
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -673,28 +730,28 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     // Set Motion
     console.log('haha');
     $scope.$on('$ionicView.beforeEnter', function(){
-      Http.post('getnotifications',{UserID : $rootScope.UserID})
-      .success(function(data){
-        if(data.Status.ResponseCode == 200){
-          $scope.Notifications = data.Status.Notifications;
-          console.dir($scope.Notifications);
-        }else{
-          $ionicPopup.alert({
-            title: 'Message',
-            template: $scope.ResponseMessage
-          });
-        }
-      })
-      .error(function(data){
-        console.log("error" + data);
-      })
+      var temp = Http.getdata('notifications');
+      $scope.Notifications = temp.data;
+      var dat = new Date()
+      var l = Math.floor((dat.getTime()-temp.extras.getTime())/1000);
+      var i;
+      for(i=0;i < $scope.Notifications.length;i++){
+        $scope.Notifications[i].NGT+= l;
+      }
+      $scope.stringify = Dates.getintervalstring;
     })
     $timeout(function() {
         ionicMaterialMotion.fadeSlideInRight({
             startVelocity: 3000
         });
     }, 700);
-
+    $interval(function(){
+      console.log('mama');
+      var i = 0;
+      for(i=0;i < $scope.Notifications.length;i++){
+        $scope.Notifications[i].NGT+=60;
+      }
+    },60000);
     // Set Ink
     ionicMaterialInk.displayEffect();
 
@@ -722,7 +779,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 // })
 
-.controller('SearchCtrl', function($scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
+.controller('SearchCtrl', function($state,$scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
     $scope.CurrentState =  $stateParams.CurrentState;
     console.log($scope.CurrentState);
     ionicMaterialInk.displayEffect();
@@ -732,8 +789,16 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       // implement custom behaviour here
       $state.go($scope.CurrentState);
     };
-
-
+    $scope.gotofeeds = function(type,Id){
+      console.log('haha');
+      var obj;
+      if(type === 'user'){
+        obj = angular.toJSON({'doctorids' : Id});
+      }else{
+        obj = angular.toJSON({'tagids' : Id});
+      }
+      $state.go('app.tabs.feed',{ Prefs : obj});
+    }
     $scope.$on('$ionicView.beforeEnter', function(event, viewData) {
       viewData.enableBack = true;
     });

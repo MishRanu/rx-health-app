@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('starter', ['ionic', 'ionic-material' ,'starter.services', 'starter.controllers', 'starter.dcontrollers', 'ngCordova']);
+var app = angular.module('starter', ['ionic', 'ionic-material' ,'starter.services', 'starter.directives', 'starter.controllers', 'starter.dcontrollers', 'ngCordova']);
 
 app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ionicLoading, $cordovaSplashscreen, $rootScope) {
     $ionicPlatform.ready(function () {
@@ -11,18 +11,19 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ioni
         // for form inputs)
         //$cordovaSplashscreen.show();
         $rootScope.UserID = 1;
+
         Http.post('getcommunities', {
           'UserID': $rootScope.UserID
         })
         .success(function(data) {
           $ionicLoading.hide();
           if (data.Status.ResponseCode == 200) {
-            Http.data.communities = {};
-            Http.data.communities.myCommunities = data.Status.myCommunities;
-            Http.data.communities.connectCommunities = data.Status.connectCommunities;
-
-            Http.data.communities.adminCommunities = data.Status.adminCommunities;
-            Http.data.communities.following = data.Status.following;
+            var communities = {};
+            communities.myCommunities = data.Status.myCommunities;
+            communities.connectCommunities = data.Status.connectCommunities;
+            communities.adminCommunities = data.Status.adminCommunities;
+            communities.following = data.Status.following;
+            Http.setdata(communities,'communities');
             // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
             //$cordovaSplashscreen.hide();
           } else {
@@ -32,6 +33,20 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ioni
             //$scope.data.error={message: error, status: status};
             alert("error" + data);
             $ionicLoading.hide();
+          });
+          Http.post('getnotifications',{UserID : $rootScope.UserID})
+          .success(function(data){
+            if(data.Status.ResponseCode == 200){
+              Http.setdata(data.Status.Notifications,'notifications',new Date());
+            }else{
+              $ionicPopup.alert({
+                title: 'Message',
+                template: $scope.ResponseMessage
+              });
+            }
+          })
+          .error(function(data){
+            console.log("error" + data);
           });
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -66,6 +81,38 @@ $ionicConfigProvider.tabs.position('top');
             }
         }
     })
+    
+
+    .state('app.profile', {
+        url: '/profile',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/profile.html',
+                controller: 'ProfileCtrl'
+            }
+        }
+    })
+
+    .state('app.bookmarks', {
+        url: '/bookmarks',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/bookmarks.html',
+                controller: 'BookmarkCtrl'
+            }
+        }
+    })
+
+    .state('app.preferences', {
+        url: '/preferences',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/preferences.html',
+                controller: 'PreferencesCtrl'
+            }
+        }
+    })
+
     .state('app.lists', {
         url: '/lists',
         views: {
@@ -136,11 +183,12 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('app.tabs.feed', {
-        url: '/feed',
+        url: '/feed/:Prefs',
         views:{
             'feed':{
                 templateUrl: 'templates/feed.html',
-                controller: 'FeedCtrl'
+                controller: 'FeedCtrl',
+                params : {Prefs : null}
             }
         }
     })
@@ -315,6 +363,7 @@ $ionicConfigProvider.tabs.position('top');
         }
     })
 
+
     .state('dapp.dtabs.notifications', {
         url: '/notifications',
         views:{
@@ -325,12 +374,12 @@ $ionicConfigProvider.tabs.position('top');
         }
     })
 
-    .state('dapp.dtabs.community', {
-        url: '/groups/:CommuID/:UserType',
+    .state('dapp.patient', {
+        url: '/patients/:PID',
         views: {
-            'dgroups': {
-                templateUrl: 'dtemplates/community.html',
-                controller: 'CommunityCtrl'
+            'dmenuContent': {
+                templateUrl: 'dtemplates/patientprofile.html',
+                controller: 'dPatientProfileCtrl'
             },
             'fabContent': {
                 template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
@@ -342,12 +391,31 @@ $ionicConfigProvider.tabs.position('top');
             }
         }
     })
+   
+    .state('dapp.dtabs.community', {
+        url: '/groups/:CommuID/:UserType',
+        views: {
+            'dgroups': {
+                templateUrl: 'dtemplates/community.html',
+                controller: 'dCommunityCtrl'
+            },
+            'fabContent': {
+                template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
+                controller: function ($timeout) {
+                    /*$timeout(function () {
+                        document.getElementById('fab-profile').classList.toggle('on');
+                    }, 800);*/
+                }
+            }
+        }
+    })
+
         .state('dapp.dtabs.community1', {
         url: '/groups/:CommuID/:UserType',
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/community1.html',
-                controller: 'Community1Ctrl'
+                controller: 'dCommunity1Ctrl'
             },
             'fabContent': {
                 template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
@@ -364,7 +432,7 @@ $ionicConfigProvider.tabs.position('top');
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/activity.html',
-                controller: 'ActivityCtrl'
+                controller: 'dActivityCtrl'
             },
             'fabContent': {
                 template: '<button id="fab-activity" class="button button-fab button-fab-top-right expanded button-energized-900 flap"><i class="icon ion-paper-airplane"></i></button>',
@@ -382,7 +450,7 @@ $ionicConfigProvider.tabs.position('top');
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/connections.html',
-                controller: 'ConnectionsCtrl'
+                controller: 'dConnectionsCtrl'
             },
             'fabContent': {
                 template: '<button id="fab-friends" class="button button-fab button-fab-top-left expanded button-energized-900 spin"><i class="icon ion-chatbubbles"></i></button>',
@@ -400,7 +468,7 @@ $ionicConfigProvider.tabs.position('top');
         views: {
             'dgroups': {
                 templateUrl: 'dtemplates/followers.html',
-                controller: 'FollowersCtrl'
+                controller: 'dFollowersCtrl'
             },
             'fabContent': {
                 template: '<button id="fab-gallery" class="button button-fab button-fab-top-right expanded button-energized-900 drop"><i class="icon ion-heart"></i></button>',
@@ -424,7 +492,7 @@ $ionicConfigProvider.tabs.position('top');
     $urlRouterProvider.otherwise('/welcome');
 })
 
-.controller('UploadController', function ($scope, $ionicLoading){
+app.controller('UploadController', function ($scope, $ionicLoading, $rootScope){
   var imageUploader = new ImageUploader();
   $scope.result = {};
   $scope.file = {};
@@ -433,16 +501,17 @@ $ionicConfigProvider.tabs.position('top');
       template: 'Uploading...'
     });
     imageUploader.push($scope.file)
-      .then((data) => {
-        console.debug('Upload complete. Data:', data);
+      .then(function(data) {
+        console.log('Upload complete. Data:', data);
         $ionicLoading.hide();
         $scope.result.url = data.url;
+        $rootScope.imgurl = $scope.result.url
         $scope.$digest();
-      })
-      .catch((err) => {
-        console.error(err);
+      }, function(err) {
+        // console.error(err);
         $ionicLoading.hide();
         $scope.result.error = err;
       });
   };
+
 });

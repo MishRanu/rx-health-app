@@ -9,7 +9,7 @@ app.controller('tabsController', function($scope, $ionicSideMenuDelegate, ionicM
 })
  
 
- app.controller('AppCtrl', function ($scope, $stateParams, $state, $ionicModal, $ionicPopover, $timeout, $ionicSideMenuDelegate, ionicMaterialInk) {
+ app.controller('AppCtrl', function ($scope, $ionicLoading, Http, $stateParams, $state, $ionicModal, $ionicPopover, $timeout, $ionicSideMenuDelegate, ionicMaterialInk) {
 
 
 
@@ -43,6 +43,33 @@ app.controller('tabsController', function($scope, $ionicSideMenuDelegate, ionicM
                     '   </ion-content>' +
                     '</ion-popover-view>';
 
+
+      //$scope.$on('$ionicView.beforeEnter', function() {
+        $ionicLoading.show({
+          template: 'Loading...',
+          noBackdrop: true
+        });
+        Http.post('pmenutab', {
+          "UserID": '2'
+        })
+        .success(function(data) {
+          $scope.ResponseCode = data.Status.ResponseCode;
+          $scope.ResponseMessage = data.Status.ResponseMessage;
+          //console.log($scope.ResponseMessage);
+          $ionicLoading.hide();
+          if ($scope.ResponseCode == 200) {
+            $scope.full = data.Status;
+
+            console.dir($scope.full);
+          } else {
+            alert($scope.ResponseMessage);
+          }
+        }).error(function(data, status, headers, config) {
+          //$scope.data.error={message: error, status: status};
+          alert("error" + data);
+          $ionicLoading.hide();
+        });
+      // });
 
 
     $scope.popover = $ionicPopover.fromTemplate(template, {

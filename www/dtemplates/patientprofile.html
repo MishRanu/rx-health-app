@@ -1,0 +1,44 @@
+<ion-view view-title="Profile">
+  <ion-content class="view-background">
+    
+    <div class="list card">
+
+      <div class="item item-image padding"style="clear:both">
+        <img class = "p-pic" src={{full.Pic}} style="width: 160px;height:160px" ng-click="modal.show()"/>
+
+      </div>
+      <div class = "item item-divider" style= "text-align:center"> 
+        <i style= "text-align:center; font-size: 20px;"> {{ full.FName}} {{ full.LName}} </i>
+      </div> 
+
+      <p class="ion-location icon-color" style="text-align:center"> {{full.City}}</p>
+
+      
+    </div>
+
+        <div class="card card-contact-info">
+        <div class="card-edit-header">
+            <span> Contact Info </span>
+            
+        </div>
+        <div class="card-content">
+            <div class="card-content-item">
+                <span class="item-name">Mobile Phone</span>
+                <span class="item-value"> {{full.Phone}} </span>
+            </div>
+            <div class="card-content-item">
+                <span class="item-name">Email Address</span>
+                <span class="item-value">{{full.Email}}</span>
+            </div>
+         
+        
+    </div>
+</div>
+
+
+    <div class = "card" style="padding:0px"> 
+        <button class = "button button-block button-positive" style="margin:0px"> Add me to the group </button> 
+    </div>  
+
+</ion-content>
+</ion-view>
