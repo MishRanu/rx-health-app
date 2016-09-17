@@ -297,7 +297,7 @@ $ionicConfigProvider.tabs.position('top');
         controller: 'SearchCtrl'
     })
      .state('search1', {
-        url: '/search/:CurrentState',
+        url: '/search/:UserID/:CurrentState',
         templateUrl: 'templates/searchtemplate.html',
         controller: 'pSearchCtrl'
     })
