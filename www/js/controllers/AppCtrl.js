@@ -9,7 +9,7 @@ app.controller('tabsController', function($scope, $ionicSideMenuDelegate, ionicM
 })
  
 
- app.controller('AppCtrl', function ($scope, $ionicLoading, Http, $stateParams, $state, $ionicModal, $ionicPopover, $timeout, $ionicSideMenuDelegate, ionicMaterialInk) {
+ app.controller('AppCtrl', function ($scope, $rootScope, $ionicLoading, Http, $stateParams, $state, $ionicModal, $ionicPopover, $timeout, $ionicSideMenuDelegate, ionicMaterialInk) {
 
 
 
@@ -50,7 +50,7 @@ app.controller('tabsController', function($scope, $ionicSideMenuDelegate, ionicM
           noBackdrop: true
         });
         Http.post('pmenutab', {
-          "UserID": '2'
+          "UserID": $rootScope.UserID
         })
         .success(function(data) {
           $scope.ResponseCode = data.Status.ResponseCode;

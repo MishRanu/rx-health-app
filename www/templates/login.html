@@ -1,0 +1,32 @@
+<ion-view view-title="Login"  class="view-background" hide-nav-bar="true">
+  <ion-content scroll="false">
+    <div style="margin-top:30%; text-align:center">
+      <img src="img/logo-app.png" style="width:50%;">
+    </div>
+    <div style="margin-top:20%; text-align:center" ng-click="signupfunction($event)">
+      <h5 style="color: #727272">Not a member yet? <u>Sign Up</u> </h5>
+    </div>
+
+    <div class="list">
+      <label class="item item-input item-floating-label mine-item ">
+        <span class="input-label" style="color: #727272; padding-left: 15px; font-size: 13px">Phone Number</span>
+        <input class="icolor" type="tel" placeholder="Phone Number" style="padding-left: 15px" ng-model="user.phone">
+      </label>
+
+      <label class="item item-input item-floating-label ">
+        <span class="input-label" style="color: #727272; padding-left: 15px; font-size: 13px">Password</span>
+        <input class="icolor" type="password" placeholder="Password" style="padding-left: 15px; " ng-model="user.password">
+      </label>
+    </div>
+    <div class="padding">
+      <button class="button button-block button-positive" ng-click="signIn(user)">
+        Sign-In
+      </button>
+      </div>
+      <div style="text-align: center" ng-click ="forgotfunction()">
+
+        <a>Forgot password</a>
+
+    </div>
+  </ion-content>
+</ion-view>

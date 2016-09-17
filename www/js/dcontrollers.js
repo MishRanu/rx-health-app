@@ -680,7 +680,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
 
 })
 
-.controller('dGroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
+.controller('dGroupsCtrl', function($scope, $rootScope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
 
   $timeout(function() {
     ionicMaterialMotion.fadeSlideInRight({
@@ -726,7 +726,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
       $state.go('dapp.dtabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
     };
 	Http.post('getcommunities', {
-      'UserID': 1
+      'UserID': $rootScope.UserID
     })
     .success(function(data) {
       $scope.ResponseCode = data.Status.ResponseCode;
@@ -1167,7 +1167,7 @@ else{
     // $scope.$parent.setHeaderFab(false);
 
     // Activate ink for controller
-    $scope.CommuID =  $stateParams.CommuID;
+  
     ionicMaterialInk.displayEffect();
     $scope.CommuID =  $stateParams.CommuID;
     $scope.UserType = $stateParams.UserType;
@@ -1210,7 +1210,7 @@ else{
 
   })
 
-.controller('dPersonProfileCtrl', function($scope, Http, $ionicPopup, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk, $ionicLoading) {
+.controller('dPersonProfileCtrl', function($scope, Http, $cordovaPreferences, $ionicPopup, $rootScope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk, $ionicLoading) {
     // $timeout(function() {
     //     ionicMaterialMotion.slideUp({
     //         selector: '.slide-up'
@@ -1223,7 +1223,20 @@ else{
     //     });
     // }, 700);
 
-    $scope.PersonID= $stateParams.UserID;
+
+    $cordovaPreferences.fetch('UserID')
+    .success(function(value) {
+            //alert("Success: " + value);
+            $rootScope.UserID = value;
+          })
+    .error(function(error) {
+      alert("Error: " + error);
+    })
+
+
+
+console.log($rootScope.UserID);
+    $scope.PersonID= $stateParams.PersonID;
     // Set Ink
     ionicMaterialInk.displayEffect();
 
@@ -1265,7 +1278,7 @@ else{
         $scope.personconnectCommunities = data.Status.connectCommunities;
         $scope.len= $scope.personconnectCommunities.length;
         console.log($scope.len);
-        console.log(data.Status);
+        console.log("Hi", data.Status);
         // $scope.communities = angular.extend({}, $scope.adminCommunities, $scope.myCommunities);
 // console.log($scope.communities);
         // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
@@ -1278,14 +1291,15 @@ else{
         $ionicLoading.hide();
       });
 
-$scope.UserID= 1; 
+ 
 $scope.flag= 1;
 
-if($scope.PersonID==$scope.UserID)
+if($scope.PersonID==$rootScope.UserID)
   $scope.flag = 0; 
 
+console.log($rootScope.UserID);
   Http.post('getcommunities', {
-      'UserID': $scope.UserID
+      'UserID': $rootScope.UserID
     })
     .success(function(data) {
       $scope.ResponseCode = data.Status.ResponseCode;
@@ -1309,9 +1323,9 @@ if($scope.PersonID==$scope.UserID)
         alert("error" + data);
         $ionicLoading.hide();
       });
-$scope.selectcommunity;
 
-$scope.communities=[]; 
+$scope.selectedcommunity;
+
 
 
 
@@ -1343,7 +1357,7 @@ $scope.addConnection = function(){
   
           $ionicPopup.alert({
           title: 'Success',
-          template: 'Person has been added to the group'
+          template: 'Request to add successfully sent'
         });
 
       } else {
@@ -1407,7 +1421,7 @@ $scope.addConnection = function(){
     };
 
     $scope.goPeople=function(person){
-      $state.go('dapp.people', {UserID: person.UserID}, {reload:false})
+      $state.go('dapp.people', {PersonID: person.UserID}, {reload:false})
       console.log(person); 
     }
 

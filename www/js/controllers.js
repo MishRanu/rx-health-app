@@ -191,13 +191,13 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 }
 
   $scope.$on('$ionicView.beforeEnter', function() {
-   // $rootScope.UserID = 1;
+  
    $ionicLoading.show({
     template: 'Loading...',
     noBackdrop: true
   });
    Http.post('getpatientprofile2', {
-    "UserID": '2'
+    "UserID": $rootScope.UserID
   })
    .success(function(data) {
     $scope.ResponseCode = data.Status.ResponseCode;
@@ -598,12 +598,12 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 })
 
 
-.controller('GroupsCtrl', function($scope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
-    var communities = Http.getdata('communities').data;
+.controller('GroupsCtrl', function($scope, $rootScope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
+    // var communities = Http.getdata('communities').data;
     // $scope.myCommunities = communities.myCommunities;
-    $scope.connectCommunities = communities.connectCommunities;
+    // $scope.connectCommunities = communities.connectCommunities;
     // $scope.adminCommunities = communities.adminCommunities;
-    $scope.following = communities.following;
+    // $scope.following = communities.following;
     $timeout(function() {
         ionicMaterialMotion.fadeSlideInRight({
             startVelocity: 3000
@@ -626,29 +626,29 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       $state.go('app.tabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
 
     };
-    // Http.post('getcommunities', {
-    //   'UserID': 1
-    // })
-    // .success(function(data) {
-    //   $scope.ResponseCode = data.Status.ResponseCode;
-    //   $scope.ResponseMessage = data.Status.ResponseMessage;
-    //   $ionicLoading.hide();
-    //   if ($scope.ResponseCode == 200) {
-    //     $scope.myCommunities = data.Status.myCommunities;
-    //     $scope.connectCommunities = data.Status.connectCommunities;
-    //
-    //     $scope.adminCommunities = data.Status.adminCommunities;
-    //     $scope.following = data.Status.following;
-    //     console.log(data.Status);
-    //     // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
-    //   } else {
-    //     alert($scope.ResponseMessage);
-    //   }
-    // }).error(function(data, status, headers, config) {
-    //     //$scope.data.error={message: error, status: status};
-    //     alert("error" + data);
-    //     $ionicLoading.hide();
-    //   });
+    Http.post('getcommunities', {
+      'UserID': $rootScope.UserID
+    })
+    .success(function(data) {
+      $scope.ResponseCode = data.Status.ResponseCode;
+      $scope.ResponseMessage = data.Status.ResponseMessage;
+      $ionicLoading.hide();
+      if ($scope.ResponseCode == 200) {
+        // $scope.myCommunities = data.Status.myCommunities;
+        $scope.connectCommunities = data.Status.connectCommunities;
+    
+        // $scope.adminCommunities = data.Status.adminCommunities;
+        $scope.following = data.Status.following;
+        console.log(data.Status);
+        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+      } else {
+        alert($scope.ResponseMessage);
+      }
+    }).error(function(data, status, headers, config) {
+        //$scope.data.error={message: error, status: status};
+        alert("error" + data);
+        $ionicLoading.hide();
+      });
 
     $scope.isExpanded = false;
 
@@ -737,7 +737,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
       $scope.Notifications = temp.data;
       var dat = new Date()
       var l = Math.floor((dat.getTime()-temp.extras.getTime())/1000);
-      var i;
+       var i;
       for(i=0;i < $scope.Notifications.length;i++){
         $scope.Notifications[i].NGT+= l;
       }
@@ -809,6 +809,325 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 
 // })
+
+
+//////////Login controller //////////////
+.controller('LoginCtrl', function($scope, $cordovaPreferences, $rootScope, $ionicLoading, $http, $stateParams, $state, $ionicPlatform, $ionicPopup, Http) {
+  //$scope.user.password = 'lala';
+  $scope.signupfunction = function(obj) {
+    $state.go('signup');
+  }
+    $scope.user = {};
+
+
+$scope.forgotfunction = function() {
+  Http.setdata(false, 'changepass');
+  $state.go('forgotpassword');
+}
+
+$scope.signIn = function(user) {
+  if (user.phone && user.password) {
+    $ionicLoading.show({
+      template: 'Loading...',
+      noBackdrop: true
+    });
+      Http.post('signin', {
+        'Phone': user.phone,
+        'Password': user.password,
+        'RegistrationID': '12345',
+        'DeviceID': $rootScope.uuid
+
+          })
+      .success(function(data) {
+        $scope.ResponseCode = data.Status.ResponseCode;
+        $scope.ResponseMessage = data.Status.ResponseMessage;
+        $ionicLoading.hide();
+        if ($scope.ResponseCode == 200) {
+          $rootScope.IsLoggedIn = true;
+          $scope.UserID = data.Status.UserID;
+          $rootScope.UserID = $scope.UserID;
+          console.log($rootScope.UserID);
+          $scope.IsAdmin = data.Status.IsAdmin;
+          $cordovaPreferences.store('UserID', $rootScope.UserID)
+          .success(function(value) {
+                  //alert("Success: " + value);
+                })
+          .error(function(error) {
+            alert("Error: " + error);
+          })
+          $cordovaPreferences.store('IsDoctor', data.Status.IsDoctor)
+          .success(function(value) {
+                 // alert("Success: " + value);
+               })
+          .error(function(error) {
+            alert("Error: " + error);
+          })
+          $cordovaPreferences.store('IsLoggedIn', 1)
+          .success(function(value) {
+                 // alert("Success: " + value);
+               })
+          .error(function(error) {
+            alert("Error: " + error);
+          })
+          if (data.Status.IsDoctor == 0)
+            $state.go('app.tabs.symptify');
+          else
+            if (data.Status.IsDoctor == 1)
+              $state.go('dapp.dtabs.symptify');
+            else
+              $state.go('dapp.dtabs.symptify');
+          
+
+        Http.post('getcommunities', {
+          'UserID': $rootScope.UserID
+        })
+        .success(function(data) {
+          $ionicLoading.hide();
+          if (data.Status.ResponseCode == 200) {
+            var communities = {};
+            communities.myCommunities = data.Status.myCommunities;
+            communities.connectCommunities = data.Status.connectCommunities;
+            communities.adminCommunities = data.Status.adminCommunities;
+            communities.following = data.Status.following;
+            Http.setdata(communities,'communities');
+            // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
+            //$cordovaSplashscreen.hide();
+          } else {
+            alert(data.Status.ResponseMessage);
+          }
+        }).error(function(data, status, headers, config) {
+            //$scope.data.error={message: error, status: status};
+            alert("error" + data);
+            $ionicLoading.hide();
+          });
+          Http.post('getnotifications',{UserID : $rootScope.UserID})
+          .success(function(data){
+            if(data.Status.ResponseCode == 200){
+              Http.setdata(data.Status.Notifications,'notifications',new Date());
+            }else{
+              $ionicPopup.alert({
+                title: 'Message',
+                template: data.Status.ResponseMessage
+              });
+            }
+          })
+          .error(function(data){
+            console.log("error" + data);
+          });
+
+
+
+          }
+
+
+          // if(!$rootScope.IsDoctor){
+          //   $state.go('tab.pmenu');
+          //   $rootScope.IsLoggedIn = true;
+          // };
+          // }
+          else {
+            $ionicPopup.alert({
+              title: 'Message',
+              template: $scope.ResponseMessage
+            });
+          }
+          //return data
+        }).error(function(data) {
+          //$scope.data.error={message: error, status: status};
+          console.log("error" + data);
+          $ionicLoading.hide();
+        });
+      } else
+      $ionicPopup.alert({
+        title: 'Message',
+        template: 'Please enter your phone number and password!'
+      });
+    };
+  })
+
+//-------- Forgot Password Controller -----//
+.controller('ForgotPasswordCtrl', function($scope, $rootScope, $state, $ionicPopup, $ionicHistory, Http, $ionicLoading) {
+  $scope.$on("$ionicView.beforeEnter", function(){
+    $scope.changepass = Http.getdata('changepass').data;
+    if($scope.changepass){
+      $scope.div1 = false;
+      $scope.div2 = true;
+    }else{
+      $scope.div1 = true;
+      $scope.div2 = false;
+    }
+  });
+  $scope.u = {};
+  $scope.forgotpass = function(u) {
+    $scope.phone = u.phone;
+    $scope.maskmail = 'blabka@bla.com';
+    $scope.code = '1234';
+    $scope.showPopup();
+  };
+
+  $scope.updatepass = function(u,pw) {
+    if($scope.changepass){
+      Http.post('checkpassword',{'pass' : u.opass.toString(), 'UserID' : $rootScope.UserID})
+      .success(function(data){
+        $scope.ResponseCode = data.Status.ResponseCode;
+        $scope.Result = data.Status.Result;
+        if($scope.ResponseCode  == 200){
+          if($scope.Result === "true"){
+            $scope.check(u,pw);
+          }else{
+            $ionicLoading.show({
+              template: 'Incorrect Current Password',
+              noBackdrop: true,
+              duration : 1000
+            });
+          }
+        }
+      })
+      .error(function(data){
+        console.log(data);
+      })
+    }else{
+      $scope.check(u);
+    }
+  };
+
+  $scope.check = function(u,pw){
+    if (pw == u.cpass) {
+      $ionicLoading.show({
+        template: 'Password successfully updated. Please Login with new password',
+        noBackdrop: true,
+        duration : 1000
+      });
+      $ionicHistory.nextViewOptions({
+        disableBack: true
+      });
+      $state.go('login');
+    }else{
+      $ionicLoading.show({
+        template: "Password doesn't match",
+        noBackdrop: true,
+        duration : 1000
+      });
+    }
+  }
+
+  $scope.showPopup = function() {
+    $scope.data = {};
+
+    // An elaborate, custom popup
+    var myPopup = $ionicPopup.show({
+      template: '<input type="password" ng-model="data.code">',
+      title: 'Enter Verification Code sent to your registered email: ' + $scope.maskmail,
+      scope: $scope,
+      buttons: [{
+        text: 'Cancel'
+      }, {
+        text: '<b>OK</b>',
+        type: 'button-positive',
+        onTap: function(e) {
+          if (!$scope.data.code) {
+            //don't allow the user to close unless he enters wifi password
+            e.preventDefault();
+          } else {
+            return $scope.data.code;
+          }
+        }
+      }]
+    });
+    myPopup.then(function(res) {
+      if (res) {
+        if (res == $scope.code) {
+          $scope.div1 = false;
+          $scope.div2 = true;
+        }
+      }
+    });
+  };
+
+})
+
+//------------------- Sign Up COntroller ------------------------//
+
+.controller('SignUpCtrl', function($scope, Http, $state, $ionicPopup, $ionicLoading) {
+  $scope.user = {};
+  $scope.user.isdoctor = true;
+  $scope.w = [];
+  for (i = 2016; i >= 1950; i--) {
+    $scope.w.push(i);
+  }
+
+  Http.get('council')
+
+  .success(function(data) {
+    $scope.assoc = data.Status.Council;
+    //return data
+  }).error(function(data, status, headers, config) {
+    //$scope.data.error={message: error, status: status};
+    alert("error" + data);
+  });
+
+  $scope.newuser = function(user) {
+    if (user.isChecked) {
+      console.dir(user);
+      if (user.phone && user.password && user.email && user.fname && user.lname) {
+        $ionicLoading.show({
+          template: 'Loading...',
+          noBackdrop: true
+        });
+
+        Http.post('council', {
+          'Phone': user.phone,
+          'Password': sjcl.encrypt(user.phone.toString(),user.password.toString()).ct,
+          'Email': user.email,
+          'FName': user.fname,
+          'LName': user.lname,
+          'IsDoctor': user.isdoctor,
+          'RegYear': user.regyear,
+          'RegNo': user.regno,
+          'RegAssoc': user.regassoc
+        })
+
+        .success(function(data) {
+
+          $scope.ResponseCode = data.Status.ResponseCode;
+          $scope.ResponseMessage = data.Status.ResponseMessage;
+          $ionicLoading.hide();
+          if ($scope.ResponseCode == 200) {
+            $ionicPopup.alert({
+              title: 'Message',
+              template: 'User registered successfully, please login!'
+            });
+            $state.go('login');
+          } else {
+            $ionicPopup.alert({
+              title: 'Message',
+              template: $scope.ResponseMessage
+            });
+          }
+          //return data
+        }).error(function(data, status, headers, config) {
+          //$scope.data.error={message: error, status: status};
+          alert("error" + data);
+          $ionicLoading.hide();
+        });
+      } else {
+        $ionicPopup.alert({
+          title: 'Message',
+          template: 'All fields are mandatory on this page, please enter proper details.'
+        });
+      }
+    } else
+    $ionicPopup.alert({
+      title: 'Message',
+      template: 'Please accept the terms and conditions.'
+    });
+  };
+
+})
+
+
+
+
 
 .controller('pSearchCtrl', function($state,$scope,Http, $stateParams,$rootScope, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
     $scope.CurrentState =  $stateParams.CurrentState;
