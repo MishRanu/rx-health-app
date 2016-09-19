@@ -210,7 +210,7 @@ angular.module('starter.directives', [])
        }
 
        $scope.likeArticle = function(index) {
-
+        console.log('mama');
          if($rootScope.UserID && $scope.feeds[index].Liked == 0){
            Http.post('likearticle', {
             'UserID': $rootScope.UserID,

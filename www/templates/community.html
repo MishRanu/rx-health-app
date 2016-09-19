@@ -27,67 +27,31 @@
                 <i class="icon ion-images"></i> Followers
             </a>
         </div>
- --><!--         <h4 class="content padding double-padding-x">Following</h4>
- -->   <!--      <div class="list animate-fade-slide-in-right">
-            <a ui-sref="app.friends" class="item item-avatar item-icon-right">
-                <img src="img/jon-snow.jpg">
-                <h2>Jon Snow</h2>
-                <p>Da illest illegitimate</p>
-                <i class="icon ion-chatbubble muted"></i>
-            </a>
-            <a ui-sref="app.friends" class="item item-avatar item-icon-right">
-                <img src="img/sansa.jpg">
-                <h2>Sansa Stark</h2>
-                <p>&amp; Joffrey <strike>sitting</strike> sat in a tree</p>
-                <i class="icon ion-chatbubble muted"></i>
-            </a>
-            <a ui-sref="app.friends" class="item item-avatar item-icon-right">
-                <img src="img/tyrion.jpg">
-                <h2>Tyrion Lannister</h2>
-                <p>B.A.M.F. imp</p>
-                <i class="icon ion-chatbubble muted"></i>
-            </a>
-        </div>
+ -
  -->
         <!-- <div class = "cards">  -->
-            <div class = "item no-padding">
+           <!--  <div class = "item no-padding"> -->
                 <!--                <a class="button option button-clear" ng-click="openPopover($event)">
   <i class="icon dark ion-chevron-down"></i>
 </a> -->
-            <div class="list card clear-bg ink">
-<!--                <a class="button option button-clear" ng-click="openPopover($event)">
+          <!--   <div class="list card clear-bg ink">
+               <a class="button option button-clear" ng-click="openPopover($event)">
   <i class="icon dark ion-chevron-down"></i>
-</a> -->
+</a>
             <a class = "option" on-tap="openPopover($event)"><i class="icon ion-chevron-down" style="font-size:15px"></i></a>
-<!-- 
-            <a class = "icon option ion-chevron-down" ng-click="openPopover($event)"> </a>  -->
-                <div class="item item-avatar">
-                    <img src="img/arya.jpg">
-                    <h2>Arya Stark</h2>
-                    <p>"Joffrey. Cersei. Ilyn Payne. Hound. Polliver. The Mountain."</p>
-                </div>
-                <div class="item item-body">
-                    <img src="img/newmaterial.jpg">
-                <p>  The quickest way to a man's heart is through Arya's needle. She has two speeds: Walk and Kill, and is the reason why Waldo is still hiding. </p>
-                    <p>
-                        <a class="subdued">1 Like</a>
-                        <a class="subdued">5 Comments</a>
-                    </p>
-                </div>
-                <div class="item tabs tabs-positive tabs-secondary tabs-icon-left">
-                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5">
-                        <i class="icon ion-thumbsup"></i> Like
-                    </a>
-                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ui-sref="comments" class = "animate up-down">
-                        <i class="icon ion-chatbox"></i> Comment
-                    </a>
-                    <a class="tab-item" data-ink-color="#336699" data-ink-opacity="0.5" ng-click="showPopup()">
-                        <i class="icon ion-share"></i> Share
-                    </a>
-                </div>
+  -->       <div ng-hide ="Isfollow">
+            <button class="button button-block button-calm">
+               Follow 
+            </button>
+
+            </div>
+            <div ng-show ="Isfollow">
+                 <feed prefs="Prefs" community="CommuID" shrid="ShrID"></feed>
+            </div>
+           
   
-            </div>
-            </div>
+           <!--  </div>
+            </div> -->
 
     </ion-content>
 </ion-view>
