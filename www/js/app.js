@@ -5,12 +5,47 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('starter', ['ionic', 'ionic-material' ,'starter.services', 'starter.directives', 'starter.controllers', 'starter.dcontrollers', 'ngCordova']);
 
-app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ionicLoading, $cordovaSplashscreen, $rootScope) {
+
+ // $cordovaPush, $cordovaMedia, $rootScope, $cordovaDialogs, $cordovaGeolocation, $cordovaPreferences, $cordovaDevice
+
+app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $cordovaPreferences, $ionicLoading, $cordovaSplashscreen, $rootScope) {
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         //$cordovaSplashscreen.show();
-        $rootScope.UserID = 1;
+
+  if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    cordova.plugins.Keyboard.disableScroll(true);
+
+  }
+  if (window.StatusBar) {
+      // org.apache.cordova.statusbar required
+      StatusBar.styleDefault();
+    }
+    //$rootScope.uuid = $cordovaDevice.getUUID();
+    $rootScope.uuid = null;
+    $cordovaPreferences.fetch('UserID')
+    .success(function(value) {
+            //alert("Success: " + value);
+            $rootScope.UserID = value;
+          })
+    .error(function(error) {
+      alert("Error: " + error);
+    })
+    $cordovaPreferences.fetch('IsDoctor')
+    .success(function(value) {
+            //alert("Success: " + value);
+            $rootScope.IsDoctor = value;
+            if(value == 1)
+              $state.go('dapp.dtabs.symptify');
+            if(value == 0)
+              $state.go('app.tabs.symptify');
+          })
+    .error(function(error) {
+      alert("Error: " + error);
+    })
+
 
         Http.post('getcommunities', {
           'UserID': $rootScope.UserID
@@ -48,13 +83,12 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $ioni
           .error(function(data){
             console.log("error" + data);
           });
-        if (window.cordova && window.cordova.plugins.Keyboard) {
-            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        }
-        if (window.StatusBar) {
-            StatusBar.styleDefault();
-        }
-    });
+
+
+
+  });
+
+
 })
 
 app.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
@@ -63,6 +97,30 @@ $ionicConfigProvider.views.transition('ios');
 $ionicConfigProvider.tabs.position('top');
 
     $stateProvider
+
+    ////login////////////
+    .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl'
+    })
+
+    ///// sign up ///////////
+    .state('signup',{
+      url: '/signup',
+      templateUrl: 'templates/signup.html',
+      controller: 'SignUpCtrl'
+    })
+
+    //////// forgot password //////
+    .state('forgotpassword', {
+      url: '/forgotpassword',
+      templateUrl: 'templates/forgotpassword.html',
+      controller: 'ForgotPasswordCtrl'
+    })
+
+
+
 
     .state('app', {
         url: '/app',
@@ -239,7 +297,7 @@ $ionicConfigProvider.tabs.position('top');
         controller: 'SearchCtrl'
     })
      .state('search1', {
-        url: '/search/:CurrentState',
+        url: '/search/:UserID/:CurrentState',
         templateUrl: 'templates/searchtemplate.html',
         controller: 'pSearchCtrl'
     })
@@ -375,7 +433,7 @@ $ionicConfigProvider.tabs.position('top');
     })
 
     .state('dapp.people', {
-        url: '/people/:UserID',
+        url: '/people/:PersonID',
         views: {
             'dmenuContent': {
                 templateUrl: 'dtemplates/personprofile.html',
@@ -489,7 +547,7 @@ $ionicConfigProvider.tabs.position('top');
     ;
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/welcome');
+    $urlRouterProvider.otherwise('/login');
 })
 
 app.controller('UploadController', function ($scope, $ionicLoading, $rootScope){
