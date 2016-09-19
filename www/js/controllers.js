@@ -718,7 +718,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, $state, Http, $scope, $stateParams, $timeout,$interval, ionicMaterialInk, ionicMaterialMotion) {
+.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, $ionicLoading, $state, Http, $scope, $stateParams, $timeout,$interval, ionicMaterialInk, ionicMaterialMotion) {
     // Set Header
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -758,6 +758,33 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     // Set Ink
     ionicMaterialInk.displayEffect();
 
+    $scope.accrej = function(accept,notification){
+      var options = {NID : notification.NID};
+      if(accept){
+        options.Accept = 'zeher';
+      }
+      Http.post('acceptcommunityrequest',options)
+      .success(function(data){
+        if(data.Status.ResponseCode == 200){
+          $ionicLoading.show({
+           template: 'Request Accepted',
+           duration : 500
+          });
+        }else{
+          $ionicLoading.show({
+           template: data.Status.ResponseMessage,
+           duration : 500
+          });
+        }
+      })
+      .error(function(data){
+        $ionicPopup.alert({
+          title: 'Error',
+          template: data
+        });
+      })
+    }
+
     $scope.doit = function(notification){
       console.log(notification.Type);
       switch(notification.Type){
@@ -771,16 +798,12 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
         break;
         case "14":
-        console.log("sad");
-        console.dir(notification);
         $state.go('app.tabs.feed',{ShrID : notification.Extra.ShrID});
-
         break;
         case "15":
         $state.go('app.tabs.feed',{ShrID : notification.Extra.ShrID});
         break;
         case "16":
-        console.dir(notification);
         $state.go('app.tabs.feed',{ShrID : notification.Extra.ShrID});
         break;
       }
