@@ -94,6 +94,8 @@ angular.module('starter.directives', [])
     },
     templateUrl : 'templates/articlelist.html',
     link: function($scope, element,attrs) {
+      $scope.likedisabled = false;
+      $scope.IDE = $rootScope.UserID;
       $scope.refresh = function(counter){
         var feeds = {};
         $ionicLoading.show({
@@ -210,53 +212,60 @@ angular.module('starter.directives', [])
        }
 
        $scope.likeArticle = function(index) {
-        console.log('mama');
-         if($rootScope.UserID && $scope.feeds[index].Liked == 0){
-           Http.post('likearticle', {
-            'UserID': $rootScope.UserID,
-            'ShrID': $scope.feeds[index].ShrID,
-              'Like': 'suar' // Like key for like and no Like key for unlike
-            })
-           .success(function(data){
-             $scope.ResponseCode = data.Status.ResponseCode;
-             $scope.ResponseMessage = data.Status.ResponseMessage;
-             if ($scope.ResponseCode == 200) {
-               $scope.feeds[index].Likes++;
-               $scope.feeds[index].Liked = 1;
-             }
-             else {
-               $ionicPopup.alert({
-                 title: 'Message',
-                 template: $scope.ResponseMessage
-               });
-             }
-           })
-           .error(function(data){
-             console.log('You are ');
-           });
-         }else {
-           Http.post('likearticle', {
-            'UserID': $rootScope.UserID,
-            'ShrID': $scope.feeds[index].ShrID,
-             // Like key for like and no Like key for unlike
-            })
-           .success(function(data){
-             $scope.ResponseCode = data.Status.ResponseCode;
-             $scope.ResponseMessage = data.Status.ResponseMessage;
-             if ($scope.ResponseCode == 200) {
-               $scope.feeds[index].Likes--;
-               $scope.feeds[index].Liked = 0;
-             }else{
-               $ionicPopup.alert({
-                 title: 'Message',
-                 template: $scope.ResponseMessage
-               });
-             }
-           })
-           .error(function(data){
-             console.log('You are not sure');
-           });
-         };
+         if(!$scope.likedisabled){
+           $scope.likedisabled = true;
+           $timeout(function(){
+             $scope.likedisabled = false;
+           },1000);
+           console.log($scope.likedisabled);
+           if($rootScope.UserID && $scope.feeds[index].Liked == 0){
+             Http.post('likearticle', {
+              'UserID': $rootScope.UserID,
+              'ShrID': $scope.feeds[index].ShrID,
+                'Like': 'suar' // Like key for like and no Like key for unlike
+              })
+             .success(function(data){
+               $scope.ResponseCode = data.Status.ResponseCode;
+               $scope.ResponseMessage = data.Status.ResponseMessage;
+               if ($scope.ResponseCode == 200) {
+                 $scope.feeds[index].Likes++;
+                 $scope.feeds[index].Liked = 1;
+               }
+               else {
+                 $ionicPopup.alert({
+                   title: 'Message',
+                   template: $scope.ResponseMessage
+                 });
+               }
+               console.log($scope.likedisabled);
+             })
+             .error(function(data){
+               console.log('You are ');
+             });
+           }else {
+             Http.post('likearticle', {
+              'UserID': $rootScope.UserID,
+              'ShrID': $scope.feeds[index].ShrID,
+               // Like key for like and no Like key for unlike
+              })
+             .success(function(data){
+               $scope.ResponseCode = data.Status.ResponseCode;
+               $scope.ResponseMessage = data.Status.ResponseMessage;
+               if ($scope.ResponseCode == 200) {
+                 $scope.feeds[index].Likes--;
+                 $scope.feeds[index].Liked = 0;
+               }else{
+                 $ionicPopup.alert({
+                   title: 'Message',
+                   template: $scope.ResponseMessage
+                 });
+               }
+             })
+             .error(function(data){
+               console.log('You are not sure');
+             });
+           };
+         }
        }
        var template = '<ion-popover-view style="height:110px"> ' +
                       '   <ion-content >' +
@@ -323,7 +332,7 @@ angular.module('starter.directives', [])
    		 $scope.ResponseMessage = data.Status.ResponseMessage;
    		 $ionicLoading.hide();
    		 if ($scope.ResponseCode == 200) {
-   			 var newcomment = {'Comment' : comment, 'IsAnon' : anon, 'Replies' : {}, 'ComID' : data.Status.ComID, FullName : "Jon Snow"};
+   			 var newcomment = {'Comment' : comment, 'IsAnon' : anon, 'Replies' : {}, 'ComID' : data.Status.ComID, FullName : "Jon Snow", UserID : $rootScope.UserID};
    			 $scope.comments.push(newcomment);
    			 $scope.commentmodal.someotherProperty = "";
    			 $scope.commentmodal.iscomanon = false;
@@ -362,7 +371,7 @@ angular.module('starter.directives', [])
    		 $scope.ResponseMessage = data.Status.ResponseMessage;
    		 $ionicLoading.hide();
    		 if ($scope.ResponseCode == 200) {
-   			 var newreply = {'RepID' : data.Status.RepID, 'Reply' : reply, 'IsAnon' : anon, FullName : "Jon Snow", "RepID" : data.Status.RepID};
+   			 var newreply = {'RepID' : data.Status.RepID, 'Reply' : reply, 'IsAnon' : anon, FullName : "Jon Snow", "RepID" : data.Status.RepID, UserID : $rootScope.UserID};
    			 $scope.comments[index].Replies.push(newreply);
    			 $scope.commentmodal.someProperty[index] = "";
    			 $scope.commentmodal.isrepanon[index] = false;

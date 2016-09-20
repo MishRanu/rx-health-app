@@ -10,7 +10,7 @@
             <div class="list">
                 <div class="item item-avatar ink item-text-wrap item-icon-right" ng-repeat = "comment in comments track by $index">
                     <img src="img/jon-snow.jpg">
-                    <h2>{{(comment.IsAnon == 1)?'Anonymous':comment.FullName}}</h2>
+                    <h2>{{(comment.IsAnon == 1 && comment.UserID != IDE)?'Anonymous':comment.FullName}}</h2>
                     <p>{{comment.Comment}}</p>
 										<div class="list" ng-if = "comment.Replies">
 											<div class="item item-icon-left" ng-click="comment.isrepopen = !comment.isrepopen">
@@ -19,12 +19,12 @@
 											</div>
 											<div ng-show = "comment.isrepopen" class="item item-avatar ink item-text-wrap item-icon-right" ng-repeat = "reply in comment.Replies">
 			                    <img src="img/jon-snow.jpg">
-			                    <h2>{{(reply.IsAnon == 1)?'Anonymous':reply.FullName}}</h2>
+			                    <h2>{{(reply.IsAnon == 1 && reply.UserID != IDE)?'Anonymous':reply.FullName}}</h2>
 			                    <p>{{reply.Reply}}</p>
 			                </div>
 											<div ng-show="comment.isrepopen" class="item item-avatar ink item-text-wrap item-icon-right">
 			                    <img src="img/jon-snow.jpg">
-			                    <h2>X</h2>
+			                    <h2>Jon Snow</h2>
 													<div class="list">
 														<textarea elastic class="item" placeholder="Write a reply..." ng-model="commentmodal.someProperty[$index]"></textarea>
 														<div class = "item item-checkbox checkbox-clam">
