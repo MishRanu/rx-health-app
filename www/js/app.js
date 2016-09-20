@@ -12,7 +12,7 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $cord
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
-        //$cordovaSplashscreen.show();
+        // $cordovaSplashscreen.show();
 
   if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -62,7 +62,7 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $cord
             console.dir(communities);
             Http.setdata(communities,'communities');
             // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
-            //$cordovaSplashscreen.hide();
+            // $cordovaSplashscreen.hide();
           } else {
             alert(data.Status.ResponseMessage);
           }
@@ -86,6 +86,7 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $cord
             console.log("error" + data);
           });
 
+            // $cordovaSplashscreen.hide();
 
 
   });
