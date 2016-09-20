@@ -25,26 +25,27 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $cord
     }
     //$rootScope.uuid = $cordovaDevice.getUUID();
     $rootScope.uuid = null;
-    $cordovaPreferences.fetch('UserID')
-    .success(function(value) {
-            //alert("Success: " + value);
-            $rootScope.UserID = value;
-          })
-    .error(function(error) {
-      alert("Error: " + error);
-    })
-    $cordovaPreferences.fetch('IsDoctor')
-    .success(function(value) {
-            //alert("Success: " + value);
-            $rootScope.IsDoctor = value;
-            if(value == 1)
-              $state.go('dapp.dtabs.symptify');
-            if(value == 0)
-              $state.go('app.tabs.symptify');
-          })
-    .error(function(error) {
-      alert("Error: " + error);
-    })
+    // $cordovaPreferences.fetch('UserID')
+    // .success(function(value) {
+    //         //alert("Success: " + value);
+    //         $rootScope.UserID = value;
+    //       })
+    // .error(function(error) {
+    //   alert("Error: " + error);
+    // })
+    // $cordovaPreferences.fetch('IsDoctor')
+    // .success(function(value) {
+    //         //alert("Success: " + value);
+    //         $rootScope.IsDoctor = value;
+    //         if(value == 1)
+    //           $state.go('dapp.dtabs.symptify');
+    //         if(value == 0)
+    //           $state.go('app.tabs.symptify');
+    //       })
+    // .error(function(error) {
+    //   alert("Error: " + error);
+    // })
+    $rootScope.UserID = 3;
 
 
         Http.post('getcommunities', {
@@ -58,6 +59,7 @@ app.run(function (Http,$ionicPlatform, $state, $ionicPopup, $ionicHistory, $cord
             communities.connectCommunities = data.Status.connectCommunities;
             communities.adminCommunities = data.Status.adminCommunities;
             communities.following = data.Status.following;
+            console.dir(communities);
             Http.setdata(communities,'communities');
             // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
             // $cordovaSplashscreen.hide();
@@ -264,11 +266,15 @@ $ionicConfigProvider.tabs.position('top');
 
 
         .state('app.tabs.community', {
-        url: '/pcommunity',
+        url: '/pcommunity/:CommuID/:IsFollow',
         views: {
             'groups': {
                 templateUrl: 'templates/community.html',
-                controller: 'CommunityCtrl'
+                controller: 'CommunityCtrl',
+                params: {
+                    CommuID : null,
+                    IsFollow : null
+                }
             },
             'fabContent': {
                 template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
@@ -548,7 +554,7 @@ $ionicConfigProvider.tabs.position('top');
     ;
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/welcome');
 })
 
 app.controller('UploadController', function ($scope, $ionicLoading, $rootScope){

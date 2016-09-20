@@ -52,11 +52,11 @@
 				Communities
 				</div>
 				<div class="list " >
-                <a  class="item item-avatar " ng-repeat = "community in querylist.Communities | filter : query| limitTo : 5" >
+                <a  class="item item-avatar " ng-repeat = "community in querylist.Communities | filter : query| limitTo : 5" ng-click="goToCommunity(community.CommuID)">
                     <img src="img/jon-snow.jpg">
                     <h2>{{community.Name}}</h2>
                     <div class="positive " >
-                     <i class="icon ion-android-happy "  ng-click="openPopover($event,item)"></i>     <span >Follow</span>
+                     <i class="icon ion-android-happy "  ng-click="openPopover($event,item)"></i><span >Follow</span>
                      </div>
 
                 </a>

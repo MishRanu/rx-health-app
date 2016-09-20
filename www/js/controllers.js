@@ -646,6 +646,9 @@ $scope.$on('$ionicView.enter', function(){
 .controller('CommunityCtrl', function($scope, $stateParams,$state, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     // Set Header
     console.log("dsds");
+    $scope.CommuID =  $stateParams.CommuID;
+    $scope.Isfollow = $stateParams.IsFollow;
+    console.log($scope.CommuID);
     // $scope.showHeader();
     // $scope.$parent.clearFabs();
     // $scope.isExpanded = false;
@@ -707,7 +710,7 @@ $scope.$on('$ionicView.enter', function(){
     ionicMaterialInk.displayEffect();
 })
 
-.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, $state, Http, $scope, $stateParams, $timeout,$interval, ionicMaterialInk, ionicMaterialMotion) {
+.controller('NotificationsCtrl', function($rootScope, Dates, $ionicPopup, $ionicLoading, $state, Http, $scope, $stateParams, $timeout,$interval, ionicMaterialInk, ionicMaterialMotion) {
     // Set Header
     // $scope.$parent.showHeader();
     // $scope.$parent.clearFabs();
@@ -747,6 +750,34 @@ $scope.$on('$ionicView.enter', function(){
     // Set Ink
     ionicMaterialInk.displayEffect();
 
+    $scope.accrej = function(accept,nid){
+      var options = {NID : nid};
+      if(accept){
+        console.log(9);
+        options.Accept = 'zeher';
+      }
+      Http.post('acceptcommunityrequest',options)
+      .success(function(data){
+        if(data.Status.ResponseCode == 200){
+          $ionicLoading.show({
+           template: 'Request Accepted',
+           duration : 500
+          });
+        }else{
+          $ionicPopup.alert({
+            title: 'Error',
+            template: data.Status.ResponseMessage
+          });
+        }
+      })
+      .error(function(data){
+        $ionicPopup.alert({
+          title: 'Error',
+          template: data
+        });
+      })
+    }
+
     $scope.doit = function(notification){
       console.log(notification.Type);
       switch(notification.Type){
@@ -760,16 +791,12 @@ $scope.$on('$ionicView.enter', function(){
 
         break;
         case "14":
-        console.log("sad");
-        console.dir(notification);
         $state.go('app.tabs.feed',{ShrID : notification.Extra.ShrID});
-
         break;
         case "15":
         $state.go('app.tabs.feed',{ShrID : notification.Extra.ShrID});
         break;
         case "16":
-        console.dir(notification);
         $state.go('app.tabs.feed',{ShrID : notification.Extra.ShrID});
         break;
       }
@@ -783,7 +810,6 @@ $scope.$on('$ionicView.enter', function(){
     ionicMaterialInk.displayEffect();
 	$scope.me="Fuck";
 })
-
 // .controller('CommentsCtrl', function($scope, $stateParams, $state, $timeout, ionicMaterialInk, ionicMaterialMotion){
 
 //     ionicMaterialInk.displayEffect();
@@ -1137,6 +1163,36 @@ $scope.signIn = function(user) {
       }
       $state.go('app.tabs.feed',{ Prefs : obj});
     }
+    $scope.goToCommunity = function(CommuID){
+      var temp = Http.getdata('communities').data;
+      var i,j,k,m;
+      var check = function(){
+        for(i = 0;i < temp.myCommunities.length ;i++){
+          if(temp.myCommunities.ComID == CommuID){
+            return true;
+          }
+        }
+        for(j = 0;i < temp.following.length ;i++){
+          if(temp.following.ComID == CommuID){
+            return true;
+          }
+        }
+        for(i = 0;i < temp.adminCommunities.length ;i++){
+          if(temp.adminCommunities.ComID == CommuID){
+            return true;
+          }
+        }
+        for(i = 0;i < temp.connectCommunities.length ;i++){
+          if(temp.connectCommunities.ComID == CommuID){
+            return true;
+          }
+        }
+        return false;
+      }
+      var Isfollow = check();
+      $state.go('app.tabs.community', { CommuID : CommuID, IsFollow : Isfollow}, {reload:false});
+
+    };
     $scope.$on('$ionicView.beforeEnter', function(event, viewData) {
       viewData.enableBack = true;
     });

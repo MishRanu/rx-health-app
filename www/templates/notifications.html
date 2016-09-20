@@ -3,10 +3,21 @@
     <ion-content>
         <div class="content">
             <div class="list animate-fade-slide-in-right">
-                <div class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{'background-color' : notification.Viewed}" ng-repeat="notification in Notifications" ng-click="doit(notification)">
+                <div  ng-repeat="notification in Notifications" >
+                    <div ng-if = "notification.Type == 11" class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{'background-color' : notification.Viewed}" ng-click="doit(notification)" >
+                    <img ng-src="{{notification.Pic}}">
+                    <p>{{notification.Summary}}</p>
+                    <p>{{stringify(notification.NGT)}} </p>
+                    <div class="button-bar">
+                      <a class="button button-calm" ng-click="accrej(true,notification.NID)">Accept</a>
+                      <a class="button" ng-click="accrej(false,notification.NID">Reject</a>
+                    </div>
+                    </div>
+                    <div ng-if = "notification.Type != 11" class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{'background-color' : notification.Viewed}" ng-click="doit(notification)">
                     <img ng-src="{{notification.Pic}}">
                     <p>{{notification.Summary}}</p>
                     <p>{{stringify(notification.NGT)}}</p>
+                    </div>
                 </div>
             </div>
         </div>
