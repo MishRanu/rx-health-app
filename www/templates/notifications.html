@@ -4,7 +4,7 @@
         <div class="content">
             <div class="list animate-fade-slide-in-right">
                 <div  ng-repeat="notification in Notifications" >
-                    <div ng-if = "notification.Type == 11" class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{'background-color' : notification.Viewed}" ng-click="doit(notification)" >
+                    <div ng-if = "notification.Type == 11 && notification.Viewed == '#f6f6f6'" class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{'background-color' : notification.Viewed}" ng-click="doit(notification)" >
                     <img ng-src="{{notification.Pic}}">
                     <p>{{notification.Summary}}</p>
                     <p>{{stringify(notification.NGT)}} </p>
@@ -13,7 +13,7 @@
                       <a class="button" ng-click="accrej(false,notification.NID">Reject</a>
                     </div>
                     </div>
-                    <div ng-if = "notification.Type != 11" class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{'background-color' : notification.Viewed}" ng-click="doit(notification)">
+                    <div ng-if = "notification.Type != 11 || notification.Type ==11 && notification.Viewed == '#ffffff'" class="item ink item-text-wrap item-avatar item-icon-right" ng-style="{'background-color' : notification.Viewed}" ng-click="doit(notification)">
                     <img ng-src="{{notification.Pic}}">
                     <p>{{notification.Summary}}</p>
                     <p>{{stringify(notification.NGT)}}</p>

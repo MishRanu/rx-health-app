@@ -623,7 +623,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
     $scope.goToCommunity = function(CommuID, UserType){
         console.log(CommuID);
-      $state.go('app.tabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
+      $state.go('app.tabs.community', {"CommuID": CommuID, "UserType":UserType, "IsFollow" : true}, {reload:false});
 
     };
     Http.post('getcommunities', {
@@ -659,8 +659,9 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     // Set Header
     console.log("dsds");
     $scope.CommuID =  $stateParams.CommuID;
-    $scope.Isfollow = $stateParams.IsFollow;
+    $scope.follow = $stateParams.IsFollow;
     console.log($scope.CommuID);
+    console.log($scope.follow);
     // $scope.showHeader();
     // $scope.$parent.clearFabs();
     // $scope.isExpanded = false;

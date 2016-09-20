@@ -39,13 +39,12 @@
   <i class="icon dark ion-chevron-down"></i>
 </a>
             <a class = "option" on-tap="openPopover($event)"><i class="icon ion-chevron-down" style="font-size:15px"></i></a>
-  -->       <div ng-hide ="Isfollow">
-            <button class="button button-block button-calm">
-               Follow 
-            </button>
-
+  -->       <div ng-if ="!follow">
+                <button class="button button-block button-calm">
+                   Follow 
+                </button>
             </div>
-            <div ng-show ="Isfollow">
+            <div ng-if ="follow">
                  <feed prefs="Prefs" community="CommuID" shrid="ShrID"></feed>
             </div>
            
