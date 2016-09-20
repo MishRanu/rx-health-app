@@ -88,7 +88,7 @@ $scope.keyfunc = function(keyevent, query) {
 
 
   Http.post('dmenutab', {
-    'UserID': '1'
+    'UserID': $rootScope.UserID
   })
   .success(function(data) {
     $scope.ResponseCode = data.Status.ResponseCode;
@@ -290,7 +290,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
     noBackdrop: true
   });
   Http.post('getdoctorprofile', {
-    "DID": 1
+    "DID": $rootScope.UserID
   })
   .success(function(data) {
     $scope.ResponseCode = data.Status.ResponseCode;
@@ -789,7 +789,25 @@ $scope.$on('$ionicView.beforeEnter', function() {
 
 })
 
-.controller('dGroupsCtrl', function($scope, $rootScope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
+.controller('dGroupsCtrl', function($scope, $rootScope, $stateParams, $state,Http, $ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
+
+
+
+$scope.$on('$ionicView.beforeEnter', function(){ 
+
+
+    // LoadData.setgroups($rootScope.UserID);
+     var communities = Http.getdata('communities').data;
+    $scope.myCommunities = communities.myCommunities;
+    $scope.connectCommunities = communities.connectCommunities;
+    $scope.adminCommunities = communities.adminCommunities;
+    $scope.following = communities.following;
+  $scope.isExpanded = false;
+
+
+})
+
+$scope.$on('$ionicView.enter', function(){ 
 
   $timeout(function() {
     ionicMaterialMotion.fadeSlideInRight({
@@ -797,25 +815,8 @@ $scope.$on('$ionicView.beforeEnter', function() {
     });
   }, 700);
 
-  var template = '<ion-popover-view>' +
-                    '   <ion-header-bar>' +
-                    '       <h1 class="title">My Popover Title1</h1>' +
-                    '   </ion-header-bar>' +
-                    '   <ion-content class="padding">' +
-                    '       My Popover Contents' +
-                    '   </ion-content>' +
-                    '</ion-popover-view>';
 
-    $scope.popover1 = $ionicPopover.fromTemplate(template, {
-        scope: $scope
-    });
-    $scope.closePopover = function () {
-        $scope.popover1.hide();
-    };
-    //Cleanup the popover when we're done with it!
-    $scope.$on('$destroy', function () {
-        $scope.popover1.remove();
-    });
+})
 
 
 	$scope.$on('ngLastRepeat.mylist',function(e) {
@@ -823,42 +824,14 @@ $scope.$on('$ionicView.beforeEnter', function() {
 })
 
     ionicMaterialInk.displayEffect();
-	$scope.me="Jaishriram";
-  console.log("khujli");
 
     $scope.goToCommunity1 = function(CommuID, UserType){
-        console.log(CommuID);
       $state.go('dapp.dtabs.community1', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
     };
     $scope.goToCommunity = function(CommuID, UserType){
-        console.log(CommuID);
       $state.go('dapp.dtabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
     };
-	Http.post('getcommunities', {
-      'UserID': $rootScope.UserID
-    })
-    .success(function(data) {
-      $scope.ResponseCode = data.Status.ResponseCode;
-      $scope.ResponseMessage = data.Status.ResponseMessage;
-      $ionicLoading.hide();
-      if ($scope.ResponseCode == 200) {
-        $scope.myCommunities = data.Status.myCommunities;
-        $scope.connectCommunities = data.Status.connectCommunities;
 
-        $scope.adminCommunities = data.Status.adminCommunities;
-        $scope.following = data.Status.following;
-        console.log(data.Status);
-        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
-      } else {
-        alert($scope.ResponseMessage);
-      }
-    }).error(function(data, status, headers, config) {
-        //$scope.data.error={message: error, status: status};
-        alert("error" + data);
-        $ionicLoading.hide();
-      });
-
-  $scope.isExpanded = false;
 
 
 })

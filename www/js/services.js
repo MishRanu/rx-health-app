@@ -1,5 +1,49 @@
 angular.module('starter.services', [])
 
+// .factory('LoadData', ['Http', function(Http){ 
+
+// return{ 
+
+//   setgroups: function(userid){ 
+//     Http.post('getcommunities', {
+//       UserID: userid
+//     })
+//     .success(function(data){ 
+//       if(data.Status.ResponseCode ==200){
+//         var communities = {};
+//         console.log(userid);   
+//         communities.myCommunities = data.Status.myCommunities; 
+//         communities.connectCommunities = data.Status.connectCommunities; 
+//         communities.adminCommunities = data.Status.adminCommunities; 
+//         communities.following  = data.Status.following; 
+//         Http.setdata(communities, 'communities'); 
+//         }
+//         else {
+//           // console.log(data.Status.ResponseMessage); 
+//         }
+//       }).error(function(data, status, headers, config){
+//         // console.log("error" + data); 
+//       })
+
+//     }, 
+//   setnotifications :function(userid){ 
+//     Http.post('getnotifications', { 
+//       UserID: userid
+//     })
+//     .success(function(data){ 
+//       if(data.Status.ResponseCode == 200){ 
+//         Http.setdata(data.Status.Notifications, 'notifications', new Date()); 
+
+//         }else {
+//           // console.log(data.Status.ResponseMessage); 
+//         }
+//     }).error(function(data,status, headers, config){ 
+//       // console.log("error"+data); 
+//     })
+//   }
+//   }
+// }])
+
 .factory('Http', function($http) {
   var rooturl = "http://dxhealth.esy.es/RxHealth0.1/";
   var datam = {};
@@ -23,7 +67,7 @@ angular.module('starter.services', [])
         },
         data: params
       });
-    },
+    }, 
     setdata: function(dat,Name,extra=null){
       datam[Name] = dat;
       if(extra){

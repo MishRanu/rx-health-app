@@ -1,5 +1,5 @@
 
-<ion-view view-title="Groups"> 
+<ion-view view-title="Groups" cache-view="false"> 
 	<ion-content class = "padding">
 
 
@@ -16,7 +16,7 @@
 
             </div> -->
     <ion-item ng-if="myCommunities.length!=0">
-         <a class = "item" style= "text-align:center"> My Communities </a>
+         <a class = "item" style= "text-align:center" ng-if="myCommunities.length!=0"> My Communities </a>
 
 
        <a class="item item-icon-left" ng-repeat ="item in myCommunities" ng-click="goToCommunity(item.CommuID, item.UserType)">
@@ -30,7 +30,7 @@
 
 <ion-item ng-if="adminCommunities.length!=0">
          
-         <a class = "item" style= "text-align:center"> Admin Communities </a>
+         <a class = "item" style= "text-align:center" ng-if="adminCommunities.length!=0"> Admin Communities </a>
 
      <a class="item item-icon-left" ng-repeat ="item in adminCommunities" ng-click="goToCommunity(item.CommuID, item.UserType)">
         <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
@@ -42,9 +42,9 @@
         </ion-item>
 
 
-<ion-item ng-if = "connectCommunities.length!=0">
+<ion-item ng-if = "connectCommunities.length!=0" >
 
-         <a class = "item" style= "text-align:center"> Connection Communities </a>
+         <a class = "item" style= "text-align:center" > Connection Communities </a>
 
                  <a class="item item-icon-left" ng-repeat ="item in connectCommunities" ng-click="goToCommunity1(item.CommuID, item.UserType)">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
@@ -55,7 +55,7 @@
         </ion-item>
 
 <ion-item ng-if="following.length!=0">
-         <a class = "item" style= "text-align:center"> Following Communities </a>
+         <a class = "item" style= "text-align:center" ng-if="following.length!=0"> Following Communities </a>
                  <a class="item item-icon-left" ng-repeat ="item in following" ng-click="goToCommunity1(item.CommuID, item.UserType)">
                     <i class="icon royal-100 ion-person-stalker"></i> <h2>{{item.Name}}</h2>
                     <span class="badge badge-assertive">0</span>

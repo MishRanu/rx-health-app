@@ -599,16 +599,32 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 
 
 .controller('GroupsCtrl', function($scope, $rootScope, $stateParams, $state,Http,$ionicLoading,$ionicModal,ionicMaterialInk, ionicMaterialMotion, $ionicPopover, $timeout){
-    // var communities = Http.getdata('communities').data;
+
+
+$scope.$on('$ionicView.beforeEnter', function(){ 
+
+
+    // LoadData.setgroups($rootScope.UserID);
+     var communities = Http.getdata('communities').data;
     // $scope.myCommunities = communities.myCommunities;
-    // $scope.connectCommunities = communities.connectCommunities;
+    $scope.connectCommunities = communities.connectCommunities;
     // $scope.adminCommunities = communities.adminCommunities;
-    // $scope.following = communities.following;
-    $timeout(function() {
-        ionicMaterialMotion.fadeSlideInRight({
-            startVelocity: 3000
-        });
-    }, 700);
+    $scope.following = communities.following;
+  $scope.isExpanded = false;
+
+
+})
+
+$scope.$on('$ionicView.enter', function(){ 
+
+  $timeout(function() {
+    ionicMaterialMotion.fadeSlideInRight({
+      startVelocity: 3000
+    });
+  }, 700);
+
+
+})
 
 
 
@@ -617,40 +633,12 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
 })
 
     ionicMaterialInk.displayEffect();
-    $scope.me="Jaishriram";
-  console.log("khujli");
-
 
     $scope.goToCommunity = function(CommuID, UserType){
         console.log(CommuID);
       $state.go('app.tabs.community', {"CommuID": CommuID, "UserType":UserType}, {reload:false});
 
     };
-    Http.post('getcommunities', {
-      'UserID': $rootScope.UserID
-    })
-    .success(function(data) {
-      $scope.ResponseCode = data.Status.ResponseCode;
-      $scope.ResponseMessage = data.Status.ResponseMessage;
-      $ionicLoading.hide();
-      if ($scope.ResponseCode == 200) {
-        // $scope.myCommunities = data.Status.myCommunities;
-        $scope.connectCommunities = data.Status.connectCommunities;
-    
-        // $scope.adminCommunities = data.Status.adminCommunities;
-        $scope.following = data.Status.following;
-        console.log(data.Status);
-        // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
-      } else {
-        alert($scope.ResponseMessage);
-      }
-    }).error(function(data, status, headers, config) {
-        //$scope.data.error={message: error, status: status};
-        alert("error" + data);
-        $ionicLoading.hide();
-      });
-
-    $scope.isExpanded = false;
 
 
 })
@@ -665,6 +653,7 @@ angular.module('starter.controllers', ['ionic', 'ionic-material'])
     // $scope.$parent.setHeaderFab(false);
 
     // Set Motion
+
       $scope.users = [
     { id: 1, name: 'Bob' },
     { id: 2, name: 'Alice' },
@@ -877,7 +866,6 @@ $scope.signIn = function(user) {
             else
               $state.go('dapp.dtabs.symptify');
           
-
         Http.post('getcommunities', {
           'UserID': $rootScope.UserID
         })
@@ -891,7 +879,7 @@ $scope.signIn = function(user) {
             communities.following = data.Status.following;
             Http.setdata(communities,'communities');
             // console.dir($scope.myCommunities,$scope.following, $scope.otherCommunities);
-            //$cordovaSplashscreen.hide();
+            // $cordovaSplashscreen.hide();
           } else {
             alert(data.Status.ResponseMessage);
           }
